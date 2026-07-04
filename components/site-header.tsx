@@ -48,11 +48,11 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="flex shrink-0 items-center gap-2 lg:hidden">
-          <Button data-testid="language-toggle-mobile" variant="outline" size="sm" onClick={toggleLanguage} aria-label="Switch language">
+        <div className="flex shrink-0 items-center gap-2">
+          <Button data-testid="language-toggle-header" variant="outline" size="sm" onClick={toggleLanguage} aria-label="Switch language">
             {language === "ar" ? "NL" : "AR"}
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
+          <Button className="lg:hidden" variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             Menu
           </Button>
@@ -124,9 +124,6 @@ export function SiteHeader() {
           </a>
           <Button asChild variant="accent" size="sm">
             <Link href="/contact">Direct inschrijven</Link>
-          </Button>
-          <Button data-testid="language-toggle" className="ml-3" variant="outline" size="sm" onClick={toggleLanguage} aria-label="Switch language">
-            {language === "ar" ? "NL" : "AR"}
           </Button>
         </div>
       </div>
