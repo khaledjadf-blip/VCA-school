@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, Phone, ShieldCheck, X } from "lucide-react";
+import { ChevronDown, Globe2, Menu, Phone, ShieldCheck, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
@@ -49,8 +49,17 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Button data-testid="language-toggle-header" variant="outline" size="sm" onClick={toggleLanguage} aria-label="Switch language">
-            {language === "ar" ? "NL" : "AR"}
+          <Button
+            data-testid="language-toggle-header"
+            className="border-2 border-accent bg-accent/10 px-3 text-accent hover:bg-accent hover:text-white sm:px-4"
+            variant="outline"
+            size="sm"
+            onClick={toggleLanguage}
+            aria-label="Switch language"
+          >
+            <Globe2 className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline">{language === "ar" ? "Nederlands" : "العربية"}</span>
+            <span className="sm:hidden">{language === "ar" ? "NL" : "AR"}</span>
           </Button>
           <Button className="lg:hidden" variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
