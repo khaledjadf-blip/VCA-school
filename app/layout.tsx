@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-
-const sourceSans = Source_Sans_3({
-  subsets: ["latin"],
-  variable: "--font-source-sans",
-  display: "swap",
-  weight: ["400", "600", "700", "800"]
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vcaveiligenvakkundig.nl"),
@@ -31,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="nl" suppressHydrationWarning>
-      <body className={sourceSans.variable}>
+      <body>
         <Providers>
           <SiteHeader />
           <main>{children}</main>

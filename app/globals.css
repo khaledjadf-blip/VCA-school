@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    --font-source-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
     --background: 0 0% 100%;
     --foreground: 214 33% 15%;
     --card: 0 0% 100%;
