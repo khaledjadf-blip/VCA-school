@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# local environment
+.env
+.env.*
+!.env.example
+
+# logs and local reports
+*.log
+dev-server.log
+.lighthouse-report.json
+
+# editor / OS
+.DS_Store
+Thumbs.db
+
+# Codex/local design workspace files
+.agents/
+.hallmark/
+.codex/
+skills-lock.json

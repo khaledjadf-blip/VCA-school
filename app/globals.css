@@ -1,0 +1,140 @@
+@import "../tokens.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 214 33% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 214 33% 15%;
+    --primary: 207 69% 27%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 214 33% 15%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 214 28% 24%;
+    --accent: 19 83% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 30% 88%;
+    --input: 210 30% 88%;
+    --ring: 19 83% 45%;
+  }
+
+  .dark {
+    --background: 207 72% 10%;
+    --foreground: 210 40% 98%;
+    --card: 207 58% 15%;
+    --card-foreground: 210 40% 98%;
+    --primary: 210 40% 96%;
+    --primary-foreground: 206 72% 15.5%;
+    --secondary: 207 42% 19%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 207 42% 19%;
+    --muted-foreground: 210 32% 86%;
+    --accent: 19 83% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214 32% 24%;
+    --input: 214 32% 24%;
+    --ring: 142 45% 48%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: clip;
+    color: var(--color-ink);
+    background: hsl(var(--background));
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html[dir="rtl"] body {
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  html[dir="rtl"] .border-l-2,
+  html[dir="rtl"] .border-l-4 {
+    border-left-width: 0;
+    border-right-width: 2px;
+  }
+
+  html[dir="rtl"] .border-l-4 {
+    border-right-width: 4px;
+  }
+
+  html[dir="rtl"] svg {
+    flex-shrink: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+.section-shell {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@layer components {
+  .official-section {
+    @apply border-y border-border bg-white;
+  }
+
+  .official-card {
+    @apply rounded-none border border-[#d8e2ec] border-t-2 border-t-accent bg-white shadow-none;
+  }
+
+  .official-panel-dark {
+    @apply rounded-md border border-primary bg-primary text-primary-foreground shadow-none;
+  }
+
+  .official-kicker {
+    @apply font-mono text-xs font-bold uppercase text-accent;
+    letter-spacing: 0.06em;
+  }
+
+  .official-rule {
+    @apply border-t border-border;
+  }
+
+  .official-display {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+}
