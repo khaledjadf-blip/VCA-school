@@ -6,6 +6,11 @@
   --color-ink-2: #243447;
   --color-rule: #d8e2ec;
   --color-navy: #154273;
+  --color-road: #243142;
+  --color-road-2: #111c2b;
+  --color-warning: #f6b73c;
+  --color-danger: #dc2626;
+  --color-warm-surface: #fffaf6;
   --color-accent: #d45213;
   --color-accent-ink: #ffffff;
   --color-focus: #d45213;
@@ -26,6 +31,7 @@
   --text-title: clamp(1.5rem, 2vw, 2rem);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-short: 180ms;
+  --dur-medium: 260ms;
   --radius-card: 0.375rem;
   --radius-button: 0.5rem;
 }

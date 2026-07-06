@@ -24,9 +24,14 @@ export function CategoryFlipCard({
   const Icon = icons[icon];
 
   return (
-    <article className="border border-[#d8e2ec] bg-white p-5">
-      <Icon className="mb-4 h-6 w-6 text-accent" aria-hidden="true" />
-      <h3 className="text-xl font-bold">{title}</h3>
+    <article className="route-card border border-[#d8e2ec] bg-white p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <span className="flex h-11 w-11 items-center justify-center bg-primary text-primary-foreground">
+          <Icon className="h-6 w-6" aria-hidden="true" />
+        </span>
+        <span className="route-card-code">Route</span>
+      </div>
+      <h3 className="text-xl font-bold text-primary">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
       <p className="mt-5 border-l-2 border-accent bg-accent/10 p-3 text-sm font-semibold text-primary">{detail}</p>
       <Button asChild className="mt-6" variant="outline">

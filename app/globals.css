@@ -139,3 +139,313 @@
     overflow-wrap: anywhere;
   }
 }
+
+@layer components {
+  .traffic-hero {
+    isolation: isolate;
+  }
+
+  .traffic-command-panel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .traffic-command-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0.5rem;
+    background: repeating-linear-gradient(
+      180deg,
+      var(--color-accent) 0 1.1rem,
+      transparent 1.1rem 1.75rem
+    );
+  }
+
+  .traffic-road-divider {
+    position: relative;
+    z-index: 10;
+    height: clamp(3.5rem, 7vw, 6rem);
+    background:
+      linear-gradient(90deg, transparent 0 11%, rgba(255, 255, 255, 0.72) 11% 13%, transparent 13% 100%),
+      repeating-linear-gradient(90deg, transparent 0 4.25rem, rgba(246, 183, 60, 0.95) 4.25rem 7rem, transparent 7rem 11rem),
+      linear-gradient(180deg, var(--color-road) 0%, var(--color-road-2) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+    transform: skewY(-1.6deg);
+    transform-origin: left bottom;
+  }
+
+  .traffic-road-divider::after {
+    content: "";
+    position: absolute;
+    inset: 50% 6% auto 6%;
+    height: 0.18rem;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.94) 0 3rem,
+      transparent 3rem 5rem
+    );
+  }
+
+  .route-board {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .route-board::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, transparent calc(100% - 4.5rem), rgba(212, 82, 19, 0.1) calc(100% - 4.5rem)),
+      linear-gradient(180deg, rgba(21, 66, 115, 0.06), transparent 38%);
+  }
+
+  .route-board > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .traffic-signal {
+    display: inline-flex;
+    gap: 0.35rem;
+    border: 1px solid var(--color-rule);
+    background: var(--color-road);
+    padding: 0.35rem;
+  }
+
+  .traffic-signal span {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 999px;
+    background: var(--color-warning);
+  }
+
+  .traffic-signal span:first-child {
+    background: var(--color-danger);
+  }
+
+  .traffic-signal span:last-child {
+    background: var(--color-success);
+  }
+
+  .route-board-link,
+  .route-card,
+  .course-lanes article,
+  .schedule-board > div,
+  .proof-lanes > div {
+    transition: transform var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out);
+  }
+
+  .route-board-link:hover,
+  .route-card:hover,
+  .course-lanes article:hover,
+  .schedule-board > div:hover,
+  .proof-lanes > div:hover {
+    border-color: rgba(212, 82, 19, 0.42);
+    background: var(--color-warm-surface);
+    transform: translateY(-1px);
+  }
+
+  .traffic-route-strip {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .route-step {
+    position: relative;
+  }
+
+  .route-step::after {
+    content: "";
+    position: absolute;
+    inset: auto 1.25rem 0 1.25rem;
+    height: 0.2rem;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-warning));
+    opacity: 0.9;
+  }
+
+  .route-arrow {
+    background:
+      repeating-linear-gradient(135deg, rgba(212, 82, 19, 0.13) 0 0.5rem, transparent 0.5rem 1rem),
+      hsl(var(--secondary));
+  }
+
+  .traffic-section-heading {
+    position: relative;
+  }
+
+  .traffic-section-heading::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    width: min(18rem, 45vw);
+    height: 0.25rem;
+    background: repeating-linear-gradient(90deg, var(--color-accent) 0 1.25rem, var(--color-warning) 1.25rem 2.5rem);
+  }
+
+  .traffic-mini-map {
+    display: grid;
+    gap: 0.5rem;
+    border: 1px solid var(--color-rule);
+    background:
+      linear-gradient(90deg, transparent 1.45rem, rgba(212, 82, 19, 0.65) 1.45rem 1.6rem, transparent 1.6rem),
+      var(--color-paper-2);
+    padding: 0.85rem;
+  }
+
+  .traffic-mini-map span {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .traffic-mini-map span::before {
+    content: "";
+    width: 0.64rem;
+    height: 0.64rem;
+    border: 2px solid var(--color-accent);
+    background: white;
+  }
+
+  .traffic-course-section {
+    background:
+      linear-gradient(90deg, rgba(21, 66, 115, 0.06) 0 1px, transparent 1px),
+      hsl(var(--secondary));
+    background-size: 4rem 4rem;
+  }
+
+  .lane-marker {
+    display: inline-flex;
+    min-width: 3.2rem;
+    height: 3.2rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-rule);
+    background: var(--color-road);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 800;
+    box-shadow: inset 0 -0.24rem 0 var(--color-accent);
+  }
+
+  .route-chip {
+    display: inline-flex;
+    border: 1px solid var(--color-rule);
+    background: hsl(var(--secondary));
+    padding: 0.35rem 0.55rem;
+    color: var(--color-ink);
+  }
+
+  .route-chip-accent {
+    border-color: rgba(212, 82, 19, 0.28);
+    background: rgba(212, 82, 19, 0.1);
+    color: var(--color-navy);
+  }
+
+  .route-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .route-card::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 0.3rem;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-warning));
+  }
+
+  .route-card-code {
+    border: 1px solid var(--color-rule);
+    background: hsl(var(--secondary));
+    padding: 0.35rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .schedule-board {
+    box-shadow: inset 0.5rem 0 0 var(--color-road);
+  }
+
+  .safety-panel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .safety-panel::after {
+    content: "";
+    position: absolute;
+    inset: auto -2rem -1.4rem auto;
+    width: 12rem;
+    height: 3rem;
+    background: repeating-linear-gradient(135deg, var(--color-warning) 0 0.8rem, var(--color-road) 0.8rem 1.6rem);
+    transform: rotate(-6deg);
+    opacity: 0.22;
+  }
+
+  .conversion-road {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .conversion-road::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent 0 72%, rgba(36, 49, 66, 0.08) 72% 100%),
+      repeating-linear-gradient(90deg, transparent 0 5rem, rgba(246, 183, 60, 0.32) 5rem 7rem, transparent 7rem 11rem);
+    pointer-events: none;
+  }
+
+  .conversion-road > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 767px) {
+    .traffic-road-divider {
+      height: 3.5rem;
+      transform: none;
+    }
+
+    .traffic-mini-map {
+      display: none;
+    }
+
+    .traffic-command-panel::before {
+      width: 0.32rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .route-board-link,
+    .route-card,
+    .course-lanes article,
+    .schedule-board > div,
+    .proof-lanes > div {
+      transition-duration: 120ms;
+      transform: none;
+    }
+
+    .route-board-link:hover,
+    .route-card:hover,
+    .course-lanes article:hover,
+    .schedule-board > div:hover,
+    .proof-lanes > div:hover {
+      transform: none;
+    }
+  }
+}
