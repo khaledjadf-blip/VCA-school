@@ -36,22 +36,22 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-primary bg-white">
-      <div className="section-shell flex min-h-20 items-center justify-between gap-3 py-3">
-        <Link href="/" className="flex min-w-0 items-center gap-3 font-bold sm:gap-4" onClick={closeMenus}>
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center bg-[#154273] text-white">
+    <header className="site-header sticky top-0 z-50 border-b border-primary bg-white">
+      <div className="section-shell flex min-h-14 items-center justify-between gap-2 py-2 sm:min-h-16">
+        <Link href="/" className="site-brand flex min-w-0 items-center gap-2 font-bold sm:gap-3" onClick={closeMenus}>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#154273] text-white sm:h-11 sm:w-11">
             <ShieldCheck className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="min-w-0 leading-tight text-[#154273]">
-            <span className="block text-base sm:text-lg">VCA Veilig & Vakkundig B.V.</span>
-            <span className="hidden text-sm font-semibold text-muted-foreground sm:block">Opleiding, examinering en certificering</span>
+            <span className="block text-sm sm:text-base">VCA Veilig & Vakkundig B.V.</span>
+            <span className="hidden text-xs font-semibold text-muted-foreground md:block">Opleiding, examinering en certificering</span>
           </span>
         </Link>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Button
             data-testid="language-toggle-header"
-            className="border-2 border-accent bg-accent/10 px-3 text-accent hover:bg-accent hover:text-white sm:px-4"
+            className="border-2 border-accent bg-accent/10 px-2 text-accent hover:bg-accent hover:text-white sm:px-3"
             variant="outline"
             size="sm"
             onClick={toggleLanguage}
@@ -61,9 +61,9 @@ export function SiteHeader() {
             <span className="hidden sm:inline">{language === "ar" ? "Nederlands" : "العربية"}</span>
             <span className="sm:hidden">{language === "ar" ? "NL" : "AR"}</span>
           </Button>
-          <Button className="lg:hidden" variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
+          <Button className="lg:hidden px-2 sm:px-3" variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            Menu
+            <span className="hidden min-[360px]:inline">Menu</span>
           </Button>
         </div>
       </div>

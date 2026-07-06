@@ -133,7 +133,7 @@
 
   .official-display {
     font-family: var(--font-display);
-    font-size: clamp(2.75rem, 5vw, 4.5rem);
+    font-size: clamp(2.15rem, 5vw, 4.5rem);
     line-height: 1;
     letter-spacing: 0;
     overflow-wrap: anywhere;
@@ -143,6 +143,9 @@
 @layer components {
   .traffic-hero {
     isolation: isolate;
+    background:
+      linear-gradient(135deg, rgba(21, 66, 115, 0.07), transparent 42%),
+      var(--color-paper-2);
   }
 
   .traffic-command-panel {
@@ -416,17 +419,119 @@
   }
 
   @media (max-width: 767px) {
+    .section-shell {
+      padding-left: 0.875rem;
+      padding-right: 0.875rem;
+    }
+
+    .site-header {
+      position: sticky;
+    }
+
+    .site-brand {
+      max-width: min(12.5rem, 54vw);
+    }
+
+    .site-brand span span:first-child {
+      overflow-wrap: normal;
+    }
+
+    .official-kicker {
+      font-size: 0.66rem;
+      letter-spacing: 0.04em;
+    }
+
+    .official-display {
+      font-size: clamp(2rem, 12vw, 2.75rem);
+      line-height: 0.98;
+    }
+
+    .traffic-hero > div[style] {
+      opacity: 0.22;
+      background-position: center;
+    }
+
+    .traffic-hero .section-shell {
+      min-height: auto;
+    }
+
+    .traffic-command-panel {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .traffic-command-panel::before {
+      width: 0.28rem;
+    }
+
+    .traffic-command-panel .inline-flex,
+    .route-board-link {
+      font-size: 0.82rem;
+      line-height: 1.25rem;
+    }
+
+    .route-board {
+      padding: 0.875rem;
+    }
+
+    .route-board h2 {
+      font-size: 1.15rem;
+      line-height: 1.25;
+    }
+
     .traffic-road-divider {
-      height: 3.5rem;
+      height: 2.4rem;
       transform: none;
     }
 
     .traffic-mini-map {
       display: none;
     }
+  }
 
-    .traffic-command-panel::before {
-      width: 0.32rem;
+  @media (max-width: 360px) {
+    .section-shell {
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+    }
+
+    .site-brand {
+      max-width: none;
+      gap: 0.4rem;
+    }
+
+    .site-brand > span:first-child {
+      width: 2.1rem;
+      height: 2.1rem;
+    }
+
+    .site-brand > span:last-child {
+      display: none;
+    }
+
+    .official-display {
+      font-size: clamp(1.42rem, 13vw, 1.85rem);
+      line-height: 1.02;
+    }
+
+    .traffic-command-panel {
+      padding: 0.875rem;
+    }
+
+    .traffic-command-panel p:not(.official-kicker) {
+      font-size: 0.88rem;
+      line-height: 1.45rem;
+    }
+
+    .hero-trust {
+      display: none !important;
+    }
+
+    .traffic-command-panel a {
+      min-height: 2.35rem;
+    }
+
+    .route-board {
+      display: none;
     }
   }
 
