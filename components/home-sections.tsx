@@ -113,11 +113,10 @@ export function FeaturedCourses() {
               Deze combinatie werkt goed voor bezoekers die snel willen zien dat het om echte training, echte certificering en een rustige leeromgeving gaat.
             </p>
           </div>
-          <div
-            className="min-h-[12rem] bg-cover bg-center lg:min-h-[14rem]"
-            style={{ backgroundImage: `url('${visualAssets.forkliftCertificate.src}')` }}
-            role="img"
-            aria-label={visualAssets.forkliftCertificate.alt}
+          <img
+            src={visualAssets.forkliftCertificate.src}
+            alt={visualAssets.forkliftCertificate.alt}
+            className="w-full bg-white object-contain object-center p-3 sm:p-4 lg:min-h-[14rem] lg:p-5"
           />
         </div>
       </div>
@@ -153,14 +152,11 @@ export function WhySection() {
           <h2 className="mt-2 text-2xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
           <p className="mt-4 leading-7 text-muted-foreground">Kandidaten krijgen uitleg, voorbereiding en examenbegeleiding zonder commerciële ruis. De nadruk ligt op slagen, veiligheid, planning en correcte registratie.</p>
           <p className="mt-4 border-l-4 border-accent bg-secondary p-3 text-sm font-semibold text-primary">Arabische ondersteuning kan helpen bij uitleg over aanmelding, planning en voorbereiding.</p>
-          <div className="mt-5 overflow-hidden border border-border bg-white lg:max-w-[24rem]">
-            <div
-              className="aspect-[4/5] bg-cover bg-center lg:aspect-[4/4.6]"
-              style={{ backgroundImage: `url('${visualAssets.hoistCertificate.src}')` }}
-              role="img"
-              aria-label={visualAssets.hoistCertificate.alt}
-            />
-          </div>
+          <img
+            src={visualAssets.hoistCertificate.src}
+            alt={visualAssets.hoistCertificate.alt}
+            className="mt-5 w-full bg-white object-contain object-center p-3 lg:max-w-[24rem] lg:p-4"
+          />
           <Link href="/over-ons" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">
             Lees het verhaal achter de school
           </Link>
