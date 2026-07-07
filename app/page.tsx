@@ -8,12 +8,12 @@ export default function HomePage() {
     <>
       <section className="traffic-hero relative overflow-hidden border-b border-border bg-white">
         <div
-          className="absolute inset-0 scale-[1.01] bg-cover bg-[center_82%] opacity-95"
+          className="absolute inset-0 scale-[1.01] bg-cover bg-[center_82%] opacity-100"
           style={{ backgroundImage: `url('${visualAssets.heroPractice.src}')` }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,250,252,0.96)_0%,rgba(248,250,252,0.84)_42%,rgba(21,66,115,0.20)_100%)]" aria-hidden="true" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,250,252,0.86)_0%,rgba(248,250,252,0.62)_40%,rgba(21,66,115,0.10)_100%)]" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/80 to-transparent" aria-hidden="true" />
         <div className="section-shell relative z-10 grid gap-5 py-7 sm:py-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-8 lg:py-16">
           <div className="traffic-command-panel max-w-3xl border border-border bg-white/95 p-4 shadow-sm sm:p-6 lg:p-7">
             <p className="official-kicker mb-3 sm:mb-4">VCA inschrijven zonder omweg</p>
