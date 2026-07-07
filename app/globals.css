@@ -429,11 +429,11 @@
     }
 
     .site-brand {
-      max-width: min(13.5rem, 58vw);
+      max-width: min(14.75rem, 62vw);
     }
 
     .site-logo {
-      max-width: min(13.5rem, 58vw);
+      max-width: min(14.75rem, 62vw);
     }
 
     .official-kicker {
@@ -500,7 +500,7 @@
     }
 
     .site-logo {
-      max-width: 9.25rem;
+      max-width: 10rem;
       height: auto;
     }
 

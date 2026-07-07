@@ -40,7 +40,7 @@ export function SiteHeader() {
           <img
             src="/images/vca-logo.svg"
             alt="VCA Veilig & Vakkundig B.V."
-            className="site-logo h-11 w-auto sm:h-12"
+            className="site-logo h-12 w-auto sm:h-[3.35rem]"
           />
         </Link>
 

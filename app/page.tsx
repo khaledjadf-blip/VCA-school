@@ -59,7 +59,7 @@ export default function HomePage() {
       <FeaturedCourses />
       <section className="relative overflow-hidden bg-white">
         <div
-          className="min-h-[78svh] bg-contain bg-center bg-no-repeat sm:min-h-[86svh] lg:min-h-screen"
+          className="min-h-[68svh] bg-contain bg-center bg-no-repeat sm:min-h-[58svh] lg:min-h-[52svh] xl:min-h-[56svh]"
           style={{ backgroundImage: `url('${visualAssets.forkliftShowcase.src}')` }}
           aria-label={visualAssets.forkliftShowcase.alt}
           role="img"
