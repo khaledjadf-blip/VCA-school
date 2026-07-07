@@ -1,6 +1,6 @@
 export const visualAssets = {
   heroPractice: {
-    src: "/images/vca-hero-practice.png",
+    src: "/images/wmremove-transformed-hero.png",
     alt: "Heftruck praktijkruimte voor VCA en heftruckopleiding"
   },
   courseFolder: {
@@ -19,8 +19,12 @@ export const visualAssets = {
     src: "/images/vca-certificate-processing-detail.png",
     alt: "Diploma- en registratieverwerking na VCA examen"
   },
-  forkliftShowcase: {
-    src: "/images/vca-forklift-showcase.png",
-    alt: "Blauwe heftruck als visuele tussenpagina voor de website"
+  forkliftCertificate: {
+    src: "/images/vca-forklift-certificate.png",
+    alt: "Heftruck met certificaat als visuele ondersteuning voor de cursus"
+  },
+  hoistCertificate: {
+    src: "/images/vca-hoist-certificate.png",
+    alt: "Hoogwerker certificaat als visuele ondersteuning voor veilig werken op hoogte"
   }
 } as const;

@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import { CategoryFlipCard } from "@/components/course-card";
 import { categories, courses } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 export function SignupPath() {
   const steps = [
@@ -104,6 +105,21 @@ export function FeaturedCourses() {
             </article>
           ))}
         </div>
+        <div className="mt-6 grid gap-0 overflow-hidden border border-border bg-white lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="p-6">
+            <p className="official-kicker">Praktijkbeeld</p>
+            <h3 className="mt-2 text-2xl font-bold text-primary">Cursus, certificaat en praktijk in een helder beeld.</h3>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
+              Deze combinatie werkt goed voor bezoekers die snel willen zien dat het om echte training, echte certificering en een rustige leeromgeving gaat.
+            </p>
+          </div>
+          <div
+            className="min-h-[16rem] bg-cover bg-center"
+            style={{ backgroundImage: `url('${visualAssets.forkliftCertificate.src}')` }}
+            role="img"
+            aria-label={visualAssets.forkliftCertificate.alt}
+          />
+        </div>
       </div>
     </section>
   );
@@ -137,6 +153,14 @@ export function WhySection() {
           <h2 className="mt-2 text-2xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
           <p className="mt-4 leading-7 text-muted-foreground">Kandidaten krijgen uitleg, voorbereiding en examenbegeleiding zonder commerciële ruis. De nadruk ligt op slagen, veiligheid, planning en correcte registratie.</p>
           <p className="mt-4 border-l-4 border-accent bg-secondary p-3 text-sm font-semibold text-primary">Arabische ondersteuning kan helpen bij uitleg over aanmelding, planning en voorbereiding.</p>
+          <div className="mt-5 overflow-hidden border border-border bg-white">
+            <div
+              className="aspect-[4/5] bg-cover bg-center"
+              style={{ backgroundImage: `url('${visualAssets.hoistCertificate.src}')` }}
+              role="img"
+              aria-label={visualAssets.hoistCertificate.alt}
+            />
+          </div>
           <Link href="/over-ons" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">
             Lees het verhaal achter de school
           </Link>
