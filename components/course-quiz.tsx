@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const steps = [
   { key: "situation", question: "Welke situatie past het beste bij u?", options: ["Ik voer werk uit", "Ik geef leiding of ben zzp'er", "Ik plaats uitzendkrachten", "Ik wil heftruck rijden"] },
-  { key: "goal", question: "Wat wilt u precies regelen?", options: ["VCA cursus met examen", "Alleen VCA examen", "Heftruck certificaat", "Advies voor bedrijf of groep"] },
+  { key: "goal", question: "Wat wilt u precies regelen?", options: ["VCA cursus met examen", "Heftruck certificaat", "Advies voor bedrijf of groep", "Opfrissen of herhaling"] },
   { key: "format", question: "Welke leervorm past het best?", options: ["Klassikale lesdag", "Online voorbereiding", "Praktijktraining", "Incompany voor team"] },
   { key: "experience", question: "Hoeveel ervaring heeft u met dit onderwerp?", options: ["Eerste keer", "Al wat ervaring", "Herhaling of verlenging"] }
 ] as const;
@@ -36,11 +36,11 @@ const courseInfo = {
     why: "U oefent met veilig rijden, laden, lossen, stabiliteit, omgeving controleren en verantwoord werken met de heftruck.",
     situations: ["U gaat heftruck rijden of doet dit al.", "Uw werkgever wil aantoonbare instructie en toetsing.", "U heeft een herhaling of praktijkcertificaat nodig."]
   },
-  "Examens & Registratie": {
-    slug: "examens-registratie",
-    intro: "Alleen examen is handig wanneer u zelfstandig heeft geleerd of wanneer een bedrijf kandidaten direct wil laten toetsen.",
-    why: "Wij regelen het SSVV-erkende examen, identificatie, uitslag en registratie. U volgt dan geen volledige cursusdag.",
-    situations: ["U bent al voorbereid en wilt alleen examen doen.", "Een certificaat is verlopen en u wilt snel toetsen.", "Een bedrijf wil meerdere kandidaten centraal laten examineren."]
+  "Hoogwerker Opleiding": {
+    slug: "hoogwerker-opleiding",
+    intro: "Hoogwerker opleiding is voor veilig werken op hoogte met aandacht voor machinecontrole, stabiliteit en risicoherkenning.",
+    why: "U leert veilig gebruik, controle vooraf, juiste opstelling en verantwoord werken op hoogte.",
+    situations: ["U gebruikt een hoogwerker op de werkvloer.", "Uw werkgever vraagt om aantoonbare instructie.", "U wilt een praktijkgerichte herhaling volgen."]
   }
 } as const;
 
@@ -49,7 +49,7 @@ const otherRoutes = [
   ["VCA VOL", "Voor leidinggevenden, supervisors, projectleiders en vaak zzp'ers."],
   ["VIL-VCU", "Voor intercedenten en uitzendorganisaties die kandidaten plaatsen."],
   ["Heftruck Opleiding", "Voor mensen die veilig met een heftruck moeten werken."],
-  ["Examens & Registratie", "Voor kandidaten die alleen een erkend examen willen plannen."]
+  ["Hoogwerker Opleiding", "Voor medewerkers die veilig op hoogte werken met een hoogwerker."]
 ] as const;
 
 export function CourseQuiz() {
@@ -59,8 +59,8 @@ export function CourseQuiz() {
   const current = steps[index];
 
   const result = useMemo<keyof typeof courseInfo>(() => {
-    if (answers.goal === "Alleen VCA examen") return "Examens & Registratie";
     if (answers.situation === "Ik wil heftruck rijden" || answers.goal === "Heftruck certificaat" || answers.format === "Praktijktraining") return "Heftruck Opleiding";
+    if (answers.goal === "Opfrissen of herhaling") return "Hoogwerker Opleiding";
     if (answers.situation === "Ik geef leiding of ben zzp'er") return "VCA VOL";
     if (answers.situation === "Ik plaats uitzendkrachten") return "VIL-VCU";
     return "VCA Basis";

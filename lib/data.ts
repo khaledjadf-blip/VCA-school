@@ -149,36 +149,6 @@ export const courses = [
       }
     ]
   },
-  {
-    slug: "examens-registratie",
-    title: "Examens & Registratie",
-    category: "Examens & Registratie",
-    summary: "Losse SSVV-examens met professionele begeleiding, directe uitslag en CDR-registratie.",
-    format: "Examenlocatie of incompany",
-    duration: "60 tot 75 minuten",
-    price: "vanaf EUR 89",
-    teacher: "Examenleider en supportteam voor correcte identificatie en registratie.",
-    audience: "Kandidaten die zelfstandig hebben geleerd of bedrijven met groepen.",
-    highlights: ["SSVV-erkend", "Direct uitslag", "CDR-registratie"],
-    faqs: [
-      {
-        question: "Kan ik alleen examen doen zonder cursus?",
-        answer: "Ja. Als u zelfstandig heeft geleerd of eerder ervaring heeft, kunt u een los examen plannen."
-      },
-      {
-        question: "Wat moet ik meenemen naar het examen?",
-        answer: "Neem altijd een geldig identiteitsbewijs mee. Zonder juiste identificatie kan een examen niet correct worden afgenomen."
-      },
-      {
-        question: "Wat gebeurt er na slagen?",
-        answer: "Na slagen wordt het diploma of resultaat verwerkt volgens de examenroute en kan registratie plaatsvinden in het daarvoor bedoelde register."
-      },
-      {
-        question: "Kan een bedrijf meerdere kandidaten aanmelden?",
-        answer: "Ja. Bedrijven kunnen meerdere kandidaten aanmelden voor examenplanning of incompany afname."
-      }
-    ]
-  }
 ];
 
 export const categories = [
@@ -203,13 +173,6 @@ export const categories = [
     href: "/cursussen/hoogwerker-opleiding",
     icon: "lift"
   },
-  {
-    title: "Examens & Registratie",
-    description: "SSVV-erkende examens met directe uitslag en CDR-registratie.",
-    detail: "Losse examens, groepsplanning en incompany opties.",
-    href: "/cursussen/examens-registratie",
-    icon: "shield"
-  }
 ] as const;
 
 export const classes = [
