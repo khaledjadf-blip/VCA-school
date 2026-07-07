@@ -105,8 +105,8 @@ export function FeaturedCourses() {
             </article>
           ))}
         </div>
-        <div className="mt-6 grid gap-0 overflow-hidden border border-border bg-white lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="p-6">
+        <div className="mt-6 grid gap-0 overflow-hidden border border-border bg-white lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="p-5 lg:p-6">
             <p className="official-kicker">Praktijkbeeld</p>
             <h3 className="mt-2 text-2xl font-bold text-primary">Cursus, certificaat en praktijk in een helder beeld.</h3>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
@@ -114,7 +114,7 @@ export function FeaturedCourses() {
             </p>
           </div>
           <div
-            className="min-h-[16rem] bg-cover bg-center"
+            className="min-h-[12rem] bg-cover bg-center lg:min-h-[14rem]"
             style={{ backgroundImage: `url('${visualAssets.forkliftCertificate.src}')` }}
             role="img"
             aria-label={visualAssets.forkliftCertificate.alt}
@@ -153,9 +153,9 @@ export function WhySection() {
           <h2 className="mt-2 text-2xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
           <p className="mt-4 leading-7 text-muted-foreground">Kandidaten krijgen uitleg, voorbereiding en examenbegeleiding zonder commerciële ruis. De nadruk ligt op slagen, veiligheid, planning en correcte registratie.</p>
           <p className="mt-4 border-l-4 border-accent bg-secondary p-3 text-sm font-semibold text-primary">Arabische ondersteuning kan helpen bij uitleg over aanmelding, planning en voorbereiding.</p>
-          <div className="mt-5 overflow-hidden border border-border bg-white">
+          <div className="mt-5 overflow-hidden border border-border bg-white lg:max-w-[24rem]">
             <div
-              className="aspect-[4/5] bg-cover bg-center"
+              className="aspect-[4/5] bg-cover bg-center lg:aspect-[4/4.6]"
               style={{ backgroundImage: `url('${visualAssets.hoistCertificate.src}')` }}
               role="img"
               aria-label={visualAssets.hoistCertificate.alt}
