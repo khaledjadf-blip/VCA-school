@@ -66,8 +66,12 @@ export function CategoriesSection() {
           De meeste bezoekers zoeken snel zekerheid: ben ik uitvoerend, leidinggevend, uitzenden of praktijkchauffeur? Hieronder staat de snelste ingang.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
-        {categories.map((category) => <CategoryFlipCard key={category.title} {...category} />)}
+      <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
+        {categories.map((category) => (
+          <div key={category.title} className="min-w-[82%] snap-start sm:min-w-[62%] lg:min-w-[31%]">
+            <CategoryFlipCard {...category} />
+          </div>
+        ))}
       </div>
     </section>
   );

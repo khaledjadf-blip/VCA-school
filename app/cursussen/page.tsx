@@ -20,8 +20,12 @@ export default function CoursesPage() {
         </div>
       </section>
       <section className="section-shell py-14">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {categories.map((category) => <CategoryFlipCard key={category.title} {...category} />)}
+        <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
+          {categories.map((category) => (
+            <div key={category.title} className="min-w-[82%] snap-start sm:min-w-[62%] lg:min-w-[31%]">
+              <CategoryFlipCard {...category} />
+            </div>
+          ))}
         </div>
       </section>
       <section className="section-shell pb-16">
