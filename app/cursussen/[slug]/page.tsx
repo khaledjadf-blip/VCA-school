@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { EnrollmentForm } from "@/components/contact-forms";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -45,6 +46,15 @@ export default async function CourseDetailPage({ params }: Props) {
       </section>
       <section className="section-shell grid gap-8 py-16 lg:grid-cols-[1fr_420px]">
         <div>
+          {course.slug === "bhv-opleiding" && (
+            <figure className="mb-8 overflow-hidden border border-border bg-white">
+              <img
+                src={visualAssets.bhvPhoto.src}
+                alt={visualAssets.bhvPhoto.alt}
+                className="h-auto w-full object-cover"
+              />
+            </figure>
+          )}
           <div className="grid gap-4 md:grid-cols-3">
             <div className="official-card p-4"><p className="font-bold">Leervorm</p><p className="mt-2 text-sm text-muted-foreground">{course.format}</p></div>
             <div className="official-card p-4 md:mt-6"><p className="font-bold">Duur</p><p className="mt-2 text-sm text-muted-foreground">{course.duration}</p></div>

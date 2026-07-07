@@ -26,5 +26,9 @@ export const visualAssets = {
   hoistCertificate: {
     src: "/images/vca-hoist-certificate.png",
     alt: "Hoogwerker certificaat als visuele ondersteuning voor veilig werken op hoogte"
+  },
+  bhvPhoto: {
+    src: "/images/bhv-course-photo.png",
+    alt: "BHV cursusfoto met hesjes als visuele ondersteuning voor bedrijfshulpverlening"
   }
 } as const;
