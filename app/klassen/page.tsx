@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarDays, MapPin, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { classes } from "@/lib/data";
 
@@ -29,9 +28,9 @@ export default function ClassesPage() {
                   <h2 className="text-xl font-bold">{item.course} — {item.day} {item.time}</h2>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-2"><UserRound className="h-4 w-4" /> {item.teacher}</span>
-                  <span className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {item.location}</span>
-                  <span className="flex items-center gap-2"><CalendarDays className="h-4 w-4" /> {item.day}</span>
+                  <span>{item.teacher}</span>
+                  <span>{item.location}</span>
+                  <span>{item.day}</span>
                 </div>
               </div>
               <div className="grid gap-3 md:w-44">

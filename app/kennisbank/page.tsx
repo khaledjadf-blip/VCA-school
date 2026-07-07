@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -86,7 +85,7 @@ export default function KnowledgePage() {
             <h2 className="text-xl font-bold text-primary">Twijfelt u over de juiste route?</h2>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">Doe de keuzehulp of schrijf u in. Wij controleren de cursuskeuze voordat de planning definitief wordt.</p>
             <Button asChild className="mt-5 w-full" variant="accent">
-              <Link href="/advies">Doe de keuzehulp <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/advies">Doe de keuzehulp</Link>
             </Button>
           </div>
         </div>
@@ -141,7 +140,7 @@ export default function KnowledgePage() {
                           ))}
                         </div>
                         <Link href={type.href} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">
-                          Bekijk {type.title} <ArrowRight className="h-4 w-4" />
+                          Bekijk {type.title}
                         </Link>
                       </article>
                     ))}
@@ -169,7 +168,7 @@ export default function KnowledgePage() {
             </p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="accent">
-                <Link href="/contact">Contact opnemen <ArrowRight className="h-4 w-4" /></Link>
+                <Link href="/contact">Contact opnemen</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/advies">Doe de keuzehulp</Link>

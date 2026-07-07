@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const steps = [
@@ -108,10 +107,7 @@ export function CourseQuiz() {
               <p className="pb-4 leading-7 text-muted-foreground">{info.why}</p>
               <div className="grid gap-0 border-t border-border">
                 {info.situations.map((item) => (
-                  <p key={item} className="flex gap-3 border-b border-border py-3 font-semibold">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-                    {item}
-                  </p>
+                  <p key={item} className="border-b border-border py-3 font-semibold">{item}</p>
                 ))}
               </div>
             </div>
@@ -129,7 +125,7 @@ export function CourseQuiz() {
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button asChild variant="accent">
-              <Link href={`/contact?course=${encodeURIComponent(result)}`}>Direct inschrijven <ArrowRight className="h-4 w-4" /></Link>
+              <Link href={`/contact?course=${encodeURIComponent(result)}`}>Direct inschrijven</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href={`/cursussen/${info.slug}`}>Bekijk cursusdetails</Link>

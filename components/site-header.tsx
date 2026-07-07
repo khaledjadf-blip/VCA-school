@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Globe2, Menu, Phone, ShieldCheck, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
@@ -13,7 +12,6 @@ const nav = [
   { href: "/", label: "Home" },
   { href: "/advies", label: "Keuzehulp" },
   { href: "/kennisbank", label: "Kennisbank" },
-  { href: "/klassen", label: "Live klassen" },
   { href: "/over-ons", label: "Over ons" },
   { href: "/contact", label: "Inschrijven" }
 ];
@@ -40,7 +38,7 @@ export function SiteHeader() {
       <div className="section-shell flex min-h-14 items-center justify-between gap-2 py-2 sm:min-h-16">
         <Link href="/" className="site-brand flex min-w-0 items-center gap-2 font-bold sm:gap-3" onClick={closeMenus}>
           <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#154273] text-white sm:h-11 sm:w-11">
-            <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+            VCA
           </span>
           <span className="min-w-0 leading-tight text-[#154273]">
             <span className="block text-sm sm:text-base">VCA Veilig & Vakkundig B.V.</span>
@@ -57,13 +55,11 @@ export function SiteHeader() {
             onClick={toggleLanguage}
             aria-label="Switch language"
           >
-            <Globe2 className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">{language === "ar" ? "Nederlands" : "العربية"}</span>
             <span className="sm:hidden">{language === "ar" ? "NL" : "AR"}</span>
           </Button>
           <Button className="lg:hidden px-2 sm:px-3" variant="outline" size="sm" onClick={() => setOpen(!open)} aria-label="Open menu">
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            <span className="hidden min-[360px]:inline">Menu</span>
+            {open ? "Sluiten" : "Menu"}
           </Button>
         </div>
       </div>
@@ -93,7 +89,7 @@ export function SiteHeader() {
                 aria-haspopup="menu"
               >
                 Cursussen
-                <ChevronDown className={cn("h-4 w-4 transition-transform", coursesOpen && "rotate-180")} aria-hidden="true" />
+                <span aria-hidden="true">{coursesOpen ? "−" : "+"}</span>
               </button>
               {coursesOpen && (
                 <div className="absolute left-0 top-full z-50 w-72 border border-primary bg-white py-2 text-primary shadow-lg" role="menu">
@@ -127,8 +123,7 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <a href="tel:+31687258236" className="ml-auto mr-3 flex items-center gap-2 text-sm font-bold underline-offset-4 hover:underline">
-            <Phone className="h-4 w-4" />
+          <a href="tel:+31687258236" className="ml-auto mr-3 text-sm font-bold underline-offset-4 hover:underline">
             <bdi dir="ltr">+31 6 87258236</bdi>
           </a>
           <Button asChild variant="accent" size="sm">
@@ -155,7 +150,7 @@ export function SiteHeader() {
                 aria-expanded={mobileCoursesOpen}
               >
                 Cursussen
-                <ChevronDown className={cn("h-4 w-4 transition-transform", mobileCoursesOpen && "rotate-180")} aria-hidden="true" />
+                <span aria-hidden="true">{mobileCoursesOpen ? "−" : "+"}</span>
               </button>
               {mobileCoursesOpen && (
                 <div className="grid border-t border-border bg-secondary/60 py-2">
@@ -194,8 +189,7 @@ export function SiteHeader() {
                   Direct inschrijven
                 </Link>
               </Button>
-              <a href="tel:+31687258236" className="mt-3 flex items-center gap-2 text-sm font-bold text-primary">
-                <Phone className="h-4 w-4" />
+              <a href="tel:+31687258236" className="mt-3 flex text-sm font-bold text-primary">
                 <bdi dir="ltr">+31 6 87258236</bdi>
               </a>
             </div>

@@ -1,5 +1,3 @@
-import { Award, BriefcaseBusiness, Forklift, ShieldCheck, Users } from "lucide-react";
-
 export const courses = [
   {
     slug: "vca-basis",
@@ -29,8 +27,7 @@ export const courses = [
         question: "Krijg ik direct uitslag?",
         answer: "Bij digitale examens is de uitslag meestal snel bekend. Na slagen volgt correcte registratie volgens de examenroute."
       }
-    ],
-    icon: ShieldCheck
+    ]
   },
   {
     slug: "vca-vol",
@@ -60,8 +57,7 @@ export const courses = [
         question: "Hoe lang is een VCA VOL certificaat geldig?",
         answer: "Een VCA-diploma is normaal gesproken 10 jaar geldig. Controleer altijd de exacte diplomagegevens in de registratie."
       }
-    ],
-    icon: BriefcaseBusiness
+    ]
   },
   {
     slug: "vil-vcu",
@@ -91,8 +87,7 @@ export const courses = [
         question: "Waarom is VIL-VCU belangrijk voor uitzendbureaus?",
         answer: "Omdat uitzendorganisaties kandidaten goed moeten informeren over risico's, benodigde certificaten en veilige inzet bij opdrachtgevers."
       }
-    ],
-    icon: Users
+    ]
   },
   {
     slug: "heftruck-opleiding",
@@ -122,8 +117,7 @@ export const courses = [
         question: "Krijg ik een certificaat?",
         answer: "Na voldoende resultaat ontvangt de kandidaat een certificaat of bewijs van deelname volgens de gekozen opleiding."
       }
-    ],
-    icon: Forklift
+    ]
   },
   {
     slug: "examens-registratie",
@@ -153,8 +147,7 @@ export const courses = [
         question: "Kan een bedrijf meerdere kandidaten aanmelden?",
         answer: "Ja. Bedrijven kunnen meerdere kandidaten aanmelden voor examenplanning of incompany afname."
       }
-    ],
-    icon: Award
+    ]
   }
 ];
 

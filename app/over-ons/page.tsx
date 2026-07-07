@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { visualAssets } from "@/lib/visual-assets";
 
@@ -37,15 +36,15 @@ const roomPlan = [
 
 const timeline = [
   {
-    title: "1. Start vanuit duidelijke behoefte",
+    title: "Start vanuit duidelijke behoefte",
     text: "Veel kandidaten zoeken niet naar de goedkoopste cursus, maar naar zekerheid: welke VCA heb ik nodig, wanneer kan ik terecht en wat gebeurt er na het examen?"
   },
   {
-    title: "2. Utrecht als eerste vaste basis",
+    title: "Utrecht als eerste vaste basis",
     text: "De eerste leslocatie wordt praktisch ingericht: tafels, rustige uitleg, overzichtelijke klassen en een planning die past bij werkende mensen."
   },
   {
-    title: "3. Eerst kwaliteit, daarna groei",
+    title: "Eerst kwaliteit, daarna groei",
     text: "De school groeit liever vanuit goede begeleiding en nette processen dan vanuit drukke beloftes. Dat past beter bij veiligheidsonderwijs."
   }
 ];
@@ -71,7 +70,7 @@ export default function AboutPage() {
               De eerste vaste lesomgeving wordt ingericht met rustige klasopstelling, voldoende tafels en ruimte voor 2 tot 3 lesmomenten per planning.
             </p>
             <Button asChild className="mt-5 w-full" variant="accent">
-              <Link href="/contact">Plan een cursus <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/contact">Plan een cursus</Link>
             </Button>
           </aside>
         </div>

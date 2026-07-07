@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -65,7 +64,7 @@ export function ContactForm() {
       <label className="text-sm font-semibold">Bericht<Textarea {...form.register("message")} className="mt-1" /></label>
       <FieldError>{form.formState.errors.message?.message}</FieldError>
       {sent && <p className="border-l-4 border-accent bg-secondary p-3 text-sm font-semibold">Dank u. We nemen snel contact op.</p>}
-      <Button type="submit" variant="accent"><Send className="h-4 w-4" /> Verstuur bericht</Button>
+      <Button type="submit" variant="accent">Verstuur bericht</Button>
     </form>
   );
 }
@@ -152,7 +151,7 @@ export function EnrollmentForm({ defaultCourse }: { defaultCourse?: string }) {
       </label>
       <label className="text-sm font-semibold">Extra informatie<Textarea {...form.register("notes")} className="mt-1" placeholder="Bijvoorbeeld locatie, groep, spoed, klacht of vraag over examen." /></label>
       {sent && <p className="border-l-4 border-accent bg-secondary p-3 text-sm font-semibold">Inschrijving ontvangen. Voor dit MVP staat de aanvraag in de console.</p>}
-      <Button type="submit" variant="accent"><Send className="h-4 w-4" /> Aanmelding versturen</Button>
+      <Button type="submit" variant="accent">Aanmelding versturen</Button>
     </form>
   );
 }

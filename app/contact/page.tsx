@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Phone, ShieldCheck } from "lucide-react";
 import { ContactForm, EnrollmentForm } from "@/components/contact-forms";
 import { visualAssets } from "@/lib/visual-assets";
 
@@ -20,8 +19,8 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             Eerst geeft u door welke cursus u nodig heeft en welke dagen passen. Daarna controleren wij datum, locatie, examen en eventuele taalondersteuning.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <span className="inline-flex items-center gap-2 border border-border bg-secondary px-4 py-3 font-bold"><Phone className="h-5 w-5 text-accent" /> <bdi dir="ltr">+31 6 87258236</bdi></span>
-            <span className="inline-flex items-center gap-2 border border-border bg-secondary px-4 py-3 font-bold"><ShieldCheck className="h-5 w-5 text-green-600" /> SSVV-erkende examens</span>
+            <span className="inline-flex border border-border bg-secondary px-4 py-3 font-bold"><bdi dir="ltr">+31 6 87258236</bdi></span>
+            <span className="inline-flex border border-border bg-secondary px-4 py-3 font-bold">SSVV-erkende examens</span>
           </div>
         </div>
       </section>

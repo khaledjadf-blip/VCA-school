@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { CategoryFlipCard } from "@/components/course-card";
 import { Button } from "@/components/ui/button";
 import { categories, courses } from "@/lib/data";
@@ -36,14 +35,14 @@ export default function CoursesPage() {
                 <div className="mt-4 flex flex-wrap gap-2">
                   {course.highlights.map((item) => (
                     <span key={item} className="inline-flex items-center gap-2 border border-accent/20 bg-accent/10 px-3 py-2 text-sm font-semibold text-primary">
-                      <CheckCircle2 className="h-4 w-4 text-accent" /> {item}
+                      {item}
                     </span>
                   ))}
                 </div>
               </div>
               <div className="grid gap-3 lg:w-48">
                 <p className="font-bold text-accent">{course.price}</p>
-                <Button asChild variant="outline"><Link href={`/cursussen/${course.slug}`}>Details <ArrowRight className="h-4 w-4" /></Link></Button>
+                <Button asChild variant="outline"><Link href={`/cursussen/${course.slug}`}>Details</Link></Button>
               </div>
             </article>
           ))}
