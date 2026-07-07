@@ -7,6 +7,9 @@ Use only these image files for the current plan.
 - `vca-hero-practice.png`
   - Homepage hero background.
 
+- `vca-forklift-showcase.png`
+  - Full-screen visual section on the homepage between featured courses and the trust section.
+
 ## Detail images to generate next
 
 - `vca-course-folder-detail.png`
@@ -26,4 +29,3 @@ Use only these image files for the current plan.
   - 4:5 detail image of certificate and registration desk.
 
 Do not add unused placeholder sections. Add each image to the site only after the file exists.
-

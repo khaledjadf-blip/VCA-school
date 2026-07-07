@@ -37,13 +37,11 @@ export function SiteHeader() {
     <header className="site-header sticky top-0 z-50 border-b border-primary bg-white">
       <div className="section-shell flex min-h-14 items-center justify-between gap-2 py-2 sm:min-h-16">
         <Link href="/" className="site-brand flex min-w-0 items-center gap-2 font-bold sm:gap-3" onClick={closeMenus}>
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#154273] text-white sm:h-11 sm:w-11">
-            VCA
-          </span>
-          <span className="min-w-0 leading-tight text-[#154273]">
-            <span className="block text-sm sm:text-base">VCA Veilig & Vakkundig B.V.</span>
-            <span className="hidden text-xs font-semibold text-muted-foreground md:block">Opleiding, examinering en certificering</span>
-          </span>
+          <img
+            src="/images/vca-logo.svg"
+            alt="VCA Veilig & Vakkundig B.V."
+            className="site-logo h-11 w-auto sm:h-12"
+          />
         </Link>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">

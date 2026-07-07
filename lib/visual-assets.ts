@@ -18,5 +18,9 @@ export const visualAssets = {
   certificateProcessing: {
     src: "/images/vca-certificate-processing-detail.png",
     alt: "Diploma- en registratieverwerking na VCA examen"
+  },
+  forkliftShowcase: {
+    src: "/images/vca-forklift-showcase.png",
+    alt: "Blauwe heftruck als visuele tussenpagina voor de website"
   }
 } as const;

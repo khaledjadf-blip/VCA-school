@@ -57,6 +57,14 @@ export default function HomePage() {
       </section>
       <CategoriesSection />
       <FeaturedCourses />
+      <section className="relative overflow-hidden bg-white">
+        <div
+          className="min-h-[78svh] bg-contain bg-center bg-no-repeat sm:min-h-[86svh] lg:min-h-screen"
+          style={{ backgroundImage: `url('${visualAssets.forkliftShowcase.src}')` }}
+          aria-label={visualAssets.forkliftShowcase.alt}
+          role="img"
+        />
+      </section>
       <WhySection />
       <ConversionBand />
     </>
