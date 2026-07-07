@@ -48,19 +48,35 @@ export default async function CourseDetailPage({ params }: Props) {
         <div>
           {course.slug === "bhv-opleiding" ? (
             <div className="grid gap-8">
-              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="official-card p-4"><p className="font-bold">Leervorm</p><p className="mt-2 text-sm text-muted-foreground">{course.format}</p></div>
-                  <div className="official-card p-4 md:mt-6"><p className="font-bold">Duur</p><p className="mt-2 text-sm text-muted-foreground">{course.duration}</p></div>
-                  <div className="official-card p-4"><p className="font-bold">Docent</p><p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p></div>
-                </div>
-                <figure className="overflow-hidden border border-border bg-white">
+              <div className="grid gap-6 overflow-hidden border border-border bg-white lg:grid-cols-[1fr_1fr] lg:items-stretch">
+                <figure className="bg-secondary">
                   <img
                     src={visualAssets.bhvPhoto.src}
                     alt={visualAssets.bhvPhoto.alt}
-                    className="h-auto w-full object-contain"
+                    className="h-full w-full object-cover sm:max-h-[32rem] lg:max-h-none"
                   />
                 </figure>
+                <div className="p-6 lg:p-8">
+                  <p className="official-kicker">Trainingsomgeving</p>
+                  <h2 className="mt-2 text-3xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
+                  <p className="mt-4 leading-7 text-muted-foreground">
+                    BHV draait om snel en rustig handelen als er iets gebeurt op de werkvloer. De training is praktisch, helder en gericht op eerste hulp, brand, ontruiming en alarmeren.
+                  </p>
+                  <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                    <div className="official-card p-4">
+                      <p className="font-bold">Leervorm</p>
+                      <p className="mt-2 text-sm text-muted-foreground">{course.format}</p>
+                    </div>
+                    <div className="official-card p-4">
+                      <p className="font-bold">Duur</p>
+                      <p className="mt-2 text-sm text-muted-foreground">{course.duration}</p>
+                    </div>
+                    <div className="official-card p-4">
+                      <p className="font-bold">Docent</p>
+                      <p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="official-card p-6">
                 <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
