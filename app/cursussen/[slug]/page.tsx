@@ -47,32 +47,32 @@ export default async function CourseDetailPage({ params }: Props) {
       <section className="section-shell grid gap-8 py-16 lg:grid-cols-[1fr_420px]">
         <div>
           {course.slug === "bhv-opleiding" ? (
-            <div className="grid gap-8 lg:grid-cols-[1fr_290px] lg:items-start">
-              <div>
+            <div className="grid gap-8">
+              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="official-card p-4"><p className="font-bold">Leervorm</p><p className="mt-2 text-sm text-muted-foreground">{course.format}</p></div>
                   <div className="official-card p-4 md:mt-6"><p className="font-bold">Duur</p><p className="mt-2 text-sm text-muted-foreground">{course.duration}</p></div>
                   <div className="official-card p-4"><p className="font-bold">Docent</p><p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p></div>
                 </div>
-                <div className="official-card mt-8 p-6">
-                  <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
-                  <p className="mt-3 leading-7 text-muted-foreground">{course.audience}</p>
-                  <h2 className="mt-8 text-2xl font-bold">Wat kunt u verwachten?</h2>
-                  <p className="mt-3 leading-7 text-muted-foreground">{course.teacher}</p>
-                  <div className="mt-6 grid gap-3">
-                    {course.highlights.map((item) => (
-                      <span key={item} className="font-semibold">{item}</span>
-                    ))}
-                  </div>
+                <figure className="overflow-hidden border border-border bg-white">
+                  <img
+                    src={visualAssets.bhvPhoto.src}
+                    alt={visualAssets.bhvPhoto.alt}
+                    className="h-auto w-full object-contain"
+                  />
+                </figure>
+              </div>
+              <div className="official-card p-6">
+                <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
+                <p className="mt-3 leading-7 text-muted-foreground">{course.audience}</p>
+                <h2 className="mt-8 text-2xl font-bold">Wat kunt u verwachten?</h2>
+                <p className="mt-3 leading-7 text-muted-foreground">{course.teacher}</p>
+                <div className="mt-6 grid gap-3">
+                  {course.highlights.map((item) => (
+                    <span key={item} className="font-semibold">{item}</span>
+                  ))}
                 </div>
               </div>
-              <figure className="overflow-hidden border border-border bg-white">
-                <img
-                  src={visualAssets.bhvPhoto.src}
-                  alt={visualAssets.bhvPhoto.alt}
-                  className="h-full w-full object-cover"
-                />
-              </figure>
             </div>
           ) : (
             <>
