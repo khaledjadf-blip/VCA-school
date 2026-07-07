@@ -87,7 +87,7 @@ export function FeaturedCourses() {
           </Button>
         </div>
         <div className="course-lanes grid gap-0 border-y border-border bg-white">
-          {courses.slice(0, 3).map((course) => (
+          {courses.slice(0, 4).map((course) => (
             <article key={course.slug} className="grid gap-4 border-b border-border p-5 last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
               <div className="flex gap-4">
                 <div>

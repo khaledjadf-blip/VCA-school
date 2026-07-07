@@ -120,6 +120,36 @@ export const courses = [
     ]
   },
   {
+    slug: "hoogwerker-opleiding",
+    title: "Hoogwerker Opleiding",
+    category: "Hoogwerker Opleiding",
+    summary: "Veilig werken met een hoogwerker, inclusief machinekennis, risicoherkenning en praktijkinstructie.",
+    format: "Praktijkgericht",
+    duration: "1 dag basis of herhaling",
+    price: "vanaf EUR 195",
+    teacher: "Instructeur met aandacht voor veilig werken op hoogte en machinecontrole.",
+    audience: "Medewerkers die een hoogwerker gebruiken of hun kennis willen opfrissen.",
+    highlights: ["Praktijk en toetsing", "Veilig werken op hoogte", "Herhaling mogelijk"],
+    faqs: [
+      {
+        question: "Voor wie is een hoogwerker opleiding bedoeld?",
+        answer: "Voor medewerkers die veilig met een hoogwerker moeten werken, bijvoorbeeld in onderhoud, bouw, montage of facilitaire inzet."
+      },
+      {
+        question: "Is ervaring verplicht?",
+        answer: "Nee. Beginners kunnen de basis volgen en ervaren gebruikers kunnen een herhaling of opfriscursus doen."
+      },
+      {
+        question: "Wat leer ik tijdens de opleiding?",
+        answer: "U leert veilig gebruik, controle vooraf, risico's herkennen, correcte opstelling en verantwoord werken op hoogte."
+      },
+      {
+        question: "Krijg ik na afloop een bewijs?",
+        answer: "Na voldoende resultaat ontvangt u een certificaat of bewijs van deelname volgens de gekozen opleiding."
+      }
+    ]
+  },
+  {
     slug: "examens-registratie",
     title: "Examens & Registratie",
     category: "Examens & Registratie",
@@ -167,6 +197,13 @@ export const categories = [
     icon: "forklift"
   },
   {
+    title: "Hoogwerker Opleiding",
+    description: "Veilig werken op hoogte met praktijkinstructie en toetsing.",
+    detail: "Voor medewerkers die een hoogwerker gebruiken of opfrissing nodig hebben.",
+    href: "/cursussen/hoogwerker-opleiding",
+    icon: "lift"
+  },
+  {
     title: "Examens & Registratie",
     description: "SSVV-erkende examens met directe uitslag en CDR-registratie.",
     detail: "Losse examens, groepsplanning en incompany opties.",
@@ -178,6 +215,7 @@ export const categories = [
 export const classes = [
   { course: "VCA Basis", day: "Maandag", time: "09:00", spots: 4, teacher: "M. de Vries", location: "Rotterdam Centrum" },
   { course: "Heftruck Praktijk", day: "Woensdag", time: "13:00", spots: 0, teacher: "A. Jansen", location: "Utrecht Practice Hub" },
+  { course: "Hoogwerker Praktijk", day: "Woensdag", time: "15:00", spots: 6, teacher: "A. Jansen", location: "Utrecht Practice Hub" },
   { course: "VCA VOL", day: "Donderdag", time: "09:30", spots: 7, teacher: "S. Bakker", location: "Amsterdam Sloterdijk" },
   { course: "VIL-VCU", day: "Vrijdag", time: "10:00", spots: 5, teacher: "N. Kaya", location: "Online live klas" },
   { course: "VCA Basis Examen", day: "Zaterdag", time: "11:00", spots: 9, teacher: "Examenleider R. Meijer", location: "Eindhoven" }
