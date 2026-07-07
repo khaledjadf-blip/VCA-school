@@ -149,6 +149,36 @@ export const courses = [
       }
     ]
   },
+  {
+    slug: "bhv-opleiding",
+    title: "BHV Opleiding",
+    category: "BHV Opleiding",
+    summary: "Praktische bedrijfshulpverlening voor eerste hulp, brand, ontruiming en alarmeren op de werkvloer.",
+    format: "Praktijkgericht",
+    duration: "1 dag basis of herhaling",
+    price: "vanaf EUR 175",
+    teacher: "BHV-instructeur met aandacht voor handelen in noodsituaties en duidelijke procedures.",
+    audience: "Medewerkers die BHV-taken uitvoeren of een herhaling nodig hebben binnen hun bedrijf.",
+    highlights: ["Eerste hulp", "Brand en ontruiming", "BHV-rol op de werkvloer"],
+    faqs: [
+      {
+        question: "Wat is BHV precies?",
+        answer: "BHV staat voor bedrijfshulpverlening. Een BHV'er helpt bij eerste hulp, alarmeren, brandbestrijding in de beginfase en ontruiming van het gebouw."
+      },
+      {
+        question: "Voor wie is BHV bedoeld?",
+        answer: "Voor medewerkers die binnen een organisatie zijn aangewezen om bij noodsituaties te helpen en de veiligheid van collega's te bewaken."
+      },
+      {
+        question: "Wat leer ik tijdens de BHV opleiding?",
+        answer: "U oefent met eerste hulp, reanimatie- en alarmeringsstappen, brandbestrijding en veilig ontruimen volgens de werksituatie."
+      },
+      {
+        question: "Is herhaling mogelijk?",
+        answer: "Ja. BHV is vaak een jaarlijkse herhaling of opfrissing, zodat kennis en vaardigheden op peil blijven."
+      }
+    ]
+  },
 ];
 
 export const categories = [
@@ -172,6 +202,13 @@ export const categories = [
     detail: "Voor medewerkers die een hoogwerker gebruiken of opfrissing nodig hebben.",
     href: "/cursussen/hoogwerker-opleiding",
     icon: "lift"
+  },
+  {
+    title: "BHV Opleiding",
+    description: "Eerste hulp, brand, ontruiming en alarmeren op de werkvloer.",
+    detail: "Voor medewerkers die BHV-taken uitvoeren of herhaling nodig hebben.",
+    href: "/cursussen/bhv-opleiding",
+    icon: "shield"
   },
 ] as const;
 

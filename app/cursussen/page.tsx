@@ -20,7 +20,7 @@ export default function CoursesPage() {
         </div>
       </section>
       <section className="section-shell py-14">
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {categories.map((category) => <CategoryFlipCard key={category.title} {...category} />)}
         </div>
       </section>
