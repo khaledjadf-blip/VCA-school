@@ -15,7 +15,7 @@ export const bookingStatusLabels: Record<Booking["status"], string> = {
   pending: "Wacht op betaling",
   paid: "Betaald",
   failed: "Mislukt",
-  canceled: "Afgebroken",
+  canceled: "Geannuleerd",
   expired: "Verlopen",
   refunded: "Terugbetaald"
 };

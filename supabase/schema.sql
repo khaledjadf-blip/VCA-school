@@ -173,6 +173,44 @@ end;
 $$;
 
 -- ---------------------------------------------------------------------------
+-- Boeking annuleren of verwijderen door beheer (atomair).
+-- Geeft een betaalde plek weer vrij.
+-- ---------------------------------------------------------------------------
+create or replace function public.cancel_booking(p_booking_id uuid, p_status text, p_delete boolean default false)
+returns void
+language plpgsql
+set search_path = ''
+as $$
+declare
+  v_booking public.bookings;
+begin
+  if p_status not in ('canceled', 'refunded') then
+    raise exception 'INVALID_STATUS';
+  end if;
+
+  select * into v_booking from public.bookings
+   where id = p_booking_id for update;
+  if not found then
+    raise exception 'BOOKING_NOT_FOUND';
+  end if;
+
+  if v_booking.seat_counted then
+    update public.course_sessions
+       set seats_taken = greatest(seats_taken - 1, 0)
+     where id = v_booking.session_id;
+  end if;
+
+  if p_delete then
+    delete from public.bookings where id = p_booking_id;
+  else
+    update public.bookings
+       set status = p_status, seat_counted = false
+     where id = p_booking_id;
+  end if;
+end;
+$$;
+
+-- ---------------------------------------------------------------------------
 -- Toegang: alleen de server (service_role).
 -- ---------------------------------------------------------------------------
 alter table public.course_sessions enable row level security;
@@ -181,5 +219,7 @@ alter table public.bookings        enable row level security;
 revoke all on public.course_sessions, public.bookings from anon, authenticated;
 revoke execute on function public.create_booking(uuid, text, text, text, text, date, text, text, text) from public, anon, authenticated;
 revoke execute on function public.mark_booking_paid(uuid) from public, anon, authenticated;
+revoke execute on function public.cancel_booking(uuid, text, boolean) from public, anon, authenticated;
 grant  execute on function public.create_booking(uuid, text, text, text, text, date, text, text, text) to service_role;
 grant  execute on function public.mark_booking_paid(uuid) to service_role;
+grant  execute on function public.cancel_booking(uuid, text, boolean) to service_role;

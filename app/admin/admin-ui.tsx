@@ -26,7 +26,10 @@ export function AdminHeader({ title, back }: { title: React.ReactNode; back?: { 
 const okMessages: Record<string, string> = {
   aangemaakt: "De nieuwe datum is opgeslagen.",
   opgeslagen: "De wijzigingen zijn opgeslagen.",
-  verwijderd: "De datum is verwijderd."
+  verwijderd: "De datum is verwijderd.",
+  "boeking-annuleren": "De boeking is geannuleerd. De plek is weer vrij.",
+  "boeking-terugbetalen": "De boeking is geannuleerd en het bedrag wordt via Mollie terugbetaald.",
+  "boeking-verwijderen": "De boeking is verwijderd."
 };
 
 export function Notice({ ok, fout }: { ok?: string; fout?: string }) {

@@ -8,6 +8,9 @@ export function explainDbError(error: DbError, action = "Opslaan", status?: numb
   if (code === "42P01" || code === "PGRST205" || (status === 404 && !error?.message) || /does not exist|could not find the table|schema cache/i.test(text)) {
     return "De tabellen bestaan nog niet in Supabase. Voer het bestand supabase/schema.sql uit in Supabase → SQL Editor → Run.";
   }
+  if (code === "PGRST202" || /could not find the function/i.test(text)) {
+    return "De database mist een nieuwe functie. Voer het bestand supabase/schema.sql opnieuw uit in Supabase → SQL Editor → Run (dat is veilig).";
+  }
   if (code === "42501" || /permission denied/i.test(text)) {
     return "Geen toegang tot de database. Gebruik in Vercel bij SUPABASE_SERVICE_ROLE_KEY de geheime sleutel (service_role / secret), niet de anon- of publishable-sleutel.";
   }

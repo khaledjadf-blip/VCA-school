@@ -51,6 +51,7 @@ function customerEmailHtml(b: BookingWithSession) {
     ${row("Betaald", escapeHtml(formatEuro(b.amount_cents)))}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
+  <p>Annuleren is kosteloos tot 7 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
   <p>Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
   <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
   <hr style="border:none;border-top:1px solid #d8e2ec;margin:24px 0">
@@ -65,6 +66,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
+    <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ.</p>
     <p>لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
   </div>
 </div>`;
@@ -124,6 +126,10 @@ export async function syncPayment(paymentId: string): Promise<Booking["status"] 
     .maybeSingle();
   const booking = data as BookingWithSession | null;
   if (!booking || booking.id !== payment.bookingId) return null;
+
+  // Door beheer geannuleerd of terugbetaald: Mollie meldt na een terugbetaling
+  // nog steeds "paid", dus niet opnieuw bevestigen.
+  if (booking.status === "canceled" || booking.status === "refunded") return booking.status;
 
   if (payment.status === "paid") {
     if (payment.amountCents !== booking.amount_cents) {

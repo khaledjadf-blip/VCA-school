@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminHeader, Notice, bookingStatusLabels, courseTitle } from "@/app/admin/admin-ui";
-import { deleteSessionAction, updateSessionAction } from "@/app/admin/actions";
+import { bookingAction, deleteSessionAction, updateSessionAction } from "@/app/admin/actions";
+import { ConfirmButton } from "@/app/admin/confirm-button";
 import { SessionForm } from "@/app/admin/session-form";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -78,7 +79,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
           <p className="official-card p-6 text-muted-foreground">Nog geen boekingen voor deze datum.</p>
         ) : (
           <div className="official-card overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left text-sm">
+            <table className="w-full min-w-[960px] text-left text-sm">
               <thead className="border-b border-border bg-secondary text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-3">Naam</th>
@@ -87,6 +88,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                   <th className="px-4 py-3">Bedrag</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Geboekt op</th>
+                  <th className="px-4 py-3"></th>
                 </tr>
               </thead>
               <tbody>
@@ -102,6 +104,46 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-muted-foreground"><LocalDateTime iso={b.created_at} /></td>
+                    <td className="px-4 py-3">
+                      <form action={bookingAction} className="flex flex-wrap justify-end gap-2">
+                        <input type="hidden" name="id" value={b.id} />
+                        {b.status === "paid" && b.payment_id ? (
+                          <ConfirmButton
+                            name="mode"
+                            value="terugbetalen"
+                            variant="outline"
+                            size="sm"
+                            question={`${b.first_name} ${b.last_name}: annuleren en ${formatEuro(b.amount_cents)} terugbetalen via Mollie?`}
+                            questionAr={`${b.first_name} ${b.last_name}: إلغاء الحجز وإرجاع ${formatEuro(b.amount_cents)} عبر Mollie؟`}
+                          >
+                            Annuleren + terugbetalen
+                          </ConfirmButton>
+                        ) : null}
+                        {b.status === "paid" || b.status === "pending" ? (
+                          <ConfirmButton
+                            name="mode"
+                            value="annuleren"
+                            variant="outline"
+                            size="sm"
+                            question={`${b.first_name} ${b.last_name}: annuleren zonder terugbetaling?`}
+                            questionAr={`${b.first_name} ${b.last_name}: إلغاء الحجز بدون إرجاع المبلغ؟`}
+                          >
+                            Annuleren
+                          </ConfirmButton>
+                        ) : null}
+                        <ConfirmButton
+                          name="mode"
+                          value="verwijderen"
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-700 hover:bg-red-50"
+                          question={`${b.first_name} ${b.last_name}: boeking definitief verwijderen?${b.status === "paid" ? " Er wordt NIETS terugbetaald." : ""}`}
+                          questionAr={`${b.first_name} ${b.last_name}: حذف الحجز نهائيا؟${b.status === "paid" ? " لن يتم إرجاع أي مبلغ." : ""}`}
+                        >
+                          Verwijderen
+                        </ConfirmButton>
+                      </form>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -120,18 +162,24 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
         <SessionForm action={updateSessionAction} values={values} submitLabel="Wijzigingen opslaan" />
       </section>
 
-      {bookings.length === 0 ? (
-        <section className="official-card border-t-red-600 p-6">
-          <h2 className="text-lg font-bold">Datum verwijderen</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Kan alleen zolang er nog geen boekingen zijn.</p>
-          <form action={deleteSessionAction} className="mt-4">
-            <input type="hidden" name="id" value={session.id} />
-            <Button type="submit" variant="outline" size="sm" className="border-red-600 text-red-700 hover:bg-red-50">
-              Verwijderen
-            </Button>
-          </form>
-        </section>
-      ) : null}
+      <section className="official-card border-t-red-600 p-6">
+        <h2 className="text-lg font-bold">Datum verwijderen</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Verwijdert de datum en alle niet-betaalde boekingen. Betaalde boekingen moet u eerst annuleren.
+        </p>
+        <form action={deleteSessionAction} className="mt-4">
+          <input type="hidden" name="id" value={session.id} />
+          <ConfirmButton
+            variant="outline"
+            size="sm"
+            className="border-red-600 text-red-700 hover:bg-red-50"
+            question="Deze datum definitief verwijderen?"
+            questionAr="حذف هذا الموعد نهائيا؟"
+          >
+            Verwijderen
+          </ConfirmButton>
+        </form>
+      </section>
     </div>
   );
 }

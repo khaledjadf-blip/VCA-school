@@ -29,7 +29,7 @@ export class MollieProvider implements PaymentProvider {
 
   constructor(private readonly apiKey: string) {}
 
-  private async request(path: string, init?: RequestInit): Promise<MolliePayment> {
+  private async request<T = MolliePayment>(path: string, init?: RequestInit): Promise<T> {
     const res = await fetch(`${API}${path}`, {
       ...init,
       headers: { Authorization: `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
@@ -57,5 +57,16 @@ export class MollieProvider implements PaymentProvider {
   async getPayment(id: string) {
     if (!/^tr_[A-Za-z0-9]+$/.test(id)) throw new Error("Ongeldig Mollie-betaal-id");
     return toProviderPayment(await this.request(`/payments/${id}`));
+  }
+
+  async refundPayment(id: string, amountCents: number, description: string) {
+    if (!/^tr_[A-Za-z0-9]+$/.test(id)) throw new Error("Ongeldig Mollie-betaal-id");
+    await this.request<unknown>(`/payments/${id}/refunds`, {
+      method: "POST",
+      body: JSON.stringify({
+        amount: { currency: "EUR", value: (amountCents / 100).toFixed(2) },
+        description: description.slice(0, 140)
+      })
+    });
   }
 }

@@ -3,9 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkPassword, endAdminSession, requireAdmin, startAdminSession } from "@/lib/admin-auth";
+import { courseTitle } from "@/lib/admin-labels";
 import { explainDbError } from "@/lib/admin-db-errors";
 import { courses } from "@/lib/data";
-import { getSupabase } from "@/lib/supabase";
+import { getPaymentProvider } from "@/lib/payments";
+import { getSupabase, type Booking } from "@/lib/supabase";
 import { amsterdamToIso, euroToCents } from "@/lib/time";
 
 const courseSlugs = new Set(courses.map((c) => c.slug));
@@ -129,17 +131,63 @@ export async function updateSessionAction(formData: FormData) {
 export async function deleteSessionAction(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
+  const path = `/admin/sessies/${id}`;
   const supabase = getSupabase();
 
-  const { count } = await supabase.from("bookings").select("id", { count: "exact", head: true }).eq("session_id", id);
-  if (count) back(`/admin/sessies/${id}`, "Deze datum heeft boekingen en kan niet verwijderd worden. Zet de status op 'Geannuleerd'.");
+  // Betaalde boekingen eerst annuleren (en eventueel terugbetalen), zodat er niets ongemerkt verdwijnt.
+  const { count: paid } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("session_id", id)
+    .eq("status", "paid");
+  if (paid) back(path, `Deze datum heeft ${paid} betaalde boeking(en). Annuleer die eerst; daarna kunt u de datum verwijderen.`);
 
   const { data: current } = await supabase.from("course_sessions").select("course_slug").eq("id", id).single();
-  const { error } = await supabase.from("course_sessions").delete().eq("id", id);
+  const { error: bookingsError } = await supabase.from("bookings").delete().eq("session_id", id);
+  const { error } = bookingsError ? { error: bookingsError } : await supabase.from("course_sessions").delete().eq("id", id);
   if (error) {
     console.error("Datum verwijderen mislukt", error);
-    back(`/admin/sessies/${id}`, explainDbError(error, "Verwijderen"));
+    back(path, explainDbError(error, "Verwijderen"));
   }
   if (current) refreshPublicPages(current.course_slug);
   redirect("/admin?ok=verwijderd");
+}
+
+const bookingModes = new Set(["annuleren", "terugbetalen", "verwijderen"]);
+
+export async function bookingAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const mode = String(formData.get("mode") ?? "");
+  const supabase = getSupabase();
+
+  const { data } = await supabase.from("bookings").select("*, course_sessions(course_slug, starts_at)").eq("id", id).maybeSingle();
+  const booking = data as (Booking & { course_sessions: { course_slug: string; starts_at: string } | null }) | null;
+  if (!booking || !bookingModes.has(mode)) back("/admin", "Deze boeking bestaat niet meer.");
+  const path = `/admin/sessies/${booking.session_id}`;
+
+  if (mode === "terugbetalen") {
+    const provider = getPaymentProvider();
+    if (booking.status !== "paid" || !booking.payment_id || !provider) back(path, "Alleen betaalde online boekingen kunnen worden terugbetaald.");
+    try {
+      const course = booking.course_sessions ? courseTitle(booking.course_sessions.course_slug) : "Cursus";
+      await provider.refundPayment(booking.payment_id, booking.amount_cents, `Terugbetaling ${course} – ${booking.first_name} ${booking.last_name}`);
+    } catch (refundError) {
+      console.error("Terugbetalen mislukt", refundError);
+      back(path, `Terugbetalen via Mollie is mislukt: ${refundError instanceof Error ? refundError.message : "onbekende fout"}`);
+    }
+  }
+
+  const { error } = await supabase.rpc("cancel_booking", {
+    p_booking_id: booking.id,
+    p_status: mode === "terugbetalen" ? "refunded" : "canceled",
+    p_delete: mode === "verwijderen"
+  });
+  if (error) {
+    console.error("Boeking bijwerken mislukt", error);
+    back(path, explainDbError(error, mode === "verwijderen" ? "Verwijderen" : "Annuleren"));
+  }
+
+  if (booking.course_sessions) refreshPublicPages(booking.course_sessions.course_slug);
+  redirect(`${path}?ok=boeking-${mode}`);
 }

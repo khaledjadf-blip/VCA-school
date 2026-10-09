@@ -24,4 +24,6 @@ export interface PaymentProvider {
   createPayment(input: CreatePaymentInput): Promise<ProviderPayment>;
   /** Haalt de echte status altijd opnieuw op bij de aanbieder (nooit vertrouwen op de webhook-inhoud). */
   getPayment(id: string): Promise<ProviderPayment>;
+  /** Volledige terugbetaling van een betaalde betaling. */
+  refundPayment(id: string, amountCents: number, description: string): Promise<void>;
 }
