@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export { DEFAULT_LOCATION, bookingStatusLabels, courseTitle, sessionStatusLabels } from "@/lib/admin-labels";
 
-export function AdminHeader({ title, back }: { title: string; back?: { href: string; label: string } }) {
+export function AdminHeader({ title, back }: { title: React.ReactNode; back?: { href: string; label: string } }) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>

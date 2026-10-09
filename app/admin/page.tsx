@@ -4,7 +4,8 @@ import { loginAction } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { isAdmin, isAdminConfigured } from "@/lib/admin-auth";
 import { getSupabase, isSupabaseConfigured, type CourseSession } from "@/lib/supabase";
-import { formatDateTimeNl, formatEuro } from "@/lib/time";
+import { Bilingual, LocalDateTime } from "@/components/localized";
+import { formatEuro } from "@/lib/time";
 
 type Props = { searchParams: Promise<{ fout?: string; ok?: string; toon?: string }> };
 
@@ -115,13 +116,13 @@ export default async function AdminPage({ searchParams }: Props) {
                 const waiting = pending.get(s.id) ?? 0;
                 return (
                   <tr key={s.id} className="border-b border-border last:border-b-0">
-                    <td className="whitespace-nowrap px-4 py-3 font-semibold">{formatDateTimeNl(s.starts_at)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-semibold"><LocalDateTime iso={s.starts_at} /></td>
                     <td className="px-4 py-3">{courseTitle(s.course_slug)}</td>
                     <td className="px-4 py-3 text-muted-foreground">{s.location}</td>
                     <td className="whitespace-nowrap px-4 py-3">{formatEuro(s.price_cents)}</td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <span className="font-bold">{s.seats_taken} / {s.seats_total}</span>
-                      {waiting ? <span className="ms-2 text-xs text-muted-foreground">(+{waiting} wacht)</span> : null}
+                      {waiting ? <span className="ms-2 text-xs text-muted-foreground"><Bilingual nl={`(+${waiting} wacht op betaling)`} ar={`(+${waiting} بانتظار الدفع)`} /></span> : null}
                     </td>
                     <td className="px-4 py-3">{sessionStatusLabels[s.status]}</td>
                     <td className="px-4 py-3 text-end">

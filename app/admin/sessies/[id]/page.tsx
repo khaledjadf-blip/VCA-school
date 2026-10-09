@@ -6,7 +6,8 @@ import { SessionForm } from "@/app/admin/session-form";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
-import { centsToEuroInput, formatDateTimeNl, formatEuro, isoToAmsterdam } from "@/lib/time";
+import { Bilingual, LocalDateTime } from "@/components/localized";
+import { centsToEuroInput, formatEuro, isoToAmsterdam } from "@/lib/time";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -52,7 +53,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
   return (
     <div className="section-shell max-w-5xl">
       <AdminHeader
-        title={`${courseTitle(session.course_slug)} · ${formatDateTimeNl(session.starts_at)}`}
+        title={<>{courseTitle(session.course_slug)} · <LocalDateTime iso={session.starts_at} /></>}
         back={{ href: "/admin", label: "Terug naar overzicht" }}
       />
       <Notice ok={ok} fout={fout} />
@@ -62,7 +63,10 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
           <div>
             <h2 className="text-2xl font-bold">Boekingen</h2>
             <p className="text-sm text-muted-foreground">
-              {paid.length} betaald · {session.seats_taken} van {session.seats_total} plekken bezet
+              <Bilingual
+                nl={`${paid.length} betaald · ${session.seats_taken} van ${session.seats_total} plekken bezet`}
+                ar={`${paid.length} دفعوا · ${session.seats_taken} من ${session.seats_total} مقاعد محجوزة`}
+              />
             </p>
           </div>
           <Button asChild variant="outline" size="sm">
@@ -97,7 +101,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                         {bookingStatusLabels[b.status]}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">{formatDateTimeNl(b.created_at)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground"><LocalDateTime iso={b.created_at} /></td>
                   </tr>
                 ))}
               </tbody>
