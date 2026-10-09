@@ -7,7 +7,8 @@ import { courseTitle } from "@/lib/admin-labels";
 import { explainDbError } from "@/lib/admin-db-errors";
 import { courses } from "@/lib/data";
 import { getPaymentProvider } from "@/lib/payments";
-import { getSupabase, type Booking } from "@/lib/supabase";
+import { sendCancellationEmails, type BookingWithSession } from "@/lib/booking-payments";
+import { getSupabase } from "@/lib/supabase";
 import { amsterdamToIso, euroToCents } from "@/lib/time";
 
 const courseSlugs = new Set(courses.map((c) => c.slug));
@@ -161,8 +162,8 @@ export async function bookingAction(formData: FormData) {
   const mode = String(formData.get("mode") ?? "");
   const supabase = getSupabase();
 
-  const { data } = await supabase.from("bookings").select("*, course_sessions(course_slug, starts_at)").eq("id", id).maybeSingle();
-  const booking = data as (Booking & { course_sessions: { course_slug: string; starts_at: string } | null }) | null;
+  const { data } = await supabase.from("bookings").select("*, course_sessions(*)").eq("id", id).maybeSingle();
+  const booking = data as BookingWithSession | null;
   if (!booking || !bookingModes.has(mode)) back("/admin", "Deze boeking bestaat niet meer.");
   const path = `/admin/sessies/${booking.session_id}`;
 
@@ -189,5 +190,11 @@ export async function bookingAction(formData: FormData) {
   }
 
   if (booking.course_sessions) refreshPublicPages(booking.course_sessions.course_slug);
+
+  if (mode !== "verwijderen" && formData.get("notify") === "on" && booking.course_sessions) {
+    const sent = await sendCancellationEmails(booking, mode === "terugbetalen");
+    if (!sent) back(path, `De boeking is geannuleerd, maar de e-mail aan ${booking.email} kon niet worden verstuurd. Neem zelf contact op met de klant.`);
+    redirect(`${path}?ok=boeking-${mode}-gemaild`);
+  }
   redirect(`${path}?ok=boeking-${mode}`);
 }

@@ -581,5 +581,8 @@ Object.assign(arabicTranslations, {
   "De boeking is verwijderd.": "تم حذف الحجز.",
   "Alleen betaalde online boekingen kunnen worden terugbetaald.": "يمكن إرجاع المبلغ فقط للحجوزات المدفوعة أونلاين.",
   "Deze boeking bestaat niet meer.": "هذا الحجز لم يعد موجودا.",
-  "De database mist een nieuwe functie. Voer het bestand supabase/schema.sql opnieuw uit in Supabase → SQL Editor → Run (dat is veilig).": "قاعدة البيانات تنقصها وظيفة جديدة. شغّل الملف supabase/schema.sql مرة أخرى في Supabase ← SQL Editor ← Run (هذا آمن)."
+  "De database mist een nieuwe functie. Voer het bestand supabase/schema.sql opnieuw uit in Supabase → SQL Editor → Run (dat is veilig).": "قاعدة البيانات تنقصها وظيفة جديدة. شغّل الملف supabase/schema.sql مرة أخرى في Supabase ← SQL Editor ← Run (هذا آمن).",
+  "Klant e-mailen": "إرسال إيميل للزبون",
+  "De boeking is geannuleerd en de klant heeft een e-mail gekregen. De plek is weer vrij.": "تم إلغاء الحجز وأُرسل إيميل للزبون. المقعد أصبح متاحا من جديد.",
+  "De boeking is geannuleerd, het bedrag wordt via Mollie terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ عبر Mollie، وأُرسل إيميل للزبون."
 });

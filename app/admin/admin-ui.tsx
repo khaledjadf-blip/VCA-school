@@ -29,7 +29,9 @@ const okMessages: Record<string, string> = {
   verwijderd: "De datum is verwijderd.",
   "boeking-annuleren": "De boeking is geannuleerd. De plek is weer vrij.",
   "boeking-terugbetalen": "De boeking is geannuleerd en het bedrag wordt via Mollie terugbetaald.",
-  "boeking-verwijderen": "De boeking is verwijderd."
+  "boeking-verwijderen": "De boeking is verwijderd.",
+  "boeking-annuleren-gemaild": "De boeking is geannuleerd en de klant heeft een e-mail gekregen. De plek is weer vrij.",
+  "boeking-terugbetalen-gemaild": "De boeking is geannuleerd, het bedrag wordt via Mollie terugbetaald en de klant heeft een e-mail gekregen."
 };
 
 export function Notice({ ok, fout }: { ok?: string; fout?: string }) {

@@ -107,6 +107,12 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                     <td className="px-4 py-3">
                       <form action={bookingAction} className="flex flex-wrap justify-end gap-2">
                         <input type="hidden" name="id" value={b.id} />
+                        {b.status === "paid" || b.status === "pending" ? (
+                          <label className="flex w-full items-center justify-end gap-2 text-xs font-semibold text-muted-foreground">
+                            <input type="checkbox" name="notify" defaultChecked className="h-4 w-4 accent-[#d45213]" />
+                            Klant e-mailen
+                          </label>
+                        ) : null}
                         {b.status === "paid" && b.payment_id ? (
                           <ConfirmButton
                             name="mode"

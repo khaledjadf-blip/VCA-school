@@ -7,7 +7,7 @@ import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
 
-type BookingWithSession = Booking & { course_sessions: CourseSession };
+export type BookingWithSession = Booking & { course_sessions: CourseSession };
 
 const failedStatuses = new Set(["failed", "canceled", "expired"]);
 
@@ -106,6 +106,48 @@ async function sendConfirmationEmails(b: BookingWithSession) {
     })
   ]);
   for (const r of results) if (r.status === "rejected") console.error("Bevestigingsmail versturen mislukt", r.reason);
+}
+
+/** E-mail aan de klant (met kopie aan het bedrijf) na annuleren door beheer. */
+export async function sendCancellationEmails(b: BookingWithSession, refunded: boolean) {
+  const s = b.course_sessions;
+  const course = escapeHtml(courseTitle(s.course_slug));
+  const name = escapeHtml(b.first_name);
+  const amount = escapeHtml(formatEuro(b.amount_cents));
+  const dateNl = escapeHtml(dateText(s.starts_at, "nl-NL"));
+  const dateAr = escapeHtml(dateText(s.starts_at, "ar-u-nu-latn"));
+  const time = escapeHtml(timeText(s));
+
+  const html = `<div style="font-family:Arial,sans-serif;color:#0b2b44;max-width:560px">
+  <h2 style="color:#154273">Uw boeking is geannuleerd</h2>
+  <p>Beste ${name},</p>
+  <p>Uw boeking voor <strong>${course}</strong> op ${dateNl} (${time}) is geannuleerd.</p>
+  ${refunded
+    ? `<p>Wij hebben ${amount} terugbetaald. Het bedrag staat binnen enkele werkdagen weer op uw rekening.</p>`
+    : `<p>Volgens onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a> is bij annuleren binnen 7 dagen voor de cursusdatum geen terugbetaling mogelijk.</p>`}
+  <p>Wilt u een nieuwe datum boeken? Kijk op <a href="https://vcaveiligvakkundig.nl/inschrijven">vcaveiligvakkundig.nl/inschrijven</a>. Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
+  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
+  <hr style="border:none;border-top:1px solid #d8e2ec;margin:24px 0">
+  <div dir="rtl" style="text-align:right">
+    <h2 style="color:#154273">تم إلغاء حجزك</h2>
+    <p>مرحبا ${name}،</p>
+    <p>تم إلغاء حجزك لدورة <strong>${course}</strong> بتاريخ ${dateAr} (<span dir="ltr">${time}</span>).</p>
+    ${refunded
+      ? `<p>أرجعنا لك مبلغ <span dir="ltr">${amount}</span>. سيصل إلى حسابك خلال أيام عمل قليلة.</p>`
+      : `<p>حسب الشروط، الإلغاء خلال الأيام السبعة الأخيرة قبل الدورة لا يشمل إرجاع المبلغ.</p>`}
+    <p>لحجز موعد جديد: <span dir="ltr">vcaveiligvakkundig.nl/inschrijven</span>. لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
+  </div>
+</div>`;
+
+  const subject = `Geannuleerd: ${courseTitle(s.course_slug)} op ${dateText(s.starts_at, "nl-NL")}`;
+  const results = await Promise.allSettled([
+    sendEmail({ to: b.email, fromName: "VCA Veilig & Vakkundig", replyTo: process.env.CONTACT_TO_EMAIL, subject, html }),
+    sendEmail({ subject: `Kopie – ${subject} – ${b.first_name} ${b.last_name}`, replyTo: b.email, html })
+  ]);
+  const failed = results.filter((r) => r.status === "rejected");
+  for (const r of failed) console.error("Annuleringsmail versturen mislukt", (r as PromiseRejectedResult).reason);
+  // De klant-e-mail is de belangrijkste.
+  return results[0].status === "fulfilled";
 }
 
 /**
