@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkPassword, endAdminSession, requireAdmin, startAdminSession } from "@/lib/admin-auth";
+import { explainDbError } from "@/lib/admin-db-errors";
 import { courses } from "@/lib/data";
 import { getSupabase } from "@/lib/supabase";
 import { amsterdamToIso, euroToCents } from "@/lib/time";
@@ -92,10 +93,10 @@ export async function createSessionAction(formData: FormData) {
   const input = readSessionForm(formData);
   if (typeof input === "string") back("/admin/sessies/nieuw", input);
 
-  const { data, error } = await getSupabase().from("course_sessions").insert(input).select("id").single();
+  const { data, error, status } = await getSupabase().from("course_sessions").insert(input).select("id").single();
   if (error || !data) {
     console.error("Datum opslaan mislukt", error);
-    back("/admin/sessies/nieuw", "Opslaan is mislukt. Probeer het opnieuw.");
+    back("/admin/sessies/nieuw", explainDbError(error, "Opslaan", status));
   }
   refreshPublicPages(input.course_slug);
   redirect(`/admin/sessies/${data.id}?ok=aangemaakt`);
@@ -118,7 +119,7 @@ export async function updateSessionAction(formData: FormData) {
   const { error } = await supabase.from("course_sessions").update(input).eq("id", id);
   if (error) {
     console.error("Datum bijwerken mislukt", error);
-    back(path, "Opslaan is mislukt. Probeer het opnieuw.");
+    back(path, explainDbError(error));
   }
   refreshPublicPages(current.course_slug);
   refreshPublicPages(input.course_slug);
@@ -137,7 +138,7 @@ export async function deleteSessionAction(formData: FormData) {
   const { error } = await supabase.from("course_sessions").delete().eq("id", id);
   if (error) {
     console.error("Datum verwijderen mislukt", error);
-    back(`/admin/sessies/${id}`, "Verwijderen is mislukt.");
+    back(`/admin/sessies/${id}`, explainDbError(error, "Verwijderen"));
   }
   if (current) refreshPublicPages(current.course_slug);
   redirect("/admin?ok=verwijderd");

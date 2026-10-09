@@ -378,5 +378,9 @@ Object.assign(arabicTranslations, {
   "Zodra de betaling binnen is, ontvangt u een bevestiging per e-mail. Geen e-mail ontvangen? Bel of WhatsApp ons:": "عند وصول الدفع ستصلك رسالة تأكيد بالإيميل. لم تصلك رسالة؟ اتصل بنا أو واتساب:",
   "De betaling is niet gelukt": "لم ينجح الدفع",
   "Er is niets afgeschreven. U kunt het opnieuw proberen.": "لم يتم خصم أي مبلغ. يمكنك المحاولة مرة أخرى.",
-  "Opnieuw proberen": "حاول مرة أخرى"
+  "Opnieuw proberen": "حاول مرة أخرى",
+  "De tabellen bestaan nog niet in Supabase. Voer het bestand supabase/schema.sql uit in Supabase → SQL Editor → Run.": "الجداول غير موجودة بعد في Supabase. شغّل الملف supabase/schema.sql في Supabase ← SQL Editor ← Run.",
+  "Geen toegang tot de database. Gebruik in Vercel bij SUPABASE_SERVICE_ROLE_KEY de geheime sleutel (service_role / secret), niet de anon- of publishable-sleutel.": "لا يوجد وصول لقاعدة البيانات. في Vercel ضع في SUPABASE_SERVICE_ROLE_KEY المفتاح السري (service_role / secret)، وليس مفتاح anon أو publishable.",
+  "De databasesleutel klopt niet. Controleer SUPABASE_SERVICE_ROLE_KEY in Vercel (zonder spaties ervoor of erna).": "مفتاح قاعدة البيانات غير صحيح. تحقق من SUPABASE_SERVICE_ROLE_KEY في Vercel (بدون مسافات قبله أو بعده).",
+  "Supabase is niet bereikbaar. Controleer SUPABASE_URL in Vercel (bijv. https://xxxx.supabase.co, zonder /rest/v1).": "لا يمكن الوصول إلى Supabase. تحقق من SUPABASE_URL في Vercel (مثلا https://xxxx.supabase.co بدون /rest/v1)."
 });

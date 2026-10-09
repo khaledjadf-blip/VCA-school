@@ -6,6 +6,7 @@ import { isAdmin, isAdminConfigured } from "@/lib/admin-auth";
 import { getSupabase, isSupabaseConfigured, type CourseSession } from "@/lib/supabase";
 import { Bilingual, LocalDateTime } from "@/components/localized";
 import { formatEuro } from "@/lib/time";
+import { explainDbError } from "@/lib/admin-db-errors";
 
 type Props = { searchParams: Promise<{ fout?: string; ok?: string; toon?: string }> };
 
@@ -60,7 +61,7 @@ export default async function AdminPage({ searchParams }: Props) {
   query = showPast
     ? query.lt("starts_at", now).order("starts_at", { ascending: false }).limit(100)
     : query.gte("starts_at", now).order("starts_at", { ascending: true });
-  const { data, error } = await query;
+  const { data, error, status } = await query;
   const sessions = (data ?? []) as CourseSession[];
 
   // Openstaande betalingen per datum (voor het overzicht).
@@ -94,7 +95,7 @@ export default async function AdminPage({ searchParams }: Props) {
       </div>
 
       {error ? (
-        <p role="alert" className="font-semibold text-red-700">De gegevens konden niet worden geladen. Controleer de database-instellingen.</p>
+        <p role="alert" className="border-l-4 border-red-600 bg-red-50 px-4 py-3 font-semibold text-red-800">{explainDbError(error, "Laden", status)}</p>
       ) : sessions.length === 0 ? (
         <p className="official-card p-6 text-muted-foreground">Nog geen data. Klik op &quot;+ Nieuwe datum&quot; om te beginnen.</p>
       ) : (
