@@ -34,13 +34,25 @@ function seatsLabel(seatsLeft: number, isArabic: boolean) {
   return seatsLeft === 1 ? "Nog 1 plek vrij" : `Nog ${seatsLeft} plekken vrij`;
 }
 
-export function UpcomingSessions({ sessions }: { sessions: PublicSession[] }) {
+export function UpcomingSessions({
+  sessions,
+  kicker = "Planning",
+  title = "Komende data",
+  titleHref
+}: {
+  sessions: PublicSession[];
+  kicker?: string;
+  title?: string;
+  titleHref?: string;
+}) {
   const { isArabic } = useLanguage();
 
   return (
-    <div className="official-card mb-8 p-6">
-      <p className="official-kicker">Planning</p>
-      <h2 className="mt-2 text-2xl font-bold">Komende data</h2>
+    <div id={titleHref ? undefined : "komende-data"} className="official-card mb-8 scroll-mt-28 p-6">
+      <p className="official-kicker">{kicker}</p>
+      <h2 className="mt-2 text-2xl font-bold">
+        {titleHref ? <Link href={titleHref} className="hover:underline">{title}</Link> : title}
+      </h2>
 
       {sessions.length === 0 ? (
         <p className="mt-3 leading-7 text-muted-foreground">

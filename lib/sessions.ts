@@ -80,6 +80,26 @@ export async function getUpcomingSessions(courseSlug: string): Promise<PublicSes
   }
 }
 
+/** Alle komende data (alle cursussen) voor de inschrijfpagina. */
+export async function getAllUpcomingSessions(): Promise<PublicSession[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const { data, error } = await getSupabase()
+      .from("course_sessions")
+      .select(PUBLIC_COLUMNS)
+      .in("status", ["open", "closed"])
+      .gt("starts_at", new Date().toISOString())
+      .order("starts_at", { ascending: true })
+      .limit(100);
+    if (error) throw error;
+    return await withSeatsLeft((data ?? []) as SessionRow[]);
+  } catch (error) {
+    console.error("Cursusdata ophalen mislukt", error);
+    return [];
+  }
+}
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Eén datum voor de boekingspagina; null als hij niet (meer) bestaat of geannuleerd is. */

@@ -167,7 +167,7 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
             <Button asChild variant="accent"><Link href="/advies">Doe de keuzehulp</Link></Button>
-            <Button asChild variant="outline"><Link href="/contact">Inschrijven</Link></Button>
+            <Button asChild variant="outline"><Link href="/inschrijven">Inschrijven</Link></Button>
           </div>
         </div>
       </section>

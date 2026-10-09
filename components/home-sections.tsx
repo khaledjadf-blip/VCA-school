@@ -104,7 +104,7 @@ export function FeaturedCourses() {
                 </div>
               </div>
               <Button asChild variant="outline">
-                <Link href={`/contact?course=${encodeURIComponent(course.title)}`}>Inschrijven</Link>
+                <Link href={`/cursussen/${course.slug}#komende-data`}>Inschrijven</Link>
               </Button>
             </article>
           ))}
@@ -139,7 +139,7 @@ export function ConversionBand() {
           </p>
         </div>
         <Button asChild variant="accent" size="lg">
-          <Link href="/contact">Inschrijving starten</Link>
+          <Link href="/inschrijven">Inschrijving starten</Link>
         </Button>
       </div>
     </section>

@@ -13,7 +13,7 @@ const nav = [
   { href: "/advies", label: "Keuzehulp" },
   { href: "/kennisbank", label: "Kennisbank" },
   { href: "/over-ons", label: "Over ons" },
-  { href: "/contact", label: "Inschrijven" }
+  { href: "/inschrijven", label: "Inschrijven" }
 ];
 
 const courseLinks = [
@@ -125,7 +125,7 @@ export function SiteHeader() {
             <bdi dir="ltr">+31 6 16717342</bdi>
           </a>
           <Button asChild variant="accent" size="sm">
-            <Link href="/contact">Direct inschrijven</Link>
+            <Link href="/inschrijven">Direct inschrijven</Link>
           </Button>
         </div>
       </div>
@@ -183,7 +183,7 @@ export function SiteHeader() {
                 {language === "ar" ? "Nederlands" : "العربية"}
               </Button>
               <Button asChild variant="accent">
-                <Link href="/contact" onClick={() => setOpen(false)}>
+                <Link href="/inschrijven" onClick={() => setOpen(false)}>
                   Direct inschrijven
                 </Link>
               </Button>

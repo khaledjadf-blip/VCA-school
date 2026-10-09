@@ -24,7 +24,7 @@ export default function HomePage() {
               Kies VCA Basis, VCA VOL, VIL-VCU, heftruck of alleen examen. Wij helpen met de juiste cursus, beschikbare datum, locatie en examenregistratie.
             </p>
             <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:gap-3">
-              <Button asChild size="lg" variant="accent"><Link href="/contact">Schrijf u direct in</Link></Button>
+              <Button asChild size="lg" variant="accent"><Link href="/inschrijven">Schrijf u direct in</Link></Button>
               <Button asChild size="lg" variant="outline"><Link href="/advies">Doe de keuzehulp</Link></Button>
             </div>
             <div className="hero-trust mt-5 flex flex-wrap gap-2 text-sm font-semibold sm:mt-6 sm:gap-3">

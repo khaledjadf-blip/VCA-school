@@ -45,7 +45,7 @@ export default async function CourseDetailPage({ params }: Props) {
             <p className="text-sm text-muted-foreground">Investering</p>
             <p className="text-3xl font-bold text-accent">{course.price}</p>
             <Button asChild className="mt-5 w-full" variant="accent">
-              <Link href={`/contact?course=${encodeURIComponent(course.title)}`}>Schrijf in</Link>
+              <Link href="#komende-data">Schrijf in</Link>
             </Button>
           </div>
         </div>
