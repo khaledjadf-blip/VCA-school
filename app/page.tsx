@@ -49,7 +49,7 @@ export default function HomePage() {
                 </Link>
               ))}
             </div>
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">Bel of WhatsApp planning: <strong className="text-foreground"><bdi dir="ltr">+31 6 87258236</bdi></strong></p>
+            <p className="mt-5 text-sm leading-6 text-muted-foreground">Bel of WhatsApp planning: <strong className="text-foreground"><bdi dir="ltr">+31 6 16717342</bdi></strong></p>
             <p className="mt-3 bg-primary px-3 py-2 text-sm font-bold text-primary-foreground">Rotterdam · Utrecht · Amsterdam · Incompany</p>
             <p className="mt-3 border-l-4 border-accent bg-white p-3 text-sm font-semibold text-primary" dir="rtl">الدعم باللغة العربية ممكن عند التسجيل والتخطيط.</p>
           </aside>
