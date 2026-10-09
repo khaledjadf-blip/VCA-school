@@ -42,7 +42,23 @@ function translateDom(language: Language) {
   nodes.forEach((node) => {
     if (node.textContent) node.textContent = translateText(node.textContent, language);
   });
+
+  // Ook invulhints, schermlezer-labels en afbeeldingsteksten vertalen.
+  document.querySelectorAll<HTMLElement>("[placeholder], [aria-label], img[alt], [title]").forEach((element) => {
+    for (const attribute of TRANSLATED_ATTRIBUTES) {
+      const value = element.getAttribute(attribute);
+      if (!value) continue;
+      const next = translateText(value, language);
+      if (next !== value) element.setAttribute(attribute, next);
+    }
+  });
+
+  // Paginatitel: "Onderdeel | VCA Veilig & Vakkundig B.V." per deel vertalen.
+  const title = document.title.split(" | ").map((part) => translateText(part, language)).join(" | ");
+  if (title !== document.title) document.title = title;
 }
+
+const TRANSLATED_ATTRIBUTES = ["placeholder", "aria-label", "alt", "title"] as const;
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("nl");
@@ -64,6 +80,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     const observer = new MutationObserver(() => translateDom(language));
     observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
     return () => observer.disconnect();
   }, [language]);
 

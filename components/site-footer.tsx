@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="border-t-4 border-accent bg-primary text-primary-foreground">
       <div className="section-shell grid gap-8 py-10 md:grid-cols-[1.3fr_1fr_1fr]">
         <div>
-          <div className="mb-4 text-base font-bold text-white">VCA Veilig & Vakkundig B.V.</div>
+          <div className="mb-4 text-base font-bold text-white"><bdi dir="ltr">VCA Veilig & Vakkundig B.V.</bdi></div>
           <p className="max-w-md text-sm text-primary-foreground/78">
             Professionele VCA- en heftruckopleidingen met SSVV-erkende examens, heldere begeleiding en praktische planning.
           </p>
