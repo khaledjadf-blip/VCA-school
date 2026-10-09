@@ -363,5 +363,20 @@ Object.assign(arabicTranslations, {
   "Bedankt! We hebben uw gegevens ontvangen en nemen snel contact met u op.": "شكرا! استلمنا معلوماتك وسنتواصل معك قريبا.",
   "Deze datum is vol": "هذا الموعد مكتمل",
   "Kies een andere datum of neem contact met ons op.": "اختر موعدا آخر أو تواصل معنا.",
-  "Bekijk andere data": "شاهد مواعيد أخرى"
+  "Bekijk andere data": "شاهد مواعيد أخرى",
+  "Online boeken is op dit moment niet mogelijk. Bel of WhatsApp ons om te boeken.": "الحجز أونلاين غير متاح حاليا. اتصل بنا أو راسلنا على واتساب للحجز.",
+  "Verder naar betalen": "متابعة إلى الدفع",
+  "U betaalt veilig met iDEAL of creditcard via Mollie.": "ادفع بأمان عبر iDEAL أو البطاقة البنكية من خلال Mollie.",
+  "Betaling": "الدفع",
+  "Uw betaling wordt gecontroleerd": "جار التحقق من الدفع",
+  "Een moment geduld, sluit deze pagina niet.": "لحظة من فضلك، لا تغلق هذه الصفحة.",
+  "Gelukt": "تم بنجاح",
+  "Uw plek is gereserveerd": "تم حجز مقعدك",
+  "Bedankt voor uw betaling. U ontvangt binnen enkele minuten een bevestiging per e-mail. Kijk ook in uw spam-map.": "شكرا على الدفع. ستصلك رسالة تأكيد بالإيميل خلال دقائق. تحقق أيضا من مجلد الرسائل غير المرغوب فيها.",
+  "Terug naar home": "العودة إلى الرئيسية",
+  "Uw betaling is nog niet bevestigd": "لم يتم تأكيد الدفع بعد",
+  "Zodra de betaling binnen is, ontvangt u een bevestiging per e-mail. Geen e-mail ontvangen? Bel of WhatsApp ons:": "عند وصول الدفع ستصلك رسالة تأكيد بالإيميل. لم تصلك رسالة؟ اتصل بنا أو واتساب:",
+  "De betaling is niet gelukt": "لم ينجح الدفع",
+  "Er is niets afgeschreven. U kunt het opnieuw proberen.": "لم يتم خصم أي مبلغ. يمكنك المحاولة مرة أخرى.",
+  "Opnieuw proberen": "حاول مرة أخرى"
 });

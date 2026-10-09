@@ -26,7 +26,8 @@ const serverErrors: Record<string, string> = {
   full: "Deze datum is helaas net vol geraakt. Kies een andere datum.",
   closed: "Voor deze datum kan niet meer geboekt worden. Kies een andere datum.",
   not_found: "Deze datum bestaat niet meer. Kies een andere datum.",
-  invalid: "Controleer uw gegevens. Let op: u moet minstens 16 jaar zijn."
+  invalid: "Controleer uw gegevens. Let op: u moet minstens 16 jaar zijn.",
+  unavailable: "Online boeken is op dit moment niet mogelijk. Bel of WhatsApp ons om te boeken."
 };
 const genericError = "Boeken is niet gelukt. Probeer het opnieuw of bel/WhatsApp ons:";
 
@@ -119,8 +120,9 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
       ) : null}
 
       <Button type="submit" variant="accent" size="lg" disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting ? "Bezig..." : "Plek reserveren"}
+        {form.formState.isSubmitting ? "Bezig..." : "Verder naar betalen"}
       </Button>
+      <p className="text-center text-xs text-muted-foreground">U betaalt veilig met iDEAL of creditcard via Mollie.</p>
     </form>
   );
 }

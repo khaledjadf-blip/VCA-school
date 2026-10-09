@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
+import { courseTitle } from "@/lib/admin-labels";
+import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
+import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
 
 const bookingSchema = z.object({
   sessionId: z.string().uuid(),
@@ -35,7 +37,8 @@ const errorMessages: Record<string, { status: number; error: string }> = {
 };
 
 export async function POST(request: Request) {
-  if (!isSupabaseConfigured()) return NextResponse.json({ ok: false, error: "unavailable" }, { status: 503 });
+  const provider = getPaymentProvider();
+  if (!isSupabaseConfigured() || !provider) return NextResponse.json({ ok: false, error: "unavailable" }, { status: 503 });
 
   const parsed = bookingSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ ok: false, error: "invalid" }, { status: 400 });
@@ -44,7 +47,8 @@ export async function POST(request: Request) {
   const years = age(input.birthDate);
   if (years < 16 || years > 100) return NextResponse.json({ ok: false, error: "invalid" }, { status: 400 });
 
-  const { data, error } = await getSupabase().rpc("create_booking", {
+  const supabase = getSupabase();
+  const { data, error } = await supabase.rpc("create_booking", {
     p_session_id: input.sessionId,
     p_first_name: input.firstName,
     p_last_name: input.lastName,
@@ -63,6 +67,36 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "server" }, { status: 500 });
   }
 
-  // Fase 5: hier wordt de Mollie-betaling aangemaakt en krijgt de klant een checkoutUrl.
-  return NextResponse.json({ ok: true, bookingId: (data as { id: string }).id });
+  const booking = data as Booking;
+
+  try {
+    const { data: session } = await supabase
+      .from("course_sessions")
+      .select("course_slug, starts_at")
+      .eq("id", booking.session_id)
+      .single();
+    const date = session ? new Date(session.starts_at).toLocaleDateString("nl-NL", { timeZone: "Europe/Amsterdam" }) : "";
+    const base = siteUrl(request);
+    const payment = await provider.createPayment({
+      bookingId: booking.id,
+      amountCents: booking.amount_cents,
+      description: `${session ? courseTitle(session.course_slug) : "Cursus"} ${date} – ${booking.first_name} ${booking.last_name}`,
+      redirectUrl: `${base}/boeken/bedankt?b=${booking.id}`,
+      webhookUrl: webhookUrl(base, "/api/payments/webhook")
+    });
+    if (!payment.checkoutUrl) throw new Error("Geen checkout-URL ontvangen");
+
+    const { error: updateError } = await supabase
+      .from("bookings")
+      .update({ payment_provider: provider.name, payment_id: payment.id })
+      .eq("id", booking.id);
+    if (updateError) throw updateError;
+
+    return NextResponse.json({ ok: true, checkoutUrl: payment.checkoutUrl });
+  } catch (paymentError) {
+    console.error("Betaling aanmaken mislukt", paymentError);
+    // Plek direct vrijgeven.
+    await supabase.from("bookings").update({ status: "failed" }).eq("id", booking.id).eq("status", "pending");
+    return NextResponse.json({ ok: false, error: "server" }, { status: 502 });
+  }
 }
