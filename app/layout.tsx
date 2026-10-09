@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vcaveiligenvakkundig.nl"),
+  metadataBase: new URL("https://vcaveiligvakkundig.nl"),
   title: {
     default: "VCA cursus inschrijven | VCA Basis, VOL, VIL-VCU & heftruck",
     template: "%s | VCA Veilig & Vakkundig B.V."
