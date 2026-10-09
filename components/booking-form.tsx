@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Req, RequiredNote } from "@/components/ui/required";
 import { Textarea } from "@/components/ui/textarea";
 
 const bookingSchema = z.object({
@@ -77,30 +78,31 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
     <form onSubmit={form.handleSubmit(submit)} className="official-card grid gap-4 p-6" noValidate>
       <h2 className="text-2xl font-bold">Uw gegevens</h2>
       <p className="text-sm text-muted-foreground">Vul uw naam in zoals op uw identiteitsbewijs. Deze gegevens zijn nodig voor de registratie van uw diploma.</p>
+      <RequiredNote />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-semibold">Voornaam<Input {...form.register("firstName")} className="mt-1" autoComplete="given-name" /></label>
+          <label className="text-sm font-semibold">Voornaam<Req /><Input {...form.register("firstName")} className="mt-1" autoComplete="given-name" /></label>
           <FieldError>{errors.firstName?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">Achternaam<Input {...form.register("lastName")} className="mt-1" autoComplete="family-name" /></label>
+          <label className="text-sm font-semibold">Achternaam<Req /><Input {...form.register("lastName")} className="mt-1" autoComplete="family-name" /></label>
           <FieldError>{errors.lastName?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">Geboortedatum<Input type="date" {...form.register("birthDate")} className="mt-1" autoComplete="bday" /></label>
+          <label className="text-sm font-semibold">Geboortedatum<Req /><Input type="date" {...form.register("birthDate")} className="mt-1" autoComplete="bday" /></label>
           <FieldError>{errors.birthDate?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">Geboorteplaats<Input {...form.register("birthPlace")} className="mt-1" /></label>
+          <label className="text-sm font-semibold">Geboorteplaats<Req /><Input {...form.register("birthPlace")} className="mt-1" /></label>
           <FieldError>{errors.birthPlace?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">E-mail<Input type="email" {...form.register("email")} className="mt-1" autoComplete="email" /></label>
+          <label className="text-sm font-semibold">E-mail<Req /><Input type="email" {...form.register("email")} className="mt-1" autoComplete="email" /></label>
           <FieldError>{errors.email?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">Telefoon<Input type="tel" {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
+          <label className="text-sm font-semibold">Telefoon<Req /><Input type="tel" {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
           <FieldError>{errors.phone?.message}</FieldError>
         </div>
       </div>
