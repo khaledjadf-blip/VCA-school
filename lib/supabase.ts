@@ -48,14 +48,20 @@ export function isSupabaseConfigured(): boolean {
   return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
+// Accepteer ook een URL die (per ongeluk) eindigt op /rest/v1 of een slash.
+function projectUrl(raw: string) {
+  return raw.trim().replace(/\/+$/, "").replace(/\/rest\/v1$/i, "").replace(/\/+$/, "");
+}
+
 export function getSupabase(): SupabaseClient {
-  const url = process.env.SUPABASE_URL;
+  const rawUrl = process.env.SUPABASE_URL;
+  const url = rawUrl ? projectUrl(rawUrl) : undefined;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
     throw new Error("Database-instellingen ontbreken (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY).");
   }
   if (!client) {
-    client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+    client = createClient(url, key.trim(), { auth: { persistSession: false, autoRefreshToken: false } });
   }
   return client;
 }

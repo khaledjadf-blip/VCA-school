@@ -14,7 +14,7 @@ export function explainDbError(error: DbError, action = "Opslaan", status?: numb
   if (/invalid api key|jwt|unauthorized|no api key/i.test(text)) {
     return "De databasesleutel klopt niet. Controleer SUPABASE_SERVICE_ROLE_KEY in Vercel (zonder spaties ervoor of erna).";
   }
-  if (/fetch failed|ENOTFOUND|getaddrinfo|ECONNREFUSED|invalid url/i.test(text)) {
+  if (code === "PGRST125" || /fetch failed|ENOTFOUND|getaddrinfo|ECONNREFUSED|invalid url/i.test(text)) {
     return "Supabase is niet bereikbaar. Controleer SUPABASE_URL in Vercel (bijv. https://xxxx.supabase.co, zonder /rest/v1).";
   }
   return `${action} is mislukt. Technische melding: ${[code, text].filter(Boolean).join(" – ") || "onbekend"}`;
