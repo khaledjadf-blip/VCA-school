@@ -1,7 +1,9 @@
 "use client";
 
 import { CalendarDays, Clock, MapPin } from "lucide-react";
+import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
+import { Button } from "@/components/ui/button";
 import type { PublicSession } from "@/lib/sessions";
 
 const TIME_ZONE = "Europe/Amsterdam";
@@ -67,14 +69,19 @@ export function UpcomingSessions({ sessions }: { sessions: PublicSession[] }) {
                     <span dir="ltr">{session.location}</span>
                   </p>
                 </div>
-                <div className="flex items-center gap-3 sm:flex-col sm:items-end sm:gap-1">
+                <div className="flex flex-wrap items-center gap-3 sm:flex-col sm:items-end sm:gap-1">
                   <span className="text-lg font-bold text-accent" dir="ltr">{formatPrice(session.priceCents)}</span>
                   {full ? (
                     <span className="border border-border bg-secondary px-2 py-1 text-xs font-bold uppercase text-muted-foreground">Vol</span>
                   ) : (
-                    <span className={`px-2 py-1 text-xs font-bold ${session.seatsLeft <= 3 ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"}`}>
-                      {seatsLabel(session.seatsLeft, isArabic)}
-                    </span>
+                    <>
+                      <span className={`px-2 py-1 text-xs font-bold ${session.seatsLeft <= 3 ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"}`}>
+                        {seatsLabel(session.seatsLeft, isArabic)}
+                      </span>
+                      <Button asChild variant="accent" size="sm" className="sm:mt-1">
+                        <Link href={`/boeken/${session.id}`}>Boek deze datum</Link>
+                      </Button>
+                    </>
                   )}
                 </div>
               </li>
@@ -83,5 +90,37 @@ export function UpcomingSessions({ sessions }: { sessions: PublicSession[] }) {
         </ul>
       )}
     </div>
+  );
+}
+
+export function SessionSummary({ session, courseTitle }: { session: PublicSession; courseTitle: string }) {
+  const { isArabic } = useLanguage();
+  const time = session.endsAt
+    ? `${formatTime(session.startsAt)} – ${formatTime(session.endsAt)}`
+    : formatTime(session.startsAt);
+  const full = session.status === "closed" || session.seatsLeft === 0;
+
+  return (
+    <aside className="official-card order-first grid gap-3 p-6 lg:order-none">
+      <p className="official-kicker">Uw keuze</p>
+      <h2 className="text-xl font-bold">{courseTitle}</h2>
+      <p className="flex items-center gap-2 font-bold text-primary">
+        <CalendarDays className="h-4 w-4 shrink-0 text-accent" aria-hidden />
+        {formatDate(session.startsAt, isArabic)}
+      </p>
+      <p className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Clock className="h-4 w-4 shrink-0" aria-hidden />
+        <span dir="ltr">{time}</span>
+      </p>
+      <p className="flex items-start gap-2 text-sm text-muted-foreground">
+        <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+        <span dir="ltr">{session.location}</span>
+      </p>
+      <div className="mt-2 flex items-center justify-between border-t border-border pt-4">
+        <span className="text-sm text-muted-foreground">Prijs</span>
+        <span className="text-2xl font-bold text-accent" dir="ltr">{formatPrice(session.priceCents)}</span>
+      </div>
+      {full ? null : <p className="text-sm font-semibold text-primary">{seatsLabel(session.seatsLeft, isArabic)}</p>}
+    </aside>
   );
 }
