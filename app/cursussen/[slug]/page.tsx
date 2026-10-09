@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EnrollmentForm } from "@/components/contact-forms";
+import { UpcomingSessions } from "@/components/upcoming-sessions";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/lib/data";
+import { getUpcomingSessions } from "@/lib/sessions";
 import { visualAssets } from "@/lib/visual-assets";
 
 type Props = { params: Promise<{ slug: string }> };
+
+// Komende data en vrije plekken elke minuut opnieuw ophalen.
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return courses.map((course) => ({ slug: course.slug }));
@@ -25,6 +30,7 @@ export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
   const course = courses.find((item) => item.slug === slug);
   if (!course) notFound();
+  const sessions = await getUpcomingSessions(course.slug);
 
   return (
     <>
@@ -46,6 +52,7 @@ export default async function CourseDetailPage({ params }: Props) {
       </section>
       <section className="section-shell grid gap-8 py-16 lg:grid-cols-[1fr_420px]">
         <div>
+          <UpcomingSessions sessions={sessions} />
           {course.slug === "bhv-opleiding" ? (
             <div className="grid gap-8">
               <div className="grid gap-6 overflow-hidden border border-border bg-white lg:grid-cols-[1fr_1fr] lg:items-stretch">

@@ -269,5 +269,8 @@ Object.assign(arabicTranslations, {
   "Voor leidinggevenden, supervisors, projectleiders en vaak zzp'ers.": "للمسؤولين والمشرفين ومديري المشاريع وغالبا المستقلين.",
   "Voor intercedenten en uitzendorganisaties die kandidaten plaatsen.": "لموظفي وشركات التوظيف التي ترشح المرشحين.",
   "Voor mensen die veilig met een heftruck moeten werken.": "للأشخاص الذين يجب أن يعملوا بأمان مع رافعة شوكية.",
-  "Voor kandidaten die alleen een erkend examen willen plannen.": "للمرشحين الذين يريدون تخطيط اختبار معتمد فقط."
+  "Voor kandidaten die alleen een erkend examen willen plannen.": "للمرشحين الذين يريدون تخطيط اختبار معتمد فقط.",
+  "Komende data": "المواعيد القادمة",
+  "Er zijn op dit moment geen data gepland. Neem contact op of vul het formulier in, dan plannen we samen een datum.": "لا توجد مواعيد مخططة حاليا. تواصل معنا أو املأ النموذج وسنحدد موعدا معا.",
+  "Vol": "مكتمل"
 });
