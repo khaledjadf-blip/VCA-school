@@ -15,7 +15,8 @@ const bookingSchema = z.object({
   company: z.string().trim().max(150).optional(),
   notes: z.string().trim().max(1000).optional(),
   // Onzichtbaar veld: echte bezoekers laten dit leeg, spam-bots niet.
-  website: z.string().max(0).optional()
+  website: z.string().max(0).optional(),
+  acceptTerms: z.literal(true)
 });
 
 function age(birthDate: string) {

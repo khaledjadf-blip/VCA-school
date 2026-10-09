@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,7 +19,8 @@ const bookingSchema = z.object({
   birthPlace: z.string().trim().min(2, "Vul uw geboorteplaats in."),
   company: z.string().optional(),
   notes: z.string().optional(),
-  website: z.string().optional()
+  website: z.string().optional(),
+  acceptTerms: z.literal(true, { errorMap: () => ({ message: "Ga akkoord met de voorwaarden om te boeken." }) })
 });
 
 type BookingValues = z.infer<typeof bookingSchema>;
@@ -109,6 +111,18 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
 
       <label className="text-sm font-semibold">Bedrijf (optioneel)<Input {...form.register("company")} className="mt-1" autoComplete="organization" /></label>
       <label className="text-sm font-semibold">Opmerking (optioneel)<Textarea {...form.register("notes")} className="mt-1" rows={3} /></label>
+
+      <div>
+        <label className="flex items-start gap-3 text-sm">
+          <input type="checkbox" {...form.register("acceptTerms")} className="mt-1 h-4 w-4 shrink-0 accent-[#d45213]" />
+          <span>
+            Ik ga akkoord met de{" "}
+            <Link href="/voorwaarden" target="_blank" className="font-semibold text-primary underline underline-offset-4">voorwaarden</Link>
+            . Kosteloos annuleren kan tot 7 dagen voor de cursusdatum.<Req />
+          </span>
+        </label>
+        <FieldError>{errors.acceptTerms?.message}</FieldError>
+      </div>
 
       {/* Spam-val: verborgen voor bezoekers. */}
       <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">

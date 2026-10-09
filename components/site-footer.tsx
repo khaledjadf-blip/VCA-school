@@ -15,6 +15,7 @@ export function SiteFooter() {
           <Link href="/advies">Welke cursus past bij mij?</Link>
           <Link href="/kennisbank">Kennisbank VCA</Link>
           <Link href="/contact">Contact & inschrijven</Link>
+          <Link href="/voorwaarden">Voorwaarden en annuleren</Link>
         </div>
         <div className="grid gap-3 text-sm text-primary-foreground/84">
           <span><bdi dir="ltr">+31 6 16717342</bdi></span>
