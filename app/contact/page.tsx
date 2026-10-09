@@ -19,7 +19,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             Eerst geeft u door welke cursus u nodig heeft en welke dagen passen. Daarna controleren wij datum, locatie, examen en eventuele taalondersteuning.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <span className="inline-flex border border-border bg-secondary px-4 py-3 font-bold"><bdi dir="ltr">+31 6 87258236</bdi></span>
+            <span className="inline-flex border border-border bg-secondary px-4 py-3 font-bold"><bdi dir="ltr">+31 6 16717342</bdi></span>
             <span className="inline-flex border border-border bg-secondary px-4 py-3 font-bold">SSVV-erkende examens</span>
           </div>
         </div>
