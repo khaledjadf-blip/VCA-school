@@ -119,8 +119,8 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                             value="terugbetalen"
                             variant="outline"
                             size="sm"
-                            question={`${b.first_name} ${b.last_name}: annuleren en ${formatEuro(b.amount_cents)} terugbetalen via Mollie?`}
-                            questionAr={`${b.first_name} ${b.last_name}: إلغاء الحجز وإرجاع ${formatEuro(b.amount_cents)} عبر Mollie؟`}
+                            question={`${b.first_name} ${b.last_name}: annuleren en ${formatEuro(b.amount_cents)} terugbetalen?`}
+                            questionAr={`${b.first_name} ${b.last_name}: إلغاء الحجز وإرجاع ${formatEuro(b.amount_cents)} ؟`}
                           >
                             Annuleren + terugbetalen
                           </ConfirmButton>

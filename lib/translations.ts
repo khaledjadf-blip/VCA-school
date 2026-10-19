@@ -366,7 +366,7 @@ Object.assign(arabicTranslations, {
   "Bekijk andere data": "شاهد مواعيد أخرى",
   "Online boeken is op dit moment niet mogelijk. Bel of WhatsApp ons om te boeken.": "الحجز أونلاين غير متاح حاليا. اتصل بنا أو راسلنا على واتساب للحجز.",
   "Verder naar betalen": "متابعة إلى الدفع",
-  "U betaalt veilig met iDEAL of creditcard via Mollie.": "ادفع بأمان عبر iDEAL أو البطاقة البنكية من خلال Mollie.",
+  "U betaalt veilig online met iDEAL of creditcard.": "ادفع بأمان أونلاين عبر iDEAL أو البطاقة البنكية.",
   "Betaling": "الدفع",
   "Uw betaling wordt gecontroleerd": "جار التحقق من الدفع",
   "Een moment geduld, sluit deze pagina niet.": "لحظة من فضلك، لا تغلق هذه الصفحة.",
@@ -553,7 +553,7 @@ Object.assign(arabicTranslations, {
   "Inschrijving": "التسجيل",
   "Uw inschrijving is definitief zodra wij uw betaling hebben ontvangen.": "يصبح تسجيلك نهائيا عندما نستلم الدفع.",
   "U ontvangt daarna een bevestiging per e-mail met de cursus, datum, tijd en locatie.": "بعد ذلك تصلك رسالة تأكيد بالإيميل فيها الدورة والتاريخ والوقت والمكان.",
-  "U betaalt vooraf online via iDEAL of creditcard. De betaling wordt veilig verwerkt door Mollie.": "تدفع مسبقا أونلاين عبر iDEAL أو البطاقة البنكية. تتم معالجة الدفع بأمان عن طريق Mollie.",
+  "U betaalt vooraf online via iDEAL of creditcard. De betaling wordt veilig verwerkt door een erkende betaalprovider.": "تدفع مسبقا أونلاين عبر iDEAL أو البطاقة البنكية. تتم معالجة الدفع بأمان عن طريق شركة دفع معتمدة.",
   "Annuleren door u": "الإلغاء من طرفك",
   "Tot 7 dagen vóór de cursusdatum kunt u kosteloos annuleren. U krijgt dan het volledige bedrag terug.": "يمكنك الإلغاء مجانا حتى 7 أيام قبل موعد الدورة، وتسترد المبلغ كاملا.",
   "Annuleert u binnen 7 dagen vóór de cursusdatum, of komt u niet opdagen, dan is terugbetaling niet mogelijk.": "إذا ألغيت خلال الأيام السبعة الأخيرة قبل الدورة، أو لم تحضر، فلا يمكن إرجاع المبلغ.",
@@ -577,12 +577,12 @@ Object.assign(arabicTranslations, {
   "Annuleren": "إلغاء",
   "Verwijdert de datum en alle niet-betaalde boekingen. Betaalde boekingen moet u eerst annuleren.": "يحذف الموعد وكل الحجوزات غير المدفوعة. الحجوزات المدفوعة يجب إلغاؤها أولا.",
   "De boeking is geannuleerd. De plek is weer vrij.": "تم إلغاء الحجز. المقعد أصبح متاحا من جديد.",
-  "De boeking is geannuleerd en het bedrag wordt via Mollie terugbetaald.": "تم إلغاء الحجز وسيتم إرجاع المبلغ عبر Mollie.",
+  "De boeking is geannuleerd en het bedrag wordt terugbetaald.": "تم إلغاء الحجز وسيتم إرجاع المبلغ.",
   "De boeking is verwijderd.": "تم حذف الحجز.",
   "Alleen betaalde online boekingen kunnen worden terugbetaald.": "يمكن إرجاع المبلغ فقط للحجوزات المدفوعة أونلاين.",
   "Deze boeking bestaat niet meer.": "هذا الحجز لم يعد موجودا.",
   "De database mist een nieuwe functie. Voer het bestand supabase/schema.sql opnieuw uit in Supabase → SQL Editor → Run (dat is veilig).": "قاعدة البيانات تنقصها وظيفة جديدة. شغّل الملف supabase/schema.sql مرة أخرى في Supabase ← SQL Editor ← Run (هذا آمن).",
   "Klant e-mailen": "إرسال إيميل للزبون",
   "De boeking is geannuleerd en de klant heeft een e-mail gekregen. De plek is weer vrij.": "تم إلغاء الحجز وأُرسل إيميل للزبون. المقعد أصبح متاحا من جديد.",
-  "De boeking is geannuleerd, het bedrag wordt via Mollie terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ عبر Mollie، وأُرسل إيميل للزبون."
+  "De boeking is geannuleerd, het bedrag wordt terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ، وأُرسل إيميل للزبون."
 });

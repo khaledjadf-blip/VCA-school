@@ -57,6 +57,22 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
         setError(body.error ?? "server");
         return;
       }
+      if (body.checkoutUrl && body.checkoutFields) {
+        // myPOS: betaalpagina openen met een ondertekend formulier (POST).
+        const payForm = document.createElement("form");
+        payForm.method = "POST";
+        payForm.action = body.checkoutUrl;
+        for (const [name, value] of Object.entries(body.checkoutFields as Record<string, string>)) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = value;
+          payForm.appendChild(input);
+        }
+        document.body.appendChild(payForm);
+        payForm.submit();
+        return;
+      }
       if (body.checkoutUrl) {
         window.location.href = body.checkoutUrl;
         return;
@@ -138,7 +154,7 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
       <Button type="submit" variant="accent" size="lg" disabled={form.formState.isSubmitting}>
         {form.formState.isSubmitting ? "Bezig..." : "Verder naar betalen"}
       </Button>
-      <p className="text-center text-xs text-muted-foreground">U betaalt veilig met iDEAL of creditcard via Mollie.</p>
+      <p className="text-center text-xs text-muted-foreground">U betaalt veilig online met iDEAL of creditcard.</p>
     </form>
   );
 }

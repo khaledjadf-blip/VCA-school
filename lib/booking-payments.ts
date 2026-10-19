@@ -2,7 +2,8 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
 import { courseTitle } from "@/lib/admin-labels";
-import { getPaymentProvider } from "@/lib/payments";
+import { getPaymentProvider, getProviderByName } from "@/lib/payments";
+import type { ProviderPayment } from "@/lib/payments/types";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
@@ -150,32 +151,22 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
   return results[0].status === "fulfilled";
 }
 
+type Outcome = { status: ProviderPayment["status"]; amountCents: number };
+
 /**
- * Haalt de actuele status bij de betaalaanbieder op en werkt de boeking bij.
- * Veilig om vaak aan te roepen (webhook én terugkeerpagina): een plek en de
- * e-mails worden maar één keer verwerkt.
+ * Verwerkt een betaalstatus voor een boeking. Veilig om vaak aan te roepen:
+ * een plek en de e-mails worden maar één keer verwerkt.
  */
-export async function syncPayment(paymentId: string): Promise<Booking["status"] | null> {
-  const provider = getPaymentProvider();
-  if (!provider) return null;
-
-  const payment = await provider.getPayment(paymentId);
+async function applyOutcome(booking: BookingWithSession, outcome: Outcome): Promise<Booking["status"]> {
   const supabase = getSupabase();
-  const { data } = await supabase
-    .from("bookings")
-    .select("*, course_sessions(*)")
-    .eq("payment_id", payment.id)
-    .maybeSingle();
-  const booking = data as BookingWithSession | null;
-  if (!booking || booking.id !== payment.bookingId) return null;
 
-  // Door beheer geannuleerd of terugbetaald: Mollie meldt na een terugbetaling
-  // nog steeds "paid", dus niet opnieuw bevestigen.
+  // Door beheer geannuleerd of terugbetaald: de aanbieder meldt na een terugbetaling
+  // soms nog steeds "paid", dus niet opnieuw bevestigen.
   if (booking.status === "canceled" || booking.status === "refunded") return booking.status;
 
-  if (payment.status === "paid") {
-    if (payment.amountCents !== booking.amount_cents) {
-      console.error("Betaald bedrag wijkt af van boeking", { bookingId: booking.id, paymentId: payment.id });
+  if (outcome.status === "paid") {
+    if (outcome.amountCents !== booking.amount_cents) {
+      console.error("Betaald bedrag wijkt af van boeking", { bookingId: booking.id, paymentId: booking.payment_id });
       return booking.status;
     }
     const { data: firstTime, error } = await supabase.rpc("mark_booking_paid", { p_booking_id: booking.id });
@@ -188,12 +179,60 @@ export async function syncPayment(paymentId: string): Promise<Booking["status"] 
     return "paid";
   }
 
-  if (failedStatuses.has(payment.status) && booking.status === "pending") {
-    const status = payment.status as Booking["status"];
+  if (failedStatuses.has(outcome.status) && booking.status === "pending") {
+    const status = outcome.status as Booking["status"];
     await supabase.from("bookings").update({ status }).eq("id", booking.id).eq("status", "pending");
     revalidatePath(`/cursussen/${booking.course_sessions.course_slug}`);
     return status;
   }
 
   return booking.status;
+}
+
+async function bookingByPaymentId(paymentId: string) {
+  const { data } = await getSupabase()
+    .from("bookings")
+    .select("*, course_sessions(*)")
+    .eq("payment_id", paymentId)
+    .maybeSingle();
+  return data as BookingWithSession | null;
+}
+
+/**
+ * Haalt de actuele status bij de betaalaanbieder op en werkt de boeking bij
+ * (webhook van Mollie en de terugkeerpagina).
+ */
+export async function syncPayment(paymentId: string): Promise<Booking["status"] | null> {
+  const booking = await bookingByPaymentId(paymentId);
+  if (!booking) return null;
+  const provider = getProviderByName(booking.payment_provider) ?? getPaymentProvider();
+  if (!provider) return null;
+
+  const payment = await provider.getPayment(paymentId);
+  if (payment.bookingId !== booking.id) return null;
+
+  // myPOS: "betaald" alleen via de ondertekende melding (anders kan myPOS de
+  // betaling terugdraaien terwijl wij hem al als betaald zien).
+  if (payment.status === "paid" && provider.confirmsByNotifyOnly) return booking.status;
+
+  return applyOutcome(booking, payment);
+}
+
+/** Ondertekende betaalmelding van myPOS (IPCPurchaseNotify), al gecontroleerd. */
+export async function confirmPaidFromNotify(orderId: string, amountCents: number) {
+  const booking = await bookingByPaymentId(orderId);
+  if (!booking || booking.payment_provider !== "mypos") return null;
+  return applyOutcome(booking, { status: "paid", amountCents });
+}
+
+/** Klant brak de betaling af: plek vrijgeven als er (nog) niet betaald is. */
+export async function cancelIfUnpaid(bookingId: string) {
+  const { data } = await getSupabase().from("bookings").select("*, course_sessions(*)").eq("id", bookingId).maybeSingle();
+  const booking = data as BookingWithSession | null;
+  if (!booking || booking.status !== "pending" || !booking.payment_id) return;
+  const provider = getProviderByName(booking.payment_provider);
+  if (!provider) return;
+  const payment = await provider.getPayment(booking.payment_id);
+  if (payment.status === "paid" || payment.status === "pending" || payment.status === "authorized") return;
+  await applyOutcome(booking, { status: "canceled", amountCents: payment.amountCents });
 }

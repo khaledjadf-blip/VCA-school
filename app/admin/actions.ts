@@ -6,7 +6,7 @@ import { checkPassword, endAdminSession, requireAdmin, startAdminSession } from 
 import { courseTitle } from "@/lib/admin-labels";
 import { explainDbError } from "@/lib/admin-db-errors";
 import { courses } from "@/lib/data";
-import { getPaymentProvider } from "@/lib/payments";
+import { getProviderByName } from "@/lib/payments";
 import { sendCancellationEmails, type BookingWithSession } from "@/lib/booking-payments";
 import { getSupabase } from "@/lib/supabase";
 import { amsterdamToIso, euroToCents } from "@/lib/time";
@@ -168,14 +168,14 @@ export async function bookingAction(formData: FormData) {
   const path = `/admin/sessies/${booking.session_id}`;
 
   if (mode === "terugbetalen") {
-    const provider = getPaymentProvider();
+    const provider = getProviderByName(booking.payment_provider);
     if (booking.status !== "paid" || !booking.payment_id || !provider) back(path, "Alleen betaalde online boekingen kunnen worden terugbetaald.");
     try {
       const course = booking.course_sessions ? courseTitle(booking.course_sessions.course_slug) : "Cursus";
       await provider.refundPayment(booking.payment_id, booking.amount_cents, `Terugbetaling ${course} – ${booking.first_name} ${booking.last_name}`);
     } catch (refundError) {
       console.error("Terugbetalen mislukt", refundError);
-      back(path, `Terugbetalen via Mollie is mislukt: ${refundError instanceof Error ? refundError.message : "onbekende fout"}`);
+      back(path, `Terugbetalen is mislukt: ${refundError instanceof Error ? refundError.message : "onbekende fout"}`);
     }
   }
 

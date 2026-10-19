@@ -82,8 +82,17 @@ export async function POST(request: Request) {
       bookingId: booking.id,
       amountCents: booking.amount_cents,
       description: `${session ? courseTitle(session.course_slug) : "Cursus"} ${date} – ${booking.first_name} ${booking.last_name}`,
-      redirectUrl: `${base}/boeken/bedankt?b=${booking.id}`,
-      webhookUrl: webhookUrl(base, "/api/payments/webhook")
+      ...(provider.name === "mypos"
+        ? {
+            redirectUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=ok`,
+            cancelUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=afgebroken`,
+            webhookUrl: webhookUrl(base, "/api/payments/mypos/notify")
+          }
+        : {
+            redirectUrl: `${base}/boeken/bedankt?b=${booking.id}`,
+            cancelUrl: `${base}/boeken/bedankt?b=${booking.id}`,
+            webhookUrl: webhookUrl(base, "/api/payments/webhook")
+          })
     });
     if (!payment.checkoutUrl) throw new Error("Geen checkout-URL ontvangen");
 
@@ -93,7 +102,7 @@ export async function POST(request: Request) {
       .eq("id", booking.id);
     if (updateError) throw updateError;
 
-    return NextResponse.json({ ok: true, checkoutUrl: payment.checkoutUrl });
+    return NextResponse.json({ ok: true, checkoutUrl: payment.checkoutUrl, checkoutFields: payment.checkoutFields ?? null });
   } catch (paymentError) {
     console.error("Betaling aanmaken mislukt", paymentError);
     // Plek direct vrijgeven.

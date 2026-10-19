@@ -16,7 +16,7 @@ const sections: { title: string; lines: string[] }[] = [
   },
   {
     title: "Betaling",
-    lines: ["U betaalt vooraf online via iDEAL of creditcard. De betaling wordt veilig verwerkt door Mollie."]
+    lines: ["U betaalt vooraf online via iDEAL of creditcard. De betaling wordt veilig verwerkt door een erkende betaalprovider."]
   },
   {
     title: "Annuleren door u",
