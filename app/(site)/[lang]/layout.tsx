@@ -13,7 +13,6 @@ type Props = { children: React.ReactNode; params: Promise<{ lang: string }> };
 export function generateStaticParams() {
   return languages.map((lang) => ({ lang }));
 }
-export const dynamicParams = false;
 
 const nl = {
   title: "VCA cursus inschrijven | VCA Basis, VOL, VIL-VCU & heftruck",

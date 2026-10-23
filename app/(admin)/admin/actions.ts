@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkPassword, endAdminSession, requireAdmin, startAdminSession } from "@/lib/admin-auth";
 import { courseTitle } from "@/lib/admin-labels";
@@ -8,6 +7,7 @@ import { explainDbError } from "@/lib/admin-db-errors";
 import { courses } from "@/lib/data";
 import { getProviderByName } from "@/lib/payments";
 import { sendCancellationEmails, type BookingWithSession } from "@/lib/booking-payments";
+import { refreshCoursePages } from "@/lib/revalidate";
 import { getSupabase } from "@/lib/supabase";
 import { amsterdamToIso, euroToCents } from "@/lib/time";
 
@@ -84,7 +84,7 @@ function readSessionForm(formData: FormData): SessionInput | string {
 }
 
 function refreshPublicPages(slug: string) {
-  revalidatePath(`/cursussen/${slug}`);
+  refreshCoursePages(slug);
 }
 
 function back(path: string, message: string): never {

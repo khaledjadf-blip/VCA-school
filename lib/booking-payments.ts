@@ -1,9 +1,9 @@
 // Betaalstatus verwerken: boeking bevestigen, plek tellen en e-mails versturen.
 import "server-only";
-import { revalidatePath } from "next/cache";
 import { courseTitle } from "@/lib/admin-labels";
 import { getPaymentProvider, getProviderByName } from "@/lib/payments";
 import type { ProviderPayment } from "@/lib/payments/types";
+import { refreshCoursePages } from "@/lib/revalidate";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
@@ -32,15 +32,26 @@ function timeText(session: CourseSession) {
   return session.ends_at ? `${t(session.starts_at)} – ${t(session.ends_at)}` : t(session.starts_at);
 }
 
+const wrap = (body: string) => `<div style="font-family:Arial,sans-serif;color:#0b2b44;max-width:560px">${body}</div>`;
+const divider = `<hr style="border:none;border-top:1px solid #d8e2ec;margin:24px 0">`;
+const row = (label: string, value: string, rtl = false) =>
+  `<tr><td style="padding:${rtl ? "4px 0 4px 12px" : "4px 12px 4px 0"};font-weight:bold;vertical-align:top">${label}</td><td style="padding:4px 0">${value}</td></tr>`;
+
+/**
+ * Taal van klant-e-mails: geboekt via de Nederlandse site → alleen Nederlands;
+ * via de Arabische site → eerst Arabisch, daaronder Nederlands (handig voor werkgever of instanties).
+ */
+function forCustomer(b: Booking, nl: string, ar: string) {
+  return b.lang === "ar" ? wrap(`${ar}${divider}${nl}`) : wrap(nl);
+}
+
 function customerEmailHtml(b: BookingWithSession) {
   const s = b.course_sessions;
   const course = escapeHtml(courseTitle(s.course_slug));
   const location = escapeHtml(s.location);
   const name = escapeHtml(b.first_name);
-  const row = (label: string, value: string, rtl = false) =>
-    `<tr><td style="padding:${rtl ? "4px 0 4px 12px" : "4px 12px 4px 0"};font-weight:bold;vertical-align:top">${label}</td><td style="padding:4px 0">${value}</td></tr>`;
 
-  return `<div style="font-family:Arial,sans-serif;color:#0b2b44;max-width:560px">
+  const nl = `
   <h2 style="color:#154273">Uw boeking is bevestigd</h2>
   <p>Beste ${name},</p>
   <p>Bedankt voor uw betaling. Uw plek is gereserveerd.</p>
@@ -54,8 +65,9 @@ function customerEmailHtml(b: BookingWithSession) {
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
   <p>Annuleren is kosteloos tot 7 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
   <p>Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
-  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
-  <hr style="border:none;border-top:1px solid #d8e2ec;margin:24px 0">
+  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>`;
+
+  const ar = `
   <div dir="rtl" style="text-align:right">
     <h2 style="color:#154273">تم تأكيد حجزك</h2>
     <p>مرحبا ${name}،</p>
@@ -65,18 +77,25 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("التاريخ", escapeHtml(dateText(s.starts_at, "ar-u-nu-latn")), true)}
       ${row("الوقت", `<span dir="ltr">${escapeHtml(timeText(s))}</span>`, true)}
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
+      ${row("المبلغ المدفوع", `<span dir="ltr">${escapeHtml(formatEuro(b.amount_cents))}</span>`, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
-    <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ.</p>
+    <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ. <a href="https://vcaveiligvakkundig.nl/ar/voorwaarden">الشروط</a></p>
     <p>لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
-  </div>
-</div>`;
+    <p>مع التحية،<br><span dir="ltr">VCA Veilig &amp; Vakkundig B.V.</span></p>
+    <p style="color:#5b6b7b;font-size:13px">النسخة الهولندية في الأسفل، يمكنك إظهارها لصاحب العمل.</p>
+  </div>`;
+
+  return forCustomer(b, nl, ar);
 }
+
+const languageLabel = (b: Booking) => (b.lang === "ar" ? "Arabisch (e-mail in Arabisch + Nederlands)" : "Nederlands");
 
 async function sendConfirmationEmails(b: BookingWithSession) {
   const s = b.course_sessions;
   const course = courseTitle(s.course_slug);
   const when = `${dateText(s.starts_at, "nl-NL")} ${timeText(s)}`;
+  const nlDate = dateText(s.starts_at, "nl-NL");
 
   const results = await Promise.allSettled([
     sendEmail({
@@ -93,6 +112,7 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Geboorteplaats", b.birth_place],
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
+        ["Taal klant", languageLabel(b)],
         ["Bedrag", formatEuro(b.amount_cents)],
         ["Betaal-ID", b.payment_id],
         ["Plekken bezet", `${s.seats_taken} / ${s.seats_total}`]
@@ -102,7 +122,7 @@ async function sendConfirmationEmails(b: BookingWithSession) {
       to: b.email,
       fromName: "VCA Veilig & Vakkundig",
       replyTo: process.env.CONTACT_TO_EMAIL,
-      subject: `Bevestiging: ${course} op ${dateText(s.starts_at, "nl-NL")}`,
+      subject: b.lang === "ar" ? `تأكيد الحجز / Bevestiging: ${course} – ${nlDate}` : `Bevestiging: ${course} op ${nlDate}`,
       html: customerEmailHtml(b)
     })
   ]);
@@ -119,7 +139,7 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
   const dateAr = escapeHtml(dateText(s.starts_at, "ar-u-nu-latn"));
   const time = escapeHtml(timeText(s));
 
-  const html = `<div style="font-family:Arial,sans-serif;color:#0b2b44;max-width:560px">
+  const nl = `
   <h2 style="color:#154273">Uw boeking is geannuleerd</h2>
   <p>Beste ${name},</p>
   <p>Uw boeking voor <strong>${course}</strong> op ${dateNl} (${time}) is geannuleerd.</p>
@@ -127,8 +147,9 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
     ? `<p>Wij hebben ${amount} terugbetaald. Het bedrag staat binnen enkele werkdagen weer op uw rekening.</p>`
     : `<p>Volgens onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a> is bij annuleren binnen 7 dagen voor de cursusdatum geen terugbetaling mogelijk.</p>`}
   <p>Wilt u een nieuwe datum boeken? Kijk op <a href="https://vcaveiligvakkundig.nl/inschrijven">vcaveiligvakkundig.nl/inschrijven</a>. Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
-  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
-  <hr style="border:none;border-top:1px solid #d8e2ec;margin:24px 0">
+  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>`;
+
+  const ar = `
   <div dir="rtl" style="text-align:right">
     <h2 style="color:#154273">تم إلغاء حجزك</h2>
     <p>مرحبا ${name}،</p>
@@ -136,14 +157,17 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
     ${refunded
       ? `<p>أرجعنا لك مبلغ <span dir="ltr">${amount}</span>. سيصل إلى حسابك خلال أيام عمل قليلة.</p>`
       : `<p>حسب الشروط، الإلغاء خلال الأيام السبعة الأخيرة قبل الدورة لا يشمل إرجاع المبلغ.</p>`}
-    <p>لحجز موعد جديد: <span dir="ltr">vcaveiligvakkundig.nl/inschrijven</span>. لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
-  </div>
-</div>`;
+    <p>لحجز موعد جديد: <a href="https://vcaveiligvakkundig.nl/ar/inschrijven">vcaveiligvakkundig.nl/ar/inschrijven</a>. لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
+    <p>مع التحية،<br><span dir="ltr">VCA Veilig &amp; Vakkundig B.V.</span></p>
+  </div>`;
 
-  const subject = `Geannuleerd: ${courseTitle(s.course_slug)} op ${dateText(s.starts_at, "nl-NL")}`;
+  const html = forCustomer(b, nl, ar);
+  const nlSubject = `Geannuleerd: ${courseTitle(s.course_slug)} op ${dateText(s.starts_at, "nl-NL")}`;
+  const subject = b.lang === "ar" ? `تم إلغاء الحجز / ${nlSubject}` : nlSubject;
   const results = await Promise.allSettled([
     sendEmail({ to: b.email, fromName: "VCA Veilig & Vakkundig", replyTo: process.env.CONTACT_TO_EMAIL, subject, html }),
-    sendEmail({ subject: `Kopie – ${subject} – ${b.first_name} ${b.last_name}`, replyTo: b.email, html })
+    // Kopie voor het bedrijf: precies wat de klant kreeg.
+    sendEmail({ subject: `Kopie – ${nlSubject} – ${b.first_name} ${b.last_name}`, replyTo: b.email, html })
   ]);
   const failed = results.filter((r) => r.status === "rejected");
   for (const r of failed) console.error("Annuleringsmail versturen mislukt", (r as PromiseRejectedResult).reason);
@@ -174,7 +198,7 @@ async function applyOutcome(booking: BookingWithSession, outcome: Outcome): Prom
     if (firstTime) {
       const { data: fresh } = await supabase.from("bookings").select("*, course_sessions(*)").eq("id", booking.id).single();
       await sendConfirmationEmails((fresh ?? booking) as BookingWithSession);
-      revalidatePath(`/cursussen/${booking.course_sessions.course_slug}`);
+      refreshCoursePages(booking.course_sessions.course_slug);
     }
     return "paid";
   }
@@ -182,7 +206,7 @@ async function applyOutcome(booking: BookingWithSession, outcome: Outcome): Prom
   if (failedStatuses.has(outcome.status) && booking.status === "pending") {
     const status = outcome.status as Booking["status"];
     await supabase.from("bookings").update({ status }).eq("id", booking.id).eq("status", "pending");
-    revalidatePath(`/cursussen/${booking.course_sessions.course_slug}`);
+    refreshCoursePages(booking.course_sessions.course_slug);
     return status;
   }
 
