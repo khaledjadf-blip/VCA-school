@@ -191,7 +191,7 @@ export async function bookingAction(formData: FormData) {
 
   if (booking.course_sessions) refreshPublicPages(booking.course_sessions.course_slug);
 
-  if (mode !== "verwijderen" && formData.get("notify") === "on" && booking.course_sessions) {
+  if (mode !== "verwijderen" && booking.status === "paid" && formData.get("notify") === "on" && booking.course_sessions) {
     const sent = await sendCancellationEmails(booking, mode === "terugbetalen");
     if (!sent) back(path, `De boeking is geannuleerd, maar de e-mail aan ${booking.email} kon niet worden verstuurd. Neem zelf contact op met de klant.`);
     redirect(`${path}?ok=boeking-${mode}-gemaild`);

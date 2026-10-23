@@ -76,7 +76,7 @@ export function SessionForm({
       </div>
 
       <Field label="Locatie">
-        <input type="text" name="location" required defaultValue={values.location} className={fieldClass} />
+        <input type="text" name="location" required defaultValue={values.location} className={fieldClass} dir="auto" />
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-3">
@@ -87,7 +87,7 @@ export function SessionForm({
           <input type="number" name="seats_total" min={1} max={500} required defaultValue={values.seats_total} className={fieldClass} />
         </Field>
         <Field label="Lestaal">
-          <input type="text" name="language" defaultValue={values.language} className={fieldClass} />
+          <input type="text" name="language" defaultValue={values.language} className={fieldClass} dir="auto" />
         </Field>
       </div>
 
@@ -100,7 +100,7 @@ export function SessionForm({
       </Field>
 
       <Field label="Interne notitie" hint="Alleen zichtbaar voor beheer.">
-        <textarea name="notes" rows={3} defaultValue={values.notes} className={`${fieldClass} h-auto`} />
+        <textarea name="notes" rows={3} defaultValue={values.notes} className={`${fieldClass} h-auto`} dir="auto" />
       </Field>
 
       <div>
