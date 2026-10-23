@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/localized-link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -125,7 +125,7 @@ export function CourseQuiz() {
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button asChild variant="accent">
-              <Link href={`/contact?course=${encodeURIComponent(result)}`}>Direct inschrijven</Link>
+              <Link href={`/cursussen/${info.slug}#komende-data`}>Direct inschrijven</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href={`/cursussen/${info.slug}`}>Bekijk cursusdetails</Link>

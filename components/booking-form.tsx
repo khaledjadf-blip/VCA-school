@@ -1,0 +1,165 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "@/components/localized-link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useLanguage } from "@/components/language-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Req, RequiredNote } from "@/components/ui/required";
+import { Textarea } from "@/components/ui/textarea";
+
+const bookingSchema = z.object({
+  firstName: z.string().trim().min(1, "Vul uw voornaam in."),
+  lastName: z.string().trim().min(1, "Vul uw achternaam in."),
+  email: z.string().trim().email("Vul een geldig e-mailadres in."),
+  phone: z.string().trim().min(8, "Vul een telefoonnummer in."),
+  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Vul uw geboortedatum in."),
+  birthPlace: z.string().trim().min(2, "Vul uw geboorteplaats in."),
+  company: z.string().optional(),
+  notes: z.string().optional(),
+  website: z.string().optional(),
+  acceptTerms: z.literal(true, { errorMap: () => ({ message: "Ga akkoord met de voorwaarden om te boeken." }) })
+});
+
+type BookingValues = z.infer<typeof bookingSchema>;
+
+const serverErrors: Record<string, string> = {
+  full: "Deze datum is helaas net vol geraakt. Kies een andere datum.",
+  closed: "Voor deze datum kan niet meer geboekt worden. Kies een andere datum.",
+  not_found: "Deze datum bestaat niet meer. Kies een andere datum.",
+  invalid: "Controleer uw gegevens. Let op: u moet minstens 16 jaar zijn.",
+  unavailable: "Online boeken is op dit moment niet mogelijk. Bel of WhatsApp ons om te boeken."
+};
+const genericError = "Boeken is niet gelukt. Probeer het opnieuw of bel/WhatsApp ons:";
+
+function FieldError({ children }: { children?: string }) {
+  return children ? <p className="mt-1 text-sm text-destructive">{children}</p> : null;
+}
+
+export function BookingForm({ sessionId }: { sessionId: string }) {
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const form = useForm<BookingValues>({ resolver: zodResolver(bookingSchema) });
+  const errors = form.formState.errors;
+  const { language } = useLanguage();
+
+  async function submit(values: BookingValues) {
+    setError(null);
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, sessionId, lang: language })
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok || !body.ok) {
+        setError(body.error ?? "server");
+        return;
+      }
+      if (body.checkoutUrl && body.checkoutFields) {
+        // myPOS: betaalpagina openen met een ondertekend formulier (POST).
+        const payForm = document.createElement("form");
+        payForm.method = "POST";
+        payForm.action = body.checkoutUrl;
+        for (const [name, value] of Object.entries(body.checkoutFields as Record<string, string>)) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = value;
+          payForm.appendChild(input);
+        }
+        document.body.appendChild(payForm);
+        payForm.submit();
+        return;
+      }
+      if (body.checkoutUrl) {
+        window.location.href = body.checkoutUrl;
+        return;
+      }
+      setDone(true);
+    } catch {
+      setError("server");
+    }
+  }
+
+  if (done) {
+    return (
+      <div role="status" className="official-card p-6">
+        <h2 className="text-2xl font-bold">Uw boeking is ontvangen</h2>
+        <p className="mt-3 leading-7 text-muted-foreground">Bedankt! We hebben uw gegevens ontvangen en nemen snel contact met u op.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={form.handleSubmit(submit)} className="official-card grid gap-4 p-6" noValidate>
+      <h2 className="text-2xl font-bold">Uw gegevens</h2>
+      <p className="text-sm text-muted-foreground">Vul uw naam in zoals op uw identiteitsbewijs. Deze gegevens zijn nodig voor de registratie van uw diploma.</p>
+      <RequiredNote />
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="text-sm font-semibold">Voornaam<Req /><Input {...form.register("firstName")} className="mt-1" autoComplete="given-name" /></label>
+          <FieldError>{errors.firstName?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Achternaam<Req /><Input {...form.register("lastName")} className="mt-1" autoComplete="family-name" /></label>
+          <FieldError>{errors.lastName?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Geboortedatum<Req /><Input type="date" {...form.register("birthDate")} className="mt-1" autoComplete="bday" /></label>
+          <FieldError>{errors.birthDate?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Geboorteplaats<Req /><Input {...form.register("birthPlace")} className="mt-1" /></label>
+          <FieldError>{errors.birthPlace?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">E-mail<Req /><Input type="email" {...form.register("email")} className="mt-1" autoComplete="email" /></label>
+          <FieldError>{errors.email?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Telefoon<Req /><Input type="tel" {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
+          <FieldError>{errors.phone?.message}</FieldError>
+        </div>
+      </div>
+
+      <label className="text-sm font-semibold">Bedrijf (optioneel)<Input {...form.register("company")} className="mt-1" autoComplete="organization" /></label>
+      <label className="text-sm font-semibold">Opmerking (optioneel)<Textarea {...form.register("notes")} className="mt-1" rows={3} /></label>
+
+      <div>
+        <label className="flex items-start gap-3 text-sm">
+          <input type="checkbox" {...form.register("acceptTerms")} className="mt-1 h-4 w-4 shrink-0 accent-[#d45213]" />
+          <span>
+            Ik ga akkoord met de{" "}
+            <Link href="/voorwaarden" target="_blank" className="font-semibold text-primary underline underline-offset-4">voorwaarden</Link>
+            . Kosteloos annuleren kan tot 7 dagen voor de cursusdatum.<Req />
+          </span>
+        </label>
+        <FieldError>{errors.acceptTerms?.message}</FieldError>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Lees in onze <Link href="/privacy" target="_blank" className="underline underline-offset-2">privacyverklaring</Link> hoe wij met uw gegevens omgaan.
+        </p>
+      </div>
+
+      {/* Spam-val: verborgen voor bezoekers. */}
+      <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label>Website<input tabIndex={-1} autoComplete="off" {...form.register("website")} /></label>
+      </div>
+
+      {error ? (
+        <p role="alert" className="border-l-4 border-destructive bg-secondary p-3 text-sm font-semibold">
+          {serverErrors[error] ?? <>{genericError} <bdi dir="ltr">+31 6 16717342</bdi></>}
+        </p>
+      ) : null}
+
+      <Button type="submit" variant="accent" size="lg" disabled={form.formState.isSubmitting}>
+        {form.formState.isSubmitting ? "Bezig..." : "Verder naar betalen"}
+      </Button>
+      <p className="text-center text-xs text-muted-foreground">U betaalt veilig online met iDEAL of creditcard.</p>
+    </form>
+  );
+}

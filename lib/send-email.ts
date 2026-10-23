@@ -24,9 +24,10 @@ export function rowsToHtml(title: string, rows: [string, unknown][]): string {
     `<table style="font-family:sans-serif;border-collapse:collapse">${body}</table>`;
 }
 
-export async function sendEmail(opts: { subject: string; html: string; replyTo?: string }) {
+// Zonder `to` gaat de e-mail naar het bedrijf (CONTACT_TO_EMAIL).
+export async function sendEmail(opts: { subject: string; html: string; replyTo?: string; to?: string; fromName?: string }) {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
+  const to = opts.to ?? process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL;
 
   if (!apiKey || !to || !from) {
@@ -37,7 +38,7 @@ export async function sendEmail(opts: { subject: string; html: string; replyTo?:
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: `VCA Website <${from}>`,
+      from: `${opts.fromName ?? "VCA Website"} <${from}>`,
       to: [to],
       subject: opts.subject,
       html: opts.html,

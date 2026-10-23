@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { localizePath } from "@/lib/localized-path";
 import { arabicTranslations, type Language } from "@/lib/translations";
 
 type LanguageContextValue = {
@@ -31,7 +32,7 @@ function translateDom(language: Language) {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       const parent = node.parentElement;
-      if (!parent || parent.closest("script, style, noscript, textarea, input")) return NodeFilter.FILTER_REJECT;
+      if (!parent || parent.closest("script, style, noscript, textarea, input, [data-no-translate]")) return NodeFilter.FILTER_REJECT;
       if (!node.textContent?.trim()) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     }
@@ -42,28 +43,67 @@ function translateDom(language: Language) {
   nodes.forEach((node) => {
     if (node.textContent) node.textContent = translateText(node.textContent, language);
   });
+
+  // Ook invulhints, schermlezer-labels en afbeeldingsteksten vertalen.
+  document.querySelectorAll<HTMLElement>("[placeholder], [aria-label], img[alt], [title]").forEach((element) => {
+    for (const attribute of TRANSLATED_ATTRIBUTES) {
+      const value = element.getAttribute(attribute);
+      if (!value) continue;
+      const next = translateText(value, language);
+      if (next !== value) element.setAttribute(attribute, next);
+    }
+  });
+
+  // Paginatitel: "Onderdeel | VCA Veilig & Vakkundig B.V." per deel vertalen.
+  const title = document.title.split(" | ").map((part) => translateText(part, language)).join(" | ");
+  if (title !== document.title) document.title = title;
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("nl");
+const TRANSLATED_ATTRIBUTES = ["placeholder", "aria-label", "alt", "title"] as const;
+
+/**
+ * urlLanguage: op de website bepaalt de URL de taal (/ar/... = Arabisch) en
+ * wisselt de knop van pagina. Zonder (beheer) onthoudt de browser de keuze.
+ */
+export function LanguageProvider({ children, urlLanguage }: { children: React.ReactNode; urlLanguage?: Language }) {
+  const [storedLanguage, setStoredLanguage] = useState<Language>("nl");
+  const language = urlLanguage ?? storedLanguage;
 
   const setLanguage = (nextLanguage: Language) => {
-    setLanguageState(nextLanguage);
-    window.localStorage.setItem("site-language", nextLanguage);
+    try {
+      window.localStorage.setItem("site-language", nextLanguage);
+    } catch {
+      // Opslag niet beschikbaar (privévenster): taal geldt dan alleen voor deze pagina.
+    }
+    if (urlLanguage) {
+      if (nextLanguage !== urlLanguage) {
+        const { pathname, search, hash } = window.location;
+        window.location.assign(localizePath(pathname, nextLanguage) + search + hash);
+      }
+      return;
+    }
+    setStoredLanguage(nextLanguage);
   };
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("site-language");
-    if (stored === "ar" || stored === "nl") setLanguageState(stored);
-  }, []);
+    if (urlLanguage) return;
+    try {
+      const stored = window.localStorage.getItem("site-language");
+      if (stored === "ar" || stored === "nl") setStoredLanguage(stored);
+    } catch {
+      // Geen opslag beschikbaar.
+    }
+  }, [urlLanguage]);
 
   useEffect(() => {
     document.documentElement.lang = language === "ar" ? "ar" : "nl";
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     translateDom(language);
+    document.documentElement.removeAttribute("data-translating");
 
     const observer = new MutationObserver(() => translateDom(language));
     observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
     return () => observer.disconnect();
   }, [language]);
 
@@ -73,7 +113,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     toggleLanguage: () => setLanguage(language === "ar" ? "nl" : "ar"),
     isArabic: language === "ar",
     t: (text) => (language === "ar" ? arabicTranslations[text] ?? text : text)
-  }), [language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [language, urlLanguage]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Req, RequiredNote } from "@/components/ui/required";
 import { Textarea } from "@/components/ui/textarea";
 import { courses } from "@/lib/data";
 
@@ -61,13 +62,14 @@ export function ContactForm() {
   return (
     <form onSubmit={form.handleSubmit(submit)} className="official-card mt-5 grid gap-4 p-6">
       <h2 className="text-2xl font-bold">Stel uw vraag</h2>
-      <label className="text-sm font-semibold">Naam<Input {...form.register("name")} className="mt-1" autoComplete="name" /></label>
+      <RequiredNote />
+      <label className="text-sm font-semibold">Naam<Req /><Input {...form.register("name")} className="mt-1" autoComplete="name" /></label>
       <FieldError>{form.formState.errors.name?.message}</FieldError>
-      <label className="text-sm font-semibold">E-mail<Input {...form.register("email")} className="mt-1" autoComplete="email" /></label>
+      <label className="text-sm font-semibold">E-mail<Req /><Input {...form.register("email")} className="mt-1" autoComplete="email" /></label>
       <FieldError>{form.formState.errors.email?.message}</FieldError>
-      <label className="text-sm font-semibold">Telefoon<Input {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
+      <label className="text-sm font-semibold">Telefoon<Req /><Input {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
       <FieldError>{form.formState.errors.phone?.message}</FieldError>
-      <label className="text-sm font-semibold">Bericht<Textarea {...form.register("message")} className="mt-1" /></label>
+      <label className="text-sm font-semibold">Bericht<Req /><Textarea {...form.register("message")} className="mt-1" /></label>
       <FieldError>{form.formState.errors.message?.message}</FieldError>
       {failed && <p className="border-l-4 border-destructive bg-secondary p-3 text-sm font-semibold">Versturen is niet gelukt. Probeer het opnieuw of bel/WhatsApp ons: <bdi dir="ltr">+31 6 16717342</bdi>.</p>}
       {sent && <p className="border-l-4 border-accent bg-secondary p-3 text-sm font-semibold">Dank u. We nemen snel contact op.</p>}
@@ -106,14 +108,15 @@ export function EnrollmentForm({ defaultCourse }: { defaultCourse?: string }) {
   return (
     <form onSubmit={form.handleSubmit(submit)} className="official-card mt-5 grid gap-5 p-6">
       <h2 className="text-2xl font-bold">Inschrijven of examen plannen</h2>
-      <label className="text-sm font-semibold">Naam<Input {...form.register("name")} className="mt-1" autoComplete="name" /></label>
+      <RequiredNote />
+      <label className="text-sm font-semibold">Naam<Req /><Input {...form.register("name")} className="mt-1" autoComplete="name" /></label>
       <FieldError>{form.formState.errors.name?.message}</FieldError>
-      <label className="text-sm font-semibold">E-mail<Input {...form.register("email")} className="mt-1" autoComplete="email" /></label>
+      <label className="text-sm font-semibold">E-mail<Req /><Input {...form.register("email")} className="mt-1" autoComplete="email" /></label>
       <FieldError>{form.formState.errors.email?.message}</FieldError>
-      <label className="text-sm font-semibold">Telefoon<Input {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
+      <label className="text-sm font-semibold">Telefoon<Req /><Input {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
       <FieldError>{form.formState.errors.phone?.message}</FieldError>
       <label className="text-sm font-semibold">
-        Cursus
+        Cursus<Req />
         <Select defaultValue={defaultCourse} onValueChange={(value) => form.setValue("course", value, { shouldValidate: true })}>
           <SelectTrigger className="mt-1"><SelectValue placeholder="Kies een cursus" /></SelectTrigger>
           <SelectContent>{courses.map((course) => <SelectItem key={course.slug} value={course.title}>{course.title}</SelectItem>)}</SelectContent>
@@ -121,7 +124,7 @@ export function EnrollmentForm({ defaultCourse }: { defaultCourse?: string }) {
       </label>
       <FieldError>{form.formState.errors.course?.message}</FieldError>
       <label className="text-sm font-semibold">
-        Type aanmelding
+        Type aanmelding<Req />
         <Select onValueChange={(value) => form.setValue("type", value, { shouldValidate: true })}>
           <SelectTrigger className="mt-1"><SelectValue placeholder="Kies type" /></SelectTrigger>
           <SelectContent>
@@ -132,7 +135,7 @@ export function EnrollmentForm({ defaultCourse }: { defaultCourse?: string }) {
         </Select>
       </label>
       <FieldError>{form.formState.errors.type?.message}</FieldError>
-      <label className="text-sm font-semibold">Aantal kandidaten<Input type="number" min={1} {...form.register("candidates")} className="mt-1" /></label>
+      <label className="text-sm font-semibold">Aantal kandidaten<Req /><Input type="number" min={1} {...form.register("candidates")} className="mt-1" /></label>
       <FieldError>{form.formState.errors.candidates?.message}</FieldError>
       <div>
         <label className="text-sm font-semibold">Voorkeursdatum</label>
@@ -140,7 +143,7 @@ export function EnrollmentForm({ defaultCourse }: { defaultCourse?: string }) {
         <p className="mt-1 text-xs text-muted-foreground">Heeft u nog geen vaste datum? Kies hieronder meerdere beschikbare dagen.</p>
       </div>
       <fieldset className="grid gap-3">
-        <legend className="text-sm font-semibold">Beschikbare dagen</legend>
+        <legend className="text-sm font-semibold">Beschikbare dagen<Req /></legend>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {availableDayOptions.map((day) => (
             <label key={day} className="flex items-center gap-2 border border-border bg-white px-3 py-3 text-sm font-semibold">
