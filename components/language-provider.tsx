@@ -31,7 +31,7 @@ function translateDom(language: Language) {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       const parent = node.parentElement;
-      if (!parent || parent.closest("script, style, noscript, textarea, input")) return NodeFilter.FILTER_REJECT;
+      if (!parent || parent.closest("script, style, noscript, textarea, input, [data-no-translate]")) return NodeFilter.FILTER_REJECT;
       if (!node.textContent?.trim()) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     }

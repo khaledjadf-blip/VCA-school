@@ -109,8 +109,8 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
               <tbody>
                 {bookings.map((b) => (
                   <tr key={b.id} className="border-b border-border last:border-b-0">
-                    <td className="px-4 py-3 font-semibold">{b.first_name} {b.last_name}</td>
-                    <td className="px-4 py-3"><a href={`mailto:${b.email}`} className="underline underline-offset-4">{b.email}</a></td>
+                    <td className="px-4 py-3 font-semibold" data-no-translate>{b.first_name} {b.last_name}</td>
+                    <td className="px-4 py-3" data-no-translate><a href={`mailto:${b.email}`} className="underline underline-offset-4">{b.email}</a></td>
                     <td className="whitespace-nowrap px-4 py-3"><a href={`tel:${b.phone}`} dir="ltr">{b.phone}</a></td>
                     <td className="whitespace-nowrap px-4 py-3">{formatEuro(b.amount_cents)}</td>
                     <td className="px-4 py-3">
