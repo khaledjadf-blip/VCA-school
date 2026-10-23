@@ -1,10 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
+import Link from "@/components/localized-link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Req, RequiredNote } from "@/components/ui/required";
@@ -43,6 +44,7 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
   const [error, setError] = useState<string | null>(null);
   const form = useForm<BookingValues>({ resolver: zodResolver(bookingSchema) });
   const errors = form.formState.errors;
+  const { language } = useLanguage();
 
   async function submit(values: BookingValues) {
     setError(null);
@@ -50,7 +52,7 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, sessionId })
+        body: JSON.stringify({ ...values, sessionId, lang: language })
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
@@ -138,6 +140,9 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
           </span>
         </label>
         <FieldError>{errors.acceptTerms?.message}</FieldError>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Lees in onze <Link href="/privacy" target="_blank" className="underline underline-offset-2">privacyverklaring</Link> hoe wij met uw gegevens omgaan.
+        </p>
       </div>
 
       {/* Spam-val: verborgen voor bezoekers. */}

@@ -550,3 +550,12 @@
     }
   }
 }
+
+/* Arabische pagina's: pas tonen als de vertaling klaar is; na 1,5 s altijd tonen. */
+html[data-translating] body {
+  opacity: 0;
+  animation: reveal-after-translation 0s linear 1.5s forwards;
+}
+@keyframes reveal-after-translation {
+  to { opacity: 1; }
+}

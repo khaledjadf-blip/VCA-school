@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { courseTitle } from "@/lib/admin-labels";
+import { localizePath } from "@/lib/localized-path";
 import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
 import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
 
@@ -16,7 +17,8 @@ const bookingSchema = z.object({
   notes: z.string().trim().max(1000).optional(),
   // Onzichtbaar veld: echte bezoekers laten dit leeg, spam-bots niet.
   website: z.string().max(0).optional(),
-  acceptTerms: z.literal(true)
+  acceptTerms: z.literal(true),
+  lang: z.enum(["nl", "ar"]).default("nl")
 });
 
 function age(birthDate: string) {
@@ -78,19 +80,20 @@ export async function POST(request: Request) {
       .single();
     const date = session ? new Date(session.starts_at).toLocaleDateString("nl-NL", { timeZone: "Europe/Amsterdam" }) : "";
     const base = siteUrl(request);
+    const thanks = `${base}${localizePath("/boeken/bedankt", input.lang)}?b=${booking.id}`;
     const payment = await provider.createPayment({
       bookingId: booking.id,
       amountCents: booking.amount_cents,
       description: `${session ? courseTitle(session.course_slug) : "Cursus"} ${date} – ${booking.first_name} ${booking.last_name}`,
       ...(provider.name === "mypos"
         ? {
-            redirectUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=ok`,
-            cancelUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=afgebroken`,
+            redirectUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=ok&lang=${input.lang}`,
+            cancelUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=afgebroken&lang=${input.lang}`,
             webhookUrl: webhookUrl(base, "/api/payments/mypos/notify")
           }
         : {
-            redirectUrl: `${base}/boeken/bedankt?b=${booking.id}`,
-            cancelUrl: `${base}/boeken/bedankt?b=${booking.id}`,
+            redirectUrl: thanks,
+            cancelUrl: thanks,
             webhookUrl: webhookUrl(base, "/api/payments/webhook")
           })
     });
@@ -101,6 +104,13 @@ export async function POST(request: Request) {
       .update({ payment_provider: provider.name, payment_id: payment.id })
       .eq("id", booking.id);
     if (updateError) throw updateError;
+
+    // Taal is handig voor e-mails, maar nooit reden om een boeking te laten mislukken
+    // (bijv. als de kolom nog niet bestaat omdat schema.sql nog niet opnieuw is uitgevoerd).
+    if (input.lang !== "nl") {
+      const { error: langError } = await supabase.from("bookings").update({ lang: input.lang }).eq("id", booking.id);
+      if (langError) console.warn("Taal opslaan mislukt (voer supabase/schema.sql opnieuw uit)", langError.message);
+    }
 
     return NextResponse.json({ ok: true, checkoutUrl: payment.checkoutUrl, checkoutFields: payment.checkoutFields ?? null });
   } catch (paymentError) {

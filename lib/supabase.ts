@@ -36,6 +36,7 @@ export type Booking = {
   status: "pending" | "paid" | "failed" | "canceled" | "expired" | "refunded";
   payment_provider: string | null;
   payment_id: string | null;
+  lang: "nl" | "ar";
   seat_counted: boolean;
   paid_at: string | null;
   created_at: string;

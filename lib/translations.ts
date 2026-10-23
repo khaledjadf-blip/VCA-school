@@ -1,4 +1,9 @@
-export type Language = "nl" | "ar";
+export const languages = ["nl", "ar"] as const;
+export type Language = (typeof languages)[number];
+
+export function isLanguage(value: string): value is Language {
+  return (languages as readonly string[]).includes(value);
+}
 
 export const arabicTranslations: Record<string, string> = {
   "Home": "الرئيسية",
@@ -585,5 +590,47 @@ Object.assign(arabicTranslations, {
   "Klant e-mailen": "إرسال إيميل للزبون",
   "De boeking is geannuleerd en de klant heeft een e-mail gekregen. De plek is weer vrij.": "تم إلغاء الحجز وأُرسل إيميل للزبون. المقعد أصبح متاحا من جديد.",
   "De boeking is geannuleerd, het bedrag wordt terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ، وأُرسل إيميل للزبون.",
-  "Geen betaalde boekingen voor deze datum.": "لا توجد حجوزات مدفوعة لهذا الموعد."
+  "Geen betaalde boekingen voor deze datum.": "لا توجد حجوزات مدفوعة لهذا الموعد.",
+  "Privacyverklaring": "سياسة الخصوصية",
+  "Privacy": "الخصوصية",
+  "KvK": "رقم السجل التجاري (KvK)",
+  "Btw-nummer": "الرقم الضريبي (BTW)",
+  "WhatsApp ons": "راسلنا على واتساب",
+  "Lees in onze": "اقرأ في",
+  "privacyverklaring": "سياسة الخصوصية",
+  "hoe wij met uw gegevens omgaan.": "كيف نتعامل مع معلوماتك.",
+  "Hoe VCA Veilig & Vakkundig B.V. omgaat met uw persoonsgegevens bij inschrijving, examen en betaling.": "كيف تتعامل VCA Veilig & Vakkundig B.V. مع بياناتك الشخصية عند التسجيل والاختبار والدفع.",
+  "Wie zijn wij?": "من نحن؟",
+  "VCA Veilig & Vakkundig B.V. is verantwoordelijk voor de verwerking van uw persoonsgegevens via deze website.": "شركة VCA Veilig & Vakkundig B.V. هي المسؤولة عن معالجة بياناتك الشخصية عبر هذا الموقع.",
+  "Heeft u een vraag over uw gegevens? Neem dan contact met ons op via de gegevens onderaan deze pagina.": "هل لديك سؤال عن بياناتك؟ تواصل معنا عبر المعلومات الموجودة أسفل هذه الصفحة.",
+  "Welke gegevens verwerken wij?": "ما هي البيانات التي نعالجها؟",
+  "Wanneer u zich inschrijft of contact opneemt, verwerken wij de gegevens die u zelf invult:": "عندما تسجل أو تتواصل معنا، نعالج المعلومات التي تكتبها بنفسك:",
+  "Voornaam en achternaam": "الاسم الأول والكنية",
+  "E-mailadres en telefoonnummer": "البريد الإلكتروني ورقم الهاتف",
+  "Geboortedatum en geboorteplaats": "تاريخ ومكان الميلاد",
+  "Bedrijfsnaam en opmerkingen (als u die invult)": "اسم الشركة والملاحظات (إذا كتبتها)",
+  "Gekozen cursus, datum en betaalstatus": "الدورة والموعد المختاران وحالة الدفع",
+  "Waarom verwerken wij deze gegevens?": "لماذا نعالج هذه البيانات؟",
+  "Wij gebruiken uw gegevens om uw inschrijving te verwerken, u in te plannen voor de cursus en het examen, en met u te communiceren.": "نستخدم بياناتك لمعالجة تسجيلك وتحديد موعدك للدورة والاختبار والتواصل معك.",
+  "Uw naam, geboortedatum en geboorteplaats zijn nodig om uw examen aan te melden en uw diploma te laten registreren in het Centraal Diploma Register (CDR).": "اسمك وتاريخ ومكان ميلادك ضرورية لتسجيلك في الاختبار وتسجيل شهادتك في السجل المركزي للشهادات (CDR).",
+  "Wij verwerken uw gegevens omdat dit nodig is voor de uitvoering van de overeenkomst met u en om te voldoen aan wettelijke verplichtingen, zoals de fiscale bewaarplicht.": "نعالج بياناتك لأن ذلك ضروري لتنفيذ الاتفاق معك وللالتزام بالواجبات القانونية، مثل واجب حفظ السجلات الضريبية.",
+  "Met wie delen wij uw gegevens?": "مع من نشارك بياناتك؟",
+  "Wij verkopen uw gegevens nooit. Wij delen alleen wat nodig is met partijen die ons helpen de dienst uit te voeren:": "لا نبيع بياناتك أبدا. نشارك فقط ما هو ضروري مع الجهات التي تساعدنا في تقديم الخدمة:",
+  "De examenorganisatie en het Centraal Diploma Register, voor uw examen en diploma": "جهة الاختبار والسجل المركزي للشهادات، من أجل اختبارك وشهادتك",
+  "Onze betaalprovider, voor het verwerken van uw betaling": "شركة الدفع، لمعالجة دفعتك",
+  "Onze hosting- en e-maildiensten, voor het opslaan van uw inschrijving en het versturen van bevestigingen": "خدمات الاستضافة والبريد الإلكتروني، لحفظ تسجيلك وإرسال رسائل التأكيد",
+  "Hoe lang bewaren wij uw gegevens?": "كم من الوقت نحتفظ ببياناتك؟",
+  "Wij bewaren uw inschrijfgegevens zolang dat nodig is voor de cursus, het examen en eventuele vragen daarna.": "نحتفظ ببيانات تسجيلك طالما كان ذلك ضروريا للدورة والاختبار وأي أسئلة بعدها.",
+  "Gegevens over betalingen en facturen bewaren wij 7 jaar, omdat de wet dat verplicht.": "نحتفظ ببيانات الدفع والفواتير لمدة 7 سنوات لأن القانون يفرض ذلك.",
+  "Beveiliging": "الحماية",
+  "Uw gegevens worden versleuteld verstuurd en opgeslagen in een beveiligde database binnen de Europese Unie.": "يتم إرسال بياناتك مشفرة وحفظها في قاعدة بيانات محمية داخل الاتحاد الأوروبي.",
+  "Alleen medewerkers die uw inschrijving verwerken, hebben toegang.": "فقط الموظفون الذين يعالجون تسجيلك لديهم صلاحية الوصول.",
+  "Cookies": "ملفات تعريف الارتباط (Cookies)",
+  "Deze website gebruikt geen tracking- of advertentiecookies.": "هذا الموقع لا يستخدم ملفات تتبع أو إعلانات.",
+  "Wij onthouden alleen uw taalkeuze in uw browser, zodat de website in de juiste taal opent.": "نحفظ فقط اختيارك للغة في متصفحك، حتى يفتح الموقع باللغة الصحيحة.",
+  "Uw rechten": "حقوقك",
+  "U heeft het recht om uw gegevens in te zien, te laten corrigeren of te laten verwijderen, en om bezwaar te maken tegen het gebruik ervan.": "لديك الحق في الاطلاع على بياناتك وتصحيحها أو حذفها، والاعتراض على استخدامها.",
+  "Stuur hiervoor een e-mail naar info@vcaveiligvakkundig.nl. Wij reageren binnen 4 weken.": "لذلك أرسل إيميل إلى info@vcaveiligvakkundig.nl. نرد خلال 4 أسابيع.",
+  "Bent u niet tevreden over hoe wij met uw gegevens omgaan? Dan kunt u een klacht indienen bij de Autoriteit Persoonsgegevens.": "إذا لم تكن راضيا عن طريقة تعاملنا مع بياناتك، يمكنك تقديم شكوى لدى هيئة حماية البيانات الهولندية (Autoriteit Persoonsgegevens).",
+  "Schrijf u in voor VCA Basis, VCA VOL, VIL-VCU, heftruck opleiding of SSVV-examen. Duidelijke planning, examenregistratie en begeleiding in Nederlands en Arabisch.": "سجّل في VCA Basis أو VCA VOL أو VIL-VCU أو دورة الرافعة الشوكية أو اختبار SSVV. تخطيط واضح وتسجيل للاختبار ومرافقة بالهولندية والعربية."
 });

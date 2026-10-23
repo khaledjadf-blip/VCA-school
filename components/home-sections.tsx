@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/localized-link";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import { CategoryFlipCard } from "@/components/course-card";

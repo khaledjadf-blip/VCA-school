@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link, { useSitePath } from "@/components/localized-link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/language-provider";
@@ -22,7 +21,7 @@ const courseLinks = [
 ];
 
 export function SiteHeader() {
-  const pathname = usePathname();
+  const pathname = useSitePath();
   const { language, toggleLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
   const [coursesOpen, setCoursesOpen] = useState(false);

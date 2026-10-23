@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarDays, Clock, MapPin } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/localized-link";
 import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import type { PublicSession } from "@/lib/sessions";

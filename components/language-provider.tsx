@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { localizePath } from "@/lib/localized-path";
 import { arabicTranslations, type Language } from "@/lib/translations";
 
 type LanguageContextValue = {
@@ -60,23 +61,45 @@ function translateDom(language: Language) {
 
 const TRANSLATED_ATTRIBUTES = ["placeholder", "aria-label", "alt", "title"] as const;
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("nl");
+/**
+ * urlLanguage: op de website bepaalt de URL de taal (/ar/... = Arabisch) en
+ * wisselt de knop van pagina. Zonder (beheer) onthoudt de browser de keuze.
+ */
+export function LanguageProvider({ children, urlLanguage }: { children: React.ReactNode; urlLanguage?: Language }) {
+  const [storedLanguage, setStoredLanguage] = useState<Language>("nl");
+  const language = urlLanguage ?? storedLanguage;
 
   const setLanguage = (nextLanguage: Language) => {
-    setLanguageState(nextLanguage);
-    window.localStorage.setItem("site-language", nextLanguage);
+    try {
+      window.localStorage.setItem("site-language", nextLanguage);
+    } catch {
+      // Opslag niet beschikbaar (privévenster): taal geldt dan alleen voor deze pagina.
+    }
+    if (urlLanguage) {
+      if (nextLanguage !== urlLanguage) {
+        const { pathname, search, hash } = window.location;
+        window.location.assign(localizePath(pathname, nextLanguage) + search + hash);
+      }
+      return;
+    }
+    setStoredLanguage(nextLanguage);
   };
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("site-language");
-    if (stored === "ar" || stored === "nl") setLanguageState(stored);
-  }, []);
+    if (urlLanguage) return;
+    try {
+      const stored = window.localStorage.getItem("site-language");
+      if (stored === "ar" || stored === "nl") setStoredLanguage(stored);
+    } catch {
+      // Geen opslag beschikbaar.
+    }
+  }, [urlLanguage]);
 
   useEffect(() => {
     document.documentElement.lang = language === "ar" ? "ar" : "nl";
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     translateDom(language);
+    document.documentElement.removeAttribute("data-translating");
 
     const observer = new MutationObserver(() => translateDom(language));
     observer.observe(document.body, { childList: true, subtree: true });
@@ -90,7 +113,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     toggleLanguage: () => setLanguage(language === "ar" ? "nl" : "ar"),
     isArabic: language === "ar",
     t: (text) => (language === "ar" ? arabicTranslations[text] ?? text : text)
-  }), [language]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [language, urlLanguage]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

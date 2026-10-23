@@ -58,6 +58,9 @@ create table if not exists public.bookings (
   updated_at          timestamptz not null default now()
 );
 
+-- Taal van de website bij het boeken (voor e-mails in de juiste taal).
+alter table public.bookings add column if not exists lang text not null default 'nl';
+
 create index if not exists bookings_session_idx on public.bookings (session_id);
 create index if not exists bookings_status_idx on public.bookings (status);
 
