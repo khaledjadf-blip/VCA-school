@@ -584,5 +584,6 @@ Object.assign(arabicTranslations, {
   "De database mist een nieuwe functie. Voer het bestand supabase/schema.sql opnieuw uit in Supabase → SQL Editor → Run (dat is veilig).": "قاعدة البيانات تنقصها وظيفة جديدة. شغّل الملف supabase/schema.sql مرة أخرى في Supabase ← SQL Editor ← Run (هذا آمن).",
   "Klant e-mailen": "إرسال إيميل للزبون",
   "De boeking is geannuleerd en de klant heeft een e-mail gekregen. De plek is weer vrij.": "تم إلغاء الحجز وأُرسل إيميل للزبون. المقعد أصبح متاحا من جديد.",
-  "De boeking is geannuleerd, het bedrag wordt terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ، وأُرسل إيميل للزبون."
+  "De boeking is geannuleerd, het bedrag wordt terugbetaald en de klant heeft een e-mail gekregen.": "تم إلغاء الحجز، وسيتم إرجاع المبلغ، وأُرسل إيميل للزبون.",
+  "Geen betaalde boekingen voor deze datum.": "لا توجد حجوزات مدفوعة لهذا الموعد."
 });

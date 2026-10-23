@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { bookingStatusLabels, courseTitle } from "@/lib/admin-labels";
+import { bookingStatusLabels, courseTitle, effectiveStatus } from "@/lib/admin-labels";
 import { isAdmin } from "@/lib/admin-auth";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { formatDateTimeNl } from "@/lib/time";
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       b.birth_place ?? "",
       b.company ?? "",
       (b.amount_cents / 100).toFixed(2).replace(".", ","),
-      bookingStatusLabels[b.status] ?? b.status,
+      bookingStatusLabels[effectiveStatus(b)] ?? b.status,
       b.paid_at ? formatDateTimeNl(b.paid_at) : "",
       formatDateTimeNl(b.created_at),
       b.notes ?? ""

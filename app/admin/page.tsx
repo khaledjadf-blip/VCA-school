@@ -7,6 +7,7 @@ import { getSupabase, isSupabaseConfigured, type CourseSession } from "@/lib/sup
 import { Bilingual, LocalDateTime } from "@/components/localized";
 import { formatEuro } from "@/lib/time";
 import { explainDbError } from "@/lib/admin-db-errors";
+import { PENDING_HOLD_MS } from "@/lib/admin-labels";
 
 type Props = { searchParams: Promise<{ fout?: string; ok?: string; toon?: string }> };
 
@@ -64,14 +65,15 @@ export default async function AdminPage({ searchParams }: Props) {
   const { data, error, status } = await query;
   const sessions = (data ?? []) as CourseSession[];
 
-  // Openstaande betalingen per datum (voor het overzicht).
+  // Openstaande betalingen per datum (alleen de laatste 30 minuten; oudere zijn verlopen).
   const pending = new Map<string, number>();
   if (sessions.length) {
     const { data: rows } = await supabase
       .from("bookings")
       .select("session_id")
       .in("session_id", sessions.map((s) => s.id))
-      .eq("status", "pending");
+      .eq("status", "pending")
+      .gt("created_at", new Date(Date.now() - PENDING_HOLD_MS).toISOString());
     for (const row of rows ?? []) pending.set(row.session_id, (pending.get(row.session_id) ?? 0) + 1);
   }
 

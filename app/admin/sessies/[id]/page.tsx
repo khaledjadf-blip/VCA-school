@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminHeader, Notice, bookingStatusLabels, courseTitle } from "@/app/admin/admin-ui";
+import { effectiveStatus, isUnfinished } from "@/lib/admin-labels";
 import { bookingAction, deleteSessionAction, updateSessionAction } from "@/app/admin/actions";
 import { ConfirmButton } from "@/app/admin/confirm-button";
 import { SessionForm } from "@/app/admin/session-form";
@@ -12,7 +13,7 @@ import { centsToEuroInput, formatEuro, isoToAmsterdam } from "@/lib/time";
 
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ fout?: string; ok?: string }>;
+  searchParams: Promise<{ fout?: string; ok?: string; alles?: string }>;
 };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -20,7 +21,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export default async function SessionDetailPage({ params, searchParams }: Props) {
   await requireAdmin();
   const { id } = await params;
-  const { fout, ok } = await searchParams;
+  const { fout, ok, alles } = await searchParams;
   if (!UUID.test(id)) notFound();
 
   const supabase = getSupabase();
@@ -33,7 +34,10 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
     .select("*")
     .eq("session_id", id)
     .order("created_at", { ascending: true });
-  const bookings = (bookingRows ?? []) as Booking[];
+  const allBookings = ((bookingRows ?? []) as Booking[]).map((b) => ({ ...b, status: effectiveStatus(b) }));
+  const unfinished = allBookings.filter(isUnfinished).length;
+  const showAll = alles === "1";
+  const bookings = showAll ? allBookings : allBookings.filter((b) => !isUnfinished(b));
   const paid = bookings.filter((b) => b.status === "paid");
 
   const start = isoToAmsterdam(session.starts_at);
@@ -74,9 +78,20 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
             <a href={`/admin/export?sessie=${session.id}`}>Download deze lijst (CSV)</a>
           </Button>
         </div>
+        {unfinished ? (
+          <p className="mb-3 text-sm">
+            <Link href={showAll ? `/admin/sessies/${session.id}` : `/admin/sessies/${session.id}?alles=1`} className="font-semibold text-primary underline underline-offset-4">
+              {showAll ? (
+                <Bilingual nl="Verberg niet-betaalde aanmeldingen" ar="إخفاء الطلبات غير المدفوعة" />
+              ) : (
+                <Bilingual nl={`Toon ook ${unfinished} niet-betaalde aanmelding(en)`} ar={`إظهار ${unfinished} طلبات غير مدفوعة أيضا`} />
+              )}
+            </Link>
+          </p>
+        ) : null}
 
         {bookings.length === 0 ? (
-          <p className="official-card p-6 text-muted-foreground">Nog geen boekingen voor deze datum.</p>
+          <p className="official-card p-6 text-muted-foreground">{unfinished ? "Geen betaalde boekingen voor deze datum." : "Nog geen boekingen voor deze datum."}</p>
         ) : (
           <div className="official-card overflow-x-auto">
             <table className="w-full min-w-[960px] text-left text-sm">
