@@ -34,8 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: "VCA cursus inschrijven | VCA Veilig & Vakkundig B.V.",
       description: "Professionele VCA-cursussen, heftrucktraining en SSVV-erkende examens met duidelijke begeleiding.",
       type: "website",
-      locale: ar ? "ar" : "nl_NL"
-    }
+      siteName: "VCA Veilig & Vakkundig B.V.",
+      locale: ar ? "ar" : "nl_NL",
+      // Voorbeeldafbeelding bij delen via WhatsApp, Facebook, LinkedIn.
+      images: [{ url: "/images/og-share.jpg", width: 1200, height: 630, alt: "VCA Veilig & Vakkundig – VCA-cursus met erkend examen" }]
+    },
+    twitter: { card: "summary_large_image", images: ["/images/og-share.jpg"] }
   };
 }
 
