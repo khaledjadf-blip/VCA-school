@@ -148,9 +148,9 @@ export function WhySection() {
       <div className="grid overflow-hidden border border-border bg-white lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
         <figure className="relative min-h-[18rem] bg-secondary">
           <img
-            src={visualAssets.classroom.src}
-            alt={visualAssets.classroom.alt}
-            className="absolute inset-0 h-full w-full object-cover"
+            src={visualAssets.whyPhoto.src}
+            alt={visualAssets.whyPhoto.alt}
+            className="absolute inset-0 h-full w-full object-cover object-[50%_10%]"
             loading="lazy"
             decoding="async"
           />

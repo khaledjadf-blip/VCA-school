@@ -711,5 +711,5 @@ Object.assign(arabicTranslations, {
   "Uitleg met voorbeelden uit bouw, techniek, industrie en logistiek.": "شرح مع أمثلة من البناء والتقنية والصناعة واللوجستيات.",
   "Kies een open datum of vraag een training voor uw team op locatie aan.": "اختر موعدا متاحا أو اطلب تدريبا لفريقك في موقع عملكم.",
   "Hulp bij aanmelding, planning en voorbereiding in uw eigen taal.": "مساعدة في التسجيل والتخطيط والتحضير بلغتك.",
-  "Docent geeft les aan een groep cursisten in een leslokaal": "مدرّب يعطي درسا لمجموعة من المتدربين في قاعة الدروس"
+  "Bouwvakker met veiligheidshesje en werkhandschoenen stort beton": "عامل بناء بسترة أمان وقفازات عمل يصب الباطون"
 });
