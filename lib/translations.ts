@@ -664,9 +664,6 @@ Object.assign(arabicTranslations, {
   "vanaf": "ابتداء من",
   "excl. btw": "بدون ضريبة",
   "De btw (21%) wordt bij het betalen opgeteld.": "تُضاف الضريبة (21%) عند الدفع.",
-  "Prijs excl. btw": "السعر بدون ضريبة",
-  "Btw": "الضريبة (BTW)",
-  "Totaal incl. btw": "المجموع شامل الضريبة",
   "Prijs excl. btw (EUR)": "السعر بدون ضريبة (يورو)",
   "Bijvoorbeeld 250. De klant betaalt dit bedrag + 21% btw.": "مثلا 250. يدفع الزبون هذا المبلغ مع 21% ضريبة.",
   "Team met helmen en veiligheidshesjes op een bouwplaats": "فريق بخوذات وسترات أمان في موقع بناء",
@@ -701,7 +698,11 @@ Object.assign(arabicTranslations, {
   "Certificaat": "الشهادة",
   "Als PDF opsturen en digitale VCA-pas": "إرسال الشهادة PDF وبطاقة VCA رقمية",
   "Papieren certificaat en plastic pas + €20": "شهادة ورقية وبطاقة بلاستيكية + 20€",
-  "Papieren certificaat excl. btw": "الشهادة الورقية بدون ضريبة",
   "Papier + plastic pas": "ورقية + بطاقة بلاستيكية",
-  "PDF + digitale pas": "PDF + بطاقة رقمية"
+  "PDF + digitale pas": "PDF + بطاقة رقمية",
+  "Prijs excl. btw": "السعر بدون ضريبة",
+  "Cursusprijs": "سعر الدورة",
+  "Papieren certificaat": "الشهادة الورقية",
+  "Totaal excl. btw": "المجموع بدون ضريبة",
+  "Totaal": "المجموع"
 });

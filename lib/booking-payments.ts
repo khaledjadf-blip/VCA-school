@@ -45,16 +45,17 @@ const certificateLabels = {
 } as const;
 const certificateLabel = (b: Booking, lang: "nl" | "ar") => certificateLabels[b.certificate ?? "digital"]?.[lang] ?? certificateLabels.digital[lang];
 
-/** Bedrag-regels: prijs excl. btw, btw en totaal; oude boekingen zonder btw alleen het totaal. */
+/** Bedrag-regels: bij een papieren certificaat eerst de losse prijzen, dan totaal excl. btw en totaal; oude boekingen zonder btw alleen het totaal. */
 function amountRows(b: Booking, ar: boolean) {
   const euro = (cents: number) => (ar ? `<span dir="ltr">${escapeHtml(formatEuro(cents))}</span>` : escapeHtml(formatEuro(cents)));
   const total = `<strong>${euro(b.amount_cents)}</strong>`;
   if (!b.vat_cents) return row(ar ? "المبلغ المدفوع" : "Betaald", total, ar);
   const extra = b.certificate_cents ?? 0;
+  const exVat = b.amount_cents - b.vat_cents;
   return [
-    row(ar ? "سعر الدورة" : "Cursusprijs", euro(b.amount_cents - b.vat_cents - extra), ar),
+    extra ? row(ar ? "سعر الدورة" : "Cursusprijs", euro(exVat - extra), ar) : "",
     extra ? row(ar ? "الشهادة الورقية" : "Papieren certificaat", euro(extra), ar) : "",
-    row(ar ? `ضريبة القيمة المضافة ${b.vat_percent}%` : `Btw ${b.vat_percent}%`, euro(b.vat_cents), ar),
+    row(ar ? "المجموع بدون ضريبة" : "Totaal excl. btw", euro(exVat), ar),
     row(ar ? "المجموع المدفوع" : "Totaal betaald", total, ar)
   ].join("");
 }
@@ -143,9 +144,13 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Certificaat", certificateLabel(b, "nl")],
         ...(b.vat_cents
           ? ([
-              ["Cursusprijs", formatEuro(b.amount_cents - b.vat_cents - (b.certificate_cents ?? 0))],
-              ...(b.certificate_cents ? ([["Papieren certificaat", formatEuro(b.certificate_cents)]] as [string, string][]) : []),
-              [`Btw ${b.vat_percent}%`, formatEuro(b.vat_cents)],
+              ...(b.certificate_cents
+                ? ([
+                    ["Cursusprijs", formatEuro(b.amount_cents - b.vat_cents - b.certificate_cents)],
+                    ["Papieren certificaat", formatEuro(b.certificate_cents)]
+                  ] as [string, string][])
+                : []),
+              ["Totaal excl. btw", formatEuro(b.amount_cents - b.vat_cents)],
               ["Totaal betaald", formatEuro(b.amount_cents)]
             ] as [string, string][])
           : ([["Bedrag", formatEuro(b.amount_cents)]] as [string, string][])),

@@ -5,7 +5,7 @@ import Link from "@/components/localized-link";
 import { useLanguage } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import type { PublicSession } from "@/lib/sessions";
-import { VAT_PERCENT, vatOf, withVat } from "@/lib/vat";
+import { withVat } from "@/lib/vat";
 
 const TIME_ZONE = "Europe/Amsterdam";
 
@@ -133,22 +133,24 @@ export function SessionSummary({ session, courseTitle, extraCents = 0 }: { sessi
         <span dir="ltr">{session.location}</span>
       </p>
       <dl className="mt-2 grid gap-1.5 border-t border-border pt-4 text-sm">
-        <div className="flex items-center justify-between">
-          <dt className="text-muted-foreground">Prijs excl. btw</dt>
-          <dd dir="ltr">{formatPrice(session.priceCents)}</dd>
-        </div>
         {extraCents ? (
-          <div className="flex items-center justify-between">
-            <dt className="text-muted-foreground">Papieren certificaat excl. btw</dt>
-            <dd dir="ltr">{formatPrice(extraCents)}</dd>
-          </div>
+          <>
+            <div className="flex items-center justify-between">
+              <dt className="text-muted-foreground">Cursusprijs</dt>
+              <dd dir="ltr">{formatPrice(session.priceCents)}</dd>
+            </div>
+            <div className="flex items-center justify-between">
+              <dt className="text-muted-foreground">Papieren certificaat</dt>
+              <dd dir="ltr">{formatPrice(extraCents)}</dd>
+            </div>
+          </>
         ) : null}
         <div className="flex items-center justify-between">
-          <dt className="text-muted-foreground">Btw <span dir="ltr">{VAT_PERCENT}%</span></dt>
-          <dd dir="ltr">{formatPrice(vatOf(session.priceCents + extraCents))}</dd>
+          <dt className="text-muted-foreground">Totaal excl. btw</dt>
+          <dd className="font-semibold text-muted-foreground" dir="ltr">{formatPrice(session.priceCents + extraCents)}</dd>
         </div>
         <div className="mt-1 flex items-center justify-between border-t border-border pt-2">
-          <dt className="font-semibold">Totaal incl. btw</dt>
+          <dt className="font-semibold">Totaal</dt>
           <dd className="text-2xl font-bold text-accent" dir="ltr">{formatPrice(withVat(session.priceCents + extraCents))}</dd>
         </div>
       </dl>
