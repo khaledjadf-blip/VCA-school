@@ -14,7 +14,6 @@ const bookingSchema = z.object({
   email: z.string().trim().email().max(200),
   phone: z.string().trim().min(8).max(30),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  birthPlace: z.string().trim().min(2).max(100),
   company: z.string().trim().max(150).optional(),
   notes: z.string().trim().max(1000).optional(),
   // Onzichtbaar veld: echte bezoekers laten dit leeg, spam-bots niet.
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
     p_email: input.email.toLowerCase(),
     p_phone: input.phone,
     p_birth_date: input.birthDate,
-    p_birth_place: input.birthPlace,
+    p_birth_place: null,
     p_company: input.company || null,
     p_notes: input.notes || null
   });

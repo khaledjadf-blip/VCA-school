@@ -137,7 +137,6 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["E-mail", b.email],
         ["Telefoon", b.phone],
         ["Geboortedatum", b.birth_date],
-        ["Geboorteplaats", b.birth_place],
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
