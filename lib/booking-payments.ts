@@ -7,7 +7,7 @@ import { refreshCoursePages } from "@/lib/revalidate";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
-import { certificateOptions } from "@/lib/certificate";
+import { certificateOptions, offersCertificateChoice } from "@/lib/certificate";
 import { company } from "@/lib/company";
 
 export type BookingWithSession = Booking & { course_sessions: CourseSession };
@@ -85,7 +85,7 @@ function customerEmailHtml(b: BookingWithSession) {
     ${row("Datum", escapeHtml(dateText(s.starts_at, "nl-NL")))}
     ${row("Tijd", escapeHtml(timeText(s)))}
     ${row("Locatie", location)}
-    ${row("Certificaat", escapeHtml(certificateLabel(b, "nl")))}
+    ${offersCertificateChoice(s.course_slug) ? row("Certificaat", escapeHtml(certificateLabel(b, "nl"))) : ""}
     ${amountRows(b, false)}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
@@ -104,7 +104,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("التاريخ", escapeHtml(dateText(s.starts_at, "ar-u-nu-latn")), true)}
       ${row("الوقت", `<span dir="ltr">${escapeHtml(timeText(s))}</span>`, true)}
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
-      ${row("الشهادة", escapeHtml(certificateLabel(b, "ar")), true)}
+      ${offersCertificateChoice(s.course_slug) ? row("الشهادة", escapeHtml(certificateLabel(b, "ar")), true) : ""}
       ${amountRows(b, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
@@ -141,7 +141,7 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
-        ["Certificaat", certificateLabel(b, "nl")],
+        ...(offersCertificateChoice(s.course_slug) ? ([["Certificaat", certificateLabel(b, "nl")]] as [string, string][]) : []),
         ...(b.vat_cents
           ? ([
               ...(b.certificate_cents
@@ -274,11 +274,11 @@ export async function syncPayment(paymentId: string): Promise<Booking["status"] 
 
   const payment = await provider.getPayment(paymentId);
   if (payment.bookingId !== booking.id) return null;
+  if (payment.status !== "open") console.info("Betaalstatus opgevraagd", { bookingId: booking.id, provider: provider.name, status: payment.status, amountCents: payment.amountCents });
 
-  // myPOS: "betaald" alleen via de ondertekende melding (anders kan myPOS de
-  // betaling terugdraaien terwijl wij hem al als betaald zien).
-  if (payment.status === "paid" && provider.confirmsByNotifyOnly) return booking.status;
-
+  // myPOS bevestigt normaal via de melding (IPCPurchaseNotify). Komt die niet aan,
+  // dan geldt het rechtstreekse antwoord van myPOS (IPCGetPaymentStatus) ook:
+  // de melding die later alsnog komt, krijgt dan gewoon "OK".
   return applyOutcome(booking, payment);
 }
 

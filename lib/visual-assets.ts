@@ -4,6 +4,11 @@ export const visualAssets = {
     src: "/images/hero-vca-team.jpg",
     alt: "Team met helmen en veiligheidshesjes op een bouwplaats"
   },
+  whyPhoto: {
+    // Foto via Unsplash (Unsplash-licentie, vrij te gebruiken).
+    src: "/images/why-worker.jpg",
+    alt: "Bouwvakker met veiligheidshesje en werkhandschoenen stort beton"
+  },
   courseFolder: {
     src: "/images/vca-course-folder-detail.png",
     alt: "Cursusmap en checklist voor VCA voorbereiding"

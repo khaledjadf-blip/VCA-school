@@ -29,11 +29,6 @@ export type ProviderPayment = {
 
 export interface PaymentProvider {
   readonly name: string;
-  /**
-   * true: een betaling geldt pas als betaald na de ondertekende melding van de
-   * aanbieder (myPOS draait de betaling terug als die melding niet lukt).
-   */
-  readonly confirmsByNotifyOnly: boolean;
   createPayment(input: CreatePaymentInput): Promise<ProviderPayment>;
   /** Haalt de echte status altijd opnieuw op bij de aanbieder (nooit vertrouwen op de webhook-inhoud). */
   getPayment(id: string): Promise<ProviderPayment>;

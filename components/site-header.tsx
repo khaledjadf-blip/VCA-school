@@ -89,7 +89,7 @@ export function SiteHeader() {
                 <span aria-hidden="true">{coursesOpen ? "−" : "+"}</span>
               </button>
               {coursesOpen && (
-                <div className="absolute left-0 top-full z-50 w-72 border border-primary bg-white py-2 text-primary shadow-lg" role="menu">
+                <div className="absolute left-0 rtl:left-auto rtl:right-0 top-full z-50 w-80 max-h-[75vh] overflow-y-auto border border-primary bg-white py-2 text-primary shadow-lg" role="menu">
                   {courseLinks.map((item) => (
                     <Link
                       key={item.href}

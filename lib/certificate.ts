@@ -8,3 +8,7 @@ export type CertificateChoice = keyof typeof certificateOptions;
 
 export const isCertificateChoice = (value: unknown): value is CertificateChoice =>
   typeof value === "string" && value in certificateOptions;
+
+// Alleen bij de VCA-examens (Basis, VOL, VIL-VCU) is er een keuze voor het certificaat.
+const certificateCourses = new Set(["vca-basis", "vca-vol", "vil-vcu"]);
+export const offersCertificateChoice = (courseSlug: string) => certificateCourses.has(courseSlug);

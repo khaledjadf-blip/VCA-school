@@ -41,11 +41,13 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ["ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["var(--font-source-sans)", "ui-sans-serif", "system-ui", "sans-serif"]
+        sans: ["var(--font-body)"],
+        display: ["var(--font-display)"]
       },
       boxShadow: {
-        soft: "0 20px 70px rgba(26, 54, 93, 0.14)"
+        soft: "0 20px 70px rgba(26, 54, 93, 0.14)",
+        card: "0 1px 2px rgba(15, 40, 70, 0.04), 0 8px 24px rgba(15, 40, 70, 0.06)",
+        lift: "0 2px 4px rgba(15, 40, 70, 0.05), 0 16px 40px rgba(15, 40, 70, 0.10)"
       }
     }
   },

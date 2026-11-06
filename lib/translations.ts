@@ -202,7 +202,7 @@ export const arabicTranslations: Record<string, string> = {
 
 Object.assign(arabicTranslations, {
   "VCA Cursussen": "دورات VCA",
-  "Heftruck Opleiding": "تدريب الرافعة الشوكية",
+  "Heftruck Opleiding": "دورة Heftruck (الرافعة الشوكية)",
   "Examens & Registratie": "الاختبارات والتسجيل",
   "VCA Basis": "VCA Basis",
   "VCA VOL": "VCA VOL",
@@ -704,5 +704,12 @@ Object.assign(arabicTranslations, {
   "Cursusprijs": "سعر الدورة",
   "Papieren certificaat": "الشهادة الورقية",
   "Totaal excl. btw": "المجموع بدون ضريبة",
-  "Totaal": "المجموع"
+  "Totaal": "المجموع",
+  "Onze cursussen": "دوراتنا",
+  "Meer info en boeken": "معلومات أكثر والحجز",
+  "Na slagen wordt uw diploma geregistreerd, zodat een werkgever het direct kan controleren.": "بعد النجاح تُسجَّل شهادتك، حتى يستطيع صاحب العمل التحقق منها فورا.",
+  "Uitleg met voorbeelden uit bouw, techniek, industrie en logistiek.": "شرح مع أمثلة من البناء والتقنية والصناعة واللوجستيات.",
+  "Kies een open datum of vraag een training voor uw team op locatie aan.": "اختر موعدا متاحا أو اطلب تدريبا لفريقك في موقع عملكم.",
+  "Hulp bij aanmelding, planning en voorbereiding in uw eigen taal.": "مساعدة في التسجيل والتخطيط والتحضير بلغتك.",
+  "Bouwvakker met veiligheidshesje en werkhandschoenen stort beton": "عامل بناء بسترة أمان وقفازات عمل يصب الباطون"
 });
