@@ -122,9 +122,20 @@
     @apply rounded-md border border-primary bg-primary text-primary-foreground shadow-none;
   }
 
+  /* Kopje boven een titel: duidelijk leesbaar, ook in het Arabisch (geen mono-letter of spatiëring). */
   .official-kicker {
-    @apply font-mono text-xs font-bold uppercase text-accent;
-    letter-spacing: 0.06em;
+    @apply inline-flex items-center gap-2 text-sm font-bold uppercase text-accent;
+    letter-spacing: 0.03em;
+  }
+
+  .official-kicker::before {
+    content: "";
+    @apply inline-block h-0.5 w-6 shrink-0 bg-accent;
+  }
+
+  html[dir="rtl"] .official-kicker {
+    @apply text-base normal-case;
+    letter-spacing: 0;
   }
 
   .official-rule {
@@ -437,8 +448,7 @@
     }
 
     .official-kicker {
-      font-size: 0.66rem;
-      letter-spacing: 0.04em;
+      font-size: 0.85rem;
     }
 
     .official-display {

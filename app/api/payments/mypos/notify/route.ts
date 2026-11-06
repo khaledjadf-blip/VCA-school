@@ -14,8 +14,10 @@ export async function POST(request: Request) {
   if (!provider || !form) return new NextResponse("Bad request", { status: 400 });
 
   const { valid, fields } = verifyNotification(form, provider.publicCert);
+  // Altijd loggen (zonder persoonsgegevens), zodat in Vercel → Logs te zien is of myPOS ons bereikt.
+  console.info("myPOS-melding ontvangen", { method: fields.IPCmethod, orderId: fields.OrderID, amount: fields.Amount, currency: fields.Currency, validSignature: valid });
   if (!valid) {
-    console.error("myPOS-melding met ongeldige handtekening genegeerd");
+    console.error("myPOS-melding met ongeldige handtekening genegeerd", { fields: Object.keys(fields) });
     return new NextResponse("Invalid signature", { status: 400 });
   }
 
@@ -25,6 +27,7 @@ export async function POST(request: Request) {
       if (fields.Currency !== "EUR") return new NextResponse("Wrong currency", { status: 400 });
       const amountCents = Math.round(Number(fields.Amount) * 100);
       const status = await confirmPaidFromNotify(orderId, amountCents);
+      if (status !== "paid") console.error("myPOS-melding niet verwerkt", { orderId, status });
       return status === "paid" ? ok() : new NextResponse("Not processed", { status: 400 });
     }
     if (fields.IPCmethod === "IPCPurchaseRollback") {

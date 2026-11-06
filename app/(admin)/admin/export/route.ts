@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { bookingStatusLabels, courseTitle, effectiveStatus } from "@/lib/admin-labels";
 import { isAdmin } from "@/lib/admin-auth";
+import { offersCertificateChoice } from "@/lib/certificate";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { formatDateTimeNl } from "@/lib/time";
 
@@ -51,7 +52,7 @@ export async function GET(request: Request) {
       b.birth_date ?? "",
       b.birth_place ?? "",
       b.company ?? "",
-      b.certificate === "paper" ? "Papier + plastic pas" : "PDF + digitale pas",
+      !s || !offersCertificateChoice(s.course_slug) ? "" : b.certificate === "paper" ? "Papier + plastic pas" : "PDF + digitale pas",
       euro(b.amount_cents - (b.vat_cents ?? 0)),
       euro(b.vat_cents ?? 0),
       euro(b.amount_cents),

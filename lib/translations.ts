@@ -202,7 +202,7 @@ export const arabicTranslations: Record<string, string> = {
 
 Object.assign(arabicTranslations, {
   "VCA Cursussen": "دورات VCA",
-  "Heftruck Opleiding": "تدريب الرافعة الشوكية",
+  "Heftruck Opleiding": "دورة Heftruck (الرافعة الشوكية)",
   "Examens & Registratie": "الاختبارات والتسجيل",
   "VCA Basis": "VCA Basis",
   "VCA VOL": "VCA VOL",
@@ -704,5 +704,7 @@ Object.assign(arabicTranslations, {
   "Cursusprijs": "سعر الدورة",
   "Papieren certificaat": "الشهادة الورقية",
   "Totaal excl. btw": "المجموع بدون ضريبة",
-  "Totaal": "المجموع"
+  "Totaal": "المجموع",
+  "Onze cursussen": "دوراتنا",
+  "Meer info en boeken": "معلومات أكثر والحجز"
 });

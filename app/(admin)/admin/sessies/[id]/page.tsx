@@ -7,6 +7,7 @@ import { ConfirmButton } from "@/app/(admin)/admin/confirm-button";
 import { SessionForm } from "@/app/(admin)/admin/session-form";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin-auth";
+import { offersCertificateChoice } from "@/lib/certificate";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { Bilingual, LocalDateTime } from "@/components/localized";
 import { centsToEuroInput, formatEuro, isoToAmsterdam } from "@/lib/time";
@@ -113,7 +114,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                     <td className="px-4 py-3 font-semibold" data-no-translate>{b.first_name} {b.last_name}</td>
                     <td className="px-4 py-3" data-no-translate><a href={`mailto:${b.email}`} className="underline underline-offset-4">{b.email}</a></td>
                     <td className="whitespace-nowrap px-4 py-3"><a href={`tel:${b.phone}`} dir="ltr">{b.phone}</a></td>
-                    <td className="whitespace-nowrap px-4 py-3">{b.certificate === "paper" ? <strong>Papier + plastic pas</strong> : "PDF + digitale pas"}</td>
+                    <td className="whitespace-nowrap px-4 py-3">{!offersCertificateChoice(session.course_slug) ? "–" : b.certificate === "paper" ? <strong>Papier + plastic pas</strong> : "PDF + digitale pas"}</td>
                     <td className="whitespace-nowrap px-4 py-3">{formatEuro(b.amount_cents)}</td>
                     <td className="px-4 py-3">
                       <span className={b.status === "paid" ? "font-bold text-green-700" : "text-muted-foreground"}>

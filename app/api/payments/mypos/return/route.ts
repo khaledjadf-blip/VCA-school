@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cancelIfUnpaid } from "@/lib/booking-payments";
+import { cancelIfUnpaid, syncPayment } from "@/lib/booking-payments";
 import { localizePath } from "@/lib/localized-path";
 
 // myPOS stuurt de klant terug (soms met een POST). Wij sturen door naar de
@@ -17,6 +17,13 @@ async function handle(request: Request) {
       await cancelIfUnpaid(bookingId);
     } catch (error) {
       console.error("Afgebroken betaling verwerken mislukt", error);
+    }
+  } else {
+    // Klant komt terug na betalen: meteen bij myPOS navragen, ook als de melding (nog) niet binnen is.
+    try {
+      await syncPayment(bookingId);
+    } catch (error) {
+      console.error("Betaalstatus na terugkeer controleren mislukt", error);
     }
   }
   return NextResponse.redirect(new URL(`${localizePath("/boeken/bedankt", lang)}?b=${bookingId}`, url), 303);

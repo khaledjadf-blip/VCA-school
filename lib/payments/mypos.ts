@@ -80,7 +80,6 @@ const statusMap: Record<string, PaymentStatus> = { "1": "paid", "2": "pending", 
 
 export class MyPosProvider implements PaymentProvider {
   readonly name = "mypos";
-  readonly confirmsByNotifyOnly = true;
   private readonly config: MyPosConfig;
   readonly url: string;
 

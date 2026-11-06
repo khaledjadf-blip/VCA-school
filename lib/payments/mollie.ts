@@ -26,7 +26,6 @@ function toProviderPayment(p: MolliePayment): ProviderPayment {
 
 export class MollieProvider implements PaymentProvider {
   readonly name = "mollie";
-  readonly confirmsByNotifyOnly = false;
 
   constructor(private readonly apiKey: string) {}
 

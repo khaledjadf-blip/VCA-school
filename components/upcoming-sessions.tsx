@@ -94,8 +94,13 @@ export function UpcomingSessions({
                       <span className={`px-2 py-1 text-xs font-bold ${session.seatsLeft <= 3 ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"}`}>
                         {seatsLabel(session.seatsLeft, isArabic)}
                       </span>
+                      {/* In het overzicht van alle data eerst naar de cursuspagina, zodat de bezoeker de informatie ziet. */}
                       <Button asChild variant="accent" size="sm" className="sm:mt-1">
-                        <Link href={`/boeken/${session.id}`}>Boek deze datum</Link>
+                        {titleHref ? (
+                          <Link href={titleHref}>Meer info en boeken</Link>
+                        ) : (
+                          <Link href={`/boeken/${session.id}`}>Boek deze datum</Link>
+                        )}
                       </Button>
                     </>
                   )}

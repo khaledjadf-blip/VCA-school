@@ -47,7 +47,8 @@ export function BookingForm({
 }: {
   sessionId: string;
   certificate: CertificateChoice;
-  onCertificateChange: (value: CertificateChoice) => void;
+  /** Zonder deze functie (cursus zonder certificaatkeuze) wordt de keuze niet getoond. */
+  onCertificateChange?: (value: CertificateChoice) => void;
 }) {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -136,19 +137,21 @@ export function BookingForm({
         </div>
       </div>
 
-      <div>
-        <label className="text-sm font-semibold">
-          Certificaat
-          <select
-            value={certificate}
-            onChange={(event) => onCertificateChange(event.target.value as CertificateChoice)}
-            className="mt-1 flex h-11 w-full rounded-sm border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
-          >
-            <option value="digital">{certificateOptions.digital.label}</option>
-            <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100}`}</option>
-          </select>
-        </label>
-      </div>
+      {onCertificateChange ? (
+        <div>
+          <label className="text-sm font-semibold">
+            Certificaat
+            <select
+              value={certificate}
+              onChange={(event) => onCertificateChange(event.target.value as CertificateChoice)}
+              className="mt-1 flex h-11 w-full rounded-sm border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
+            >
+              <option value="digital">{certificateOptions.digital.label}</option>
+              <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100}`}</option>
+            </select>
+          </label>
+        </div>
+      ) : null}
 
       <label className="text-sm font-semibold">Bedrijf (optioneel)<Input {...form.register("company")} className="mt-1" autoComplete="organization" /></label>
       <label className="text-sm font-semibold">Opmerking (optioneel)<Textarea {...form.register("notes")} className="mt-1" rows={3} /></label>

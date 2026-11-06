@@ -85,7 +85,7 @@ export function FeaturedCourses() {
       <div className="section-shell">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="official-kicker">Meest gekozen</p>
+            <p className="official-kicker">Onze cursussen</p>
             <h2 className="mt-2 text-3xl font-bold tracking-tight">Snel inschrijven voor de juiste cursus.</h2>
           </div>
           <Button asChild variant="outline">
@@ -93,7 +93,7 @@ export function FeaturedCourses() {
           </Button>
         </div>
         <div className="course-lanes grid gap-0 border-y border-border bg-white">
-          {courses.slice(0, 4).map((course) => (
+          {courses.map((course) => (
             <article key={course.slug} className="grid gap-4 border-b border-border p-5 last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
               <div className="flex gap-4">
                 <CourseImage image={course.image} className="hidden aspect-[4/3] w-36 shrink-0 sm:block" />
@@ -111,20 +111,6 @@ export function FeaturedCourses() {
               </Button>
             </article>
           ))}
-        </div>
-        <div className="mt-6 grid gap-0 overflow-hidden border border-border bg-white lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="p-5 lg:p-6">
-            <p className="official-kicker">Praktijkbeeld</p>
-            <h3 className="mt-2 text-2xl font-bold text-primary">Cursus, certificaat en praktijk in een helder beeld.</h3>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-              Deze combinatie werkt goed voor bezoekers die snel willen zien dat het om echte training, echte certificering en een rustige leeromgeving gaat.
-            </p>
-          </div>
-          <img
-            src={visualAssets.forkliftCertificate.src}
-            alt={visualAssets.forkliftCertificate.alt}
-            className="w-full bg-white object-contain object-center p-3 sm:p-4 lg:min-h-[14rem] lg:p-5"
-          />
         </div>
       </div>
     </section>

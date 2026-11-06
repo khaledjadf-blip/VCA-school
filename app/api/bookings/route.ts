@@ -4,7 +4,7 @@ import { courseTitle } from "@/lib/admin-labels";
 import { localizePath } from "@/lib/localized-path";
 import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
 import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
-import { certificateOptions } from "@/lib/certificate";
+import { certificateOptions, offersCertificateChoice } from "@/lib/certificate";
 import { VAT_PERCENT, vatOf, withVat } from "@/lib/vat";
 
 const bookingSchema = z.object({
@@ -83,7 +83,8 @@ export async function POST(request: Request) {
       .single();
     if (!session) throw new Error("Cursusdatum niet gevonden");
     // Cursusprijs en certificaat zijn excl. btw; de klant betaalt incl. btw.
-    const certificate = certificateOptions[input.certificate];
+    const certificateChoice = offersCertificateChoice(session.course_slug) ? input.certificate : "digital";
+    const certificate = certificateOptions[certificateChoice];
     const priceExVat = session.price_cents + certificate.priceCents;
     const amountCents = withVat(priceExVat);
     const date = new Date(session.starts_at).toLocaleDateString("nl-NL", { timeZone: "Europe/Amsterdam" });
@@ -121,7 +122,7 @@ export async function POST(request: Request) {
       .update({
         vat_percent: VAT_PERCENT,
         vat_cents: vatOf(priceExVat),
-        certificate: input.certificate,
+        certificate: certificateChoice,
         certificate_cents: certificate.priceCents
       })
       .eq("id", booking.id);
