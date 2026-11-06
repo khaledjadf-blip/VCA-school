@@ -7,6 +7,7 @@ import { ConfirmButton } from "@/app/(admin)/admin/confirm-button";
 import { SessionForm } from "@/app/(admin)/admin/session-form";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin-auth";
+import { syncOpenPayments } from "@/lib/booking-payments";
 import { offersCertificateChoice } from "@/lib/certificate";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { Bilingual, LocalDateTime } from "@/components/localized";
@@ -25,6 +26,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
   const { fout, ok, alles } = await searchParams;
   if (!UUID.test(id)) notFound();
 
+  await syncOpenPayments().catch((error) => console.error("Openstaande betalingen navragen mislukt", error));
   const supabase = getSupabase();
   const { data } = await supabase.from("course_sessions").select("*").eq("id", id).single();
   if (!data) notFound();
