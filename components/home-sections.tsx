@@ -145,7 +145,7 @@ export function WhySection() {
   ];
   return (
     <section className="section-shell py-16">
-      <div className="grid overflow-hidden border border-border bg-white lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+      <div className="grid overflow-hidden rounded-xl border border-[#e2e8f0] bg-white shadow-card lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
         <figure className="relative min-h-[18rem] bg-secondary">
           <img
             src={visualAssets.whyPhoto.src}

@@ -83,7 +83,7 @@ export default async function CourseDetailPage({ params }: Props) {
               </p>
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 {["Uitslag controleren", "Diploma verwerken", "Werkgever kan diploma checken"].map((item) => (
-                  <span key={item} className="border border-accent/20 bg-accent/10 px-3 py-2 text-sm font-semibold text-primary">{item}</span>
+                  <span key={item} className="rounded-lg border border-accent/15 bg-accent/[0.07] px-3 py-2 text-sm font-semibold text-primary">{item}</span>
                 ))}
               </div>
               <Button asChild className="mt-5" variant="outline">

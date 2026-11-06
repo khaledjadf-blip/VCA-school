@@ -2,7 +2,7 @@
 :root {
   --color-paper: #ffffff;
   --color-paper-2: #ffffff;
-  --color-ink: #1a2634;
+  --color-ink: #0f1f33;
   --color-ink-2: #243447;
   --color-rule: #d8e2ec;
   --color-navy: #154273;
@@ -15,8 +15,9 @@
   --color-accent-ink: #ffffff;
   --color-focus: #d45213;
   --color-success: #1f7a4d;
-  --font-display: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --space-2xs: 0.5rem;
   --space-xs: 0.75rem;
@@ -32,6 +33,6 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-short: 180ms;
   --dur-medium: 260ms;
-  --radius-card: 0.375rem;
+  --radius-card: 0.875rem;
   --radius-button: 0.5rem;
 }

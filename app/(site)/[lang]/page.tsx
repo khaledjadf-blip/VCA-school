@@ -29,9 +29,9 @@ export default function HomePage() {
               <Button asChild size="lg" variant="outline" className="border-white/70 bg-transparent text-white hover:bg-white hover:text-primary"><Link href="/advies">Doe de keuzehulp</Link></Button>
             </div>
             <div className="mt-6 flex flex-wrap gap-2 text-sm font-semibold sm:mt-8 sm:gap-3">
-              <Link href="/kennisbank#ssvv" className="inline-flex border border-white/30 bg-white/10 px-3 py-2 text-white backdrop-blur-sm underline-offset-4 hover:underline">SSVV-erkende examens</Link>
-              <span className="inline-flex border border-white/30 bg-white/10 px-3 py-2 text-white backdrop-blur-sm">Data in overleg mogelijk</span>
-              <span className="inline-flex border border-white/30 bg-white/10 px-3 py-2 text-white backdrop-blur-sm">Arabische begeleiding mogelijk</span>
+              <Link href="/kennisbank#ssvv" className="inline-flex rounded-full border border-white/30 bg-white/10 px-3.5 py-1.5 text-white backdrop-blur-sm underline-offset-4 hover:underline">SSVV-erkende examens</Link>
+              <span className="inline-flex rounded-full border border-white/30 bg-white/10 px-3.5 py-1.5 text-white backdrop-blur-sm">Data in overleg mogelijk</span>
+              <span className="inline-flex rounded-full border border-white/30 bg-white/10 px-3.5 py-1.5 text-white backdrop-blur-sm">Arabische begeleiding mogelijk</span>
             </div>
           </div>
           <aside className="route-board border border-white/20 bg-white p-4 shadow-2xl sm:p-5">
@@ -51,8 +51,8 @@ export default function HomePage() {
               ))}
             </div>
             <p className="mt-5 text-sm leading-6 text-muted-foreground">Bel of WhatsApp planning: <strong className="text-foreground"><bdi dir="ltr">+31 6 16717342</bdi></strong></p>
-            <p className="mt-3 bg-primary px-3 py-2 text-sm font-bold text-primary-foreground">Rotterdam · Utrecht · Amsterdam · Incompany</p>
-            <p className="mt-3 border-l-4 border-accent bg-white p-3 text-sm font-semibold text-primary" dir="rtl">الدعم باللغة العربية ممكن عند التسجيل والتخطيط.</p>
+            <p className="mt-3 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground">Rotterdam · Utrecht · Amsterdam · Incompany</p>
+            <p className="mt-3 rounded-lg bg-secondary p-3 text-sm font-semibold text-primary" dir="rtl">الدعم باللغة العربية ممكن عند التسجيل والتخطيط.</p>
           </aside>
         </div>
       </section>

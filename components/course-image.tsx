@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 /** Cursusfoto; foto's met een open licentie tonen de maker en licentie eronder. */
 export function CourseImage({ image, className, priority = false }: { image: CourseImageInfo; className?: string; priority?: boolean }) {
   return (
-    <figure className={cn("relative overflow-hidden border border-border bg-secondary", className)}>
+    <figure className={cn("relative overflow-hidden rounded-lg bg-secondary", className)}>
       <img
         src={image.src}
         alt={image.alt}

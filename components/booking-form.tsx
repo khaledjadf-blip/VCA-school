@@ -144,7 +144,7 @@ export function BookingForm({
             <select
               value={certificate}
               onChange={(event) => onCertificateChange(event.target.value as CertificateChoice)}
-              className="mt-1 flex h-11 w-full rounded-sm border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
+              className="mt-1 flex h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
             >
               <option value="digital">{certificateOptions.digital.label}</option>
               <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100}`}</option>

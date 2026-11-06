@@ -1,3 +1,4 @@
+import "@/app/fonts";
 import "@/app/globals.css";
 import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";

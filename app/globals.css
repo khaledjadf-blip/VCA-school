@@ -5,23 +5,22 @@
 
 @layer base {
   :root {
-    --font-source-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
     --background: 0 0% 100%;
     --foreground: 214 33% 15%;
     --card: 0 0% 100%;
     --card-foreground: 214 33% 15%;
     --primary: 207 69% 27%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 98%;
+    --secondary: 210 36% 97%;
     --secondary-foreground: 214 33% 15%;
-    --muted: 210 40% 98%;
-    --muted-foreground: 214 28% 24%;
+    --muted: 210 36% 97%;
+    --muted-foreground: 215 18% 36%;
     --accent: 19 83% 45%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 30% 88%;
-    --input: 210 30% 88%;
+    --border: 213 27% 89%;
+    --input: 213 24% 84%;
     --ring: 19 83% 45%;
   }
 
@@ -59,7 +58,7 @@
     overflow-x: clip;
     color: var(--color-ink);
     background: hsl(var(--background));
-    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -67,6 +66,21 @@
   html[dir="rtl"] body {
     text-align: right;
     line-height: 1.8;
+    font-family: var(--font-arabic);
+  }
+
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] h4,
+  html[dir="rtl"] .official-display {
+    font-family: var(--font-arabic);
+    letter-spacing: 0;
+  }
+
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
   }
 
   html[dir="rtl"] .border-l-2,
@@ -115,7 +129,7 @@
   }
 
   .official-card {
-    @apply rounded-none border border-[#d8e2ec] border-t-2 border-t-accent bg-white shadow-none;
+    @apply rounded-xl border border-[#e2e8f0] bg-white shadow-card;
   }
 
   .official-panel-dark {
@@ -144,9 +158,9 @@
 
   .official-display {
     font-family: var(--font-display);
-    font-size: clamp(2.15rem, 5vw, 4.5rem);
-    line-height: 1;
-    letter-spacing: 0;
+    font-size: clamp(2.15rem, 5vw, 4.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
     overflow-wrap: anywhere;
   }
 }
@@ -164,17 +178,6 @@
     overflow: hidden;
   }
 
-  .traffic-command-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 0.5rem;
-    background: repeating-linear-gradient(
-      180deg,
-      var(--color-accent) 0 1.1rem,
-      transparent 1.1rem 1.75rem
-    );
-  }
 
   .traffic-road-divider {
     position: relative;
@@ -189,32 +192,12 @@
     transform-origin: left bottom;
   }
 
-  .traffic-road-divider::after {
-    content: "";
-    position: absolute;
-    inset: 50% 6% auto 6%;
-    height: 0.18rem;
-    background: repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.94) 0 3rem,
-      transparent 3rem 5rem
-    );
-  }
 
   .route-board {
     position: relative;
     overflow: hidden;
   }
 
-  .route-board::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      linear-gradient(90deg, transparent calc(100% - 4.5rem), rgba(212, 82, 19, 0.1) calc(100% - 4.5rem)),
-      linear-gradient(180deg, rgba(21, 66, 115, 0.06), transparent 38%);
-  }
 
   .route-board > * {
     position: relative;
@@ -253,13 +236,29 @@
   }
 
   .route-board-link:hover,
-  .route-card:hover,
   .course-lanes article:hover,
   .schedule-board > div:hover,
   .proof-lanes > div:hover {
-    border-color: rgba(212, 82, 19, 0.42);
-    background: var(--color-warm-surface);
-    transform: translateY(-1px);
+    background: hsl(var(--secondary));
+  }
+
+  .route-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(15, 40, 70, 0.05), 0 16px 40px rgba(15, 40, 70, 0.1);
+  }
+
+  /* Lijsten en blokken: afgeronde hoeken en een zachte schaduw. */
+  .course-lanes,
+  .proof-lanes,
+  .route-board,
+  .traffic-route-strip {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .course-lanes {
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(15, 40, 70, 0.04), 0 8px 24px rgba(15, 40, 70, 0.06);
   }
 
   .traffic-route-strip {
@@ -271,34 +270,15 @@
     position: relative;
   }
 
-  .route-step::after {
-    content: "";
-    position: absolute;
-    inset: auto 1.25rem 0 1.25rem;
-    height: 0.2rem;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-warning));
-    opacity: 0.9;
-  }
 
   .route-arrow {
-    background:
-      repeating-linear-gradient(135deg, rgba(212, 82, 19, 0.13) 0 0.5rem, transparent 0.5rem 1rem),
-      hsl(var(--secondary));
+    background: hsl(var(--secondary));
   }
 
   .traffic-section-heading {
     position: relative;
   }
 
-  .traffic-section-heading::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: -1px;
-    width: min(18rem, 45vw);
-    height: 0.25rem;
-    background: repeating-linear-gradient(90deg, var(--color-accent) 0 1.25rem, var(--color-warning) 1.25rem 2.5rem);
-  }
 
   .traffic-mini-map {
     display: grid;
@@ -330,41 +310,32 @@
   }
 
   .traffic-course-section {
-    background:
-      linear-gradient(90deg, rgba(21, 66, 115, 0.06) 0 1px, transparent 1px),
-      hsl(var(--secondary));
-    background-size: 4rem 4rem;
+    background: hsl(var(--secondary));
   }
 
   .route-chip {
     display: inline-flex;
-    border: 1px solid rgba(21, 66, 115, 0.18);
-    background: linear-gradient(180deg, rgba(21, 66, 115, 0.08), rgba(21, 66, 115, 0.14));
-    padding: 0.35rem 0.55rem;
+    align-items: center;
+    border-radius: 999px;
+    background: #eef3f8;
+    padding: 0.3rem 0.75rem;
     color: var(--color-navy);
-    box-shadow: inset 0 -0.12rem 0 rgba(212, 82, 19, 0.35);
+    font-weight: 600;
   }
 
   .route-chip-accent {
-    border-color: rgba(212, 82, 19, 0.34);
-    background: linear-gradient(180deg, rgba(212, 82, 19, 0.12), rgba(212, 82, 19, 0.18));
-    color: var(--color-road-2);
+    background: rgba(212, 82, 19, 0.1);
+    color: #a33c0b;
   }
 
   .route-card {
     position: relative;
     overflow: hidden;
-    border-color: rgba(21, 66, 115, 0.16);
-    box-shadow: inset 0 0.3rem 0 var(--color-accent);
+    border-radius: var(--radius-card);
+    border-color: #e2e8f0;
+    box-shadow: 0 1px 2px rgba(15, 40, 70, 0.04), 0 8px 24px rgba(15, 40, 70, 0.06);
   }
 
-  .route-card::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 0.24rem;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-warning));
-  }
 
   .schedule-board {
     box-shadow: inset 0.5rem 0 0 var(--color-road), 0 1rem 2rem rgba(21, 66, 115, 0.06);
@@ -375,40 +346,19 @@
     overflow: hidden;
   }
 
-  .safety-panel::after {
-    content: "";
-    position: absolute;
-    inset: auto -2rem -1.4rem auto;
-    width: 12rem;
-    height: 3rem;
-    background: repeating-linear-gradient(135deg, var(--color-warning) 0 0.8rem, var(--color-road) 0.8rem 1.6rem);
-    transform: rotate(-6deg);
-    opacity: 0.22;
-  }
 
   .conversion-road {
     position: relative;
     overflow: hidden;
   }
 
-  .conversion-road::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(90deg, transparent 0 72%, rgba(36, 49, 66, 0.08) 72% 100%),
-      repeating-linear-gradient(90deg, transparent 0 5rem, rgba(246, 183, 60, 0.32) 5rem 7rem, transparent 7rem 11rem);
-    pointer-events: none;
-  }
 
   .traffic-command-panel,
   .route-board,
   .schedule-board,
   .proof-lanes,
-  .route-card,
-  .official-card,
   .official-section {
-    border-color: rgba(21, 66, 115, 0.16);
+    border-color: #e2e8f0;
   }
 
   .traffic-command-panel {

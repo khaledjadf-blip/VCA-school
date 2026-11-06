@@ -41,7 +41,7 @@ export default function CoursesPage() {
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">{course.summary}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {course.highlights.map((item) => (
-                    <span key={item} className="inline-flex items-center gap-2 border border-accent/20 bg-accent/10 px-3 py-2 text-sm font-semibold text-primary">
+                    <span key={item} className="inline-flex items-center gap-2 rounded-lg border border-accent/15 bg-accent/[0.07] px-3 py-2 text-sm font-semibold text-primary">
                       {item}
                     </span>
                   ))}
