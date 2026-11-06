@@ -8,6 +8,7 @@ import { Bilingual, LocalDateTime } from "@/components/localized";
 import { formatEuro } from "@/lib/time";
 import { explainDbError } from "@/lib/admin-db-errors";
 import { PENDING_HOLD_MS } from "@/lib/admin-labels";
+import { syncOpenPayments } from "@/lib/booking-payments";
 
 type Props = { searchParams: Promise<{ fout?: string; ok?: string; toon?: string }> };
 
@@ -54,6 +55,9 @@ export default async function AdminPage({ searchParams }: Props) {
   if (missing.length) return <SetupMissing items={missing} />;
 
   if (!(await isAdmin())) return <LoginForm failed={fout === "login"} />;
+
+  // Openstaande betalingen eerst navragen, zodat late betalingen meteen als betaald staan.
+  await syncOpenPayments().catch((error) => console.error("Openstaande betalingen navragen mislukt", error));
 
   const showPast = toon === "afgelopen";
   const now = new Date().toISOString();

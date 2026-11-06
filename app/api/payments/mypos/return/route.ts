@@ -8,7 +8,11 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 async function handle(request: Request) {
   const url = new URL(request.url);
-  const bookingId = url.searchParams.get("b") ?? "";
+  // myPOS stuurt het ordernummer ook mee in het formulier (OrderID); handig als de link zonder ?b= terugkomt.
+  const form = request.method === "POST" ? await request.formData().catch(() => null) : null;
+  const orderId = String(form?.get("OrderID") ?? url.searchParams.get("OrderID") ?? "");
+  const bookingId = UUID.test(url.searchParams.get("b") ?? "") ? (url.searchParams.get("b") as string) : orderId;
+  console.info("myPOS-terugkeer", { method: request.method, result: url.searchParams.get("r"), hasBookingParam: url.searchParams.has("b"), formFields: form ? Array.from(form.keys()) : [], bookingId });
   const lang = url.searchParams.get("lang") === "ar" ? "ar" : "nl";
   if (!UUID.test(bookingId)) return NextResponse.redirect(new URL(localizePath("/inschrijven", lang), url), 303);
 

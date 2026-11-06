@@ -18,7 +18,6 @@ const bookingSchema = z.object({
   email: z.string().trim().email("Vul een geldig e-mailadres in."),
   phone: z.string().trim().min(8, "Vul een telefoonnummer in."),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Vul uw geboortedatum in."),
-  birthPlace: z.string().trim().min(2, "Vul uw geboorteplaats in."),
   company: z.string().optional(),
   notes: z.string().optional(),
   website: z.string().optional(),
@@ -120,20 +119,16 @@ export function BookingForm({
           <FieldError>{errors.lastName?.message}</FieldError>
         </div>
         <div>
-          <label className="text-sm font-semibold">Geboortedatum<Req /><Input type="date" {...form.register("birthDate")} className="mt-1" autoComplete="bday" /></label>
-          <FieldError>{errors.birthDate?.message}</FieldError>
-        </div>
-        <div>
-          <label className="text-sm font-semibold">Geboorteplaats<Req /><Input {...form.register("birthPlace")} className="mt-1" /></label>
-          <FieldError>{errors.birthPlace?.message}</FieldError>
-        </div>
-        <div>
           <label className="text-sm font-semibold">E-mail<Req /><Input type="email" {...form.register("email")} className="mt-1" autoComplete="email" /></label>
           <FieldError>{errors.email?.message}</FieldError>
         </div>
         <div>
           <label className="text-sm font-semibold">Telefoon<Req /><Input type="tel" {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
           <FieldError>{errors.phone?.message}</FieldError>
+        </div>
+        <div>
+          <label className="text-sm font-semibold">Geboortedatum<Req /><Input type="date" {...form.register("birthDate")} className="mt-1" autoComplete="bday" /></label>
+          <FieldError>{errors.birthDate?.message}</FieldError>
         </div>
       </div>
 

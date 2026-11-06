@@ -21,7 +21,7 @@ const sections: { title: string; lines: string[]; list?: string[] }[] = [
     list: [
       "Voornaam en achternaam",
       "E-mailadres en telefoonnummer",
-      "Geboortedatum en geboorteplaats",
+      "Geboortedatum",
       "Bedrijfsnaam en opmerkingen (als u die invult)",
       "Gekozen cursus, datum en betaalstatus"
     ]
@@ -30,7 +30,7 @@ const sections: { title: string; lines: string[]; list?: string[] }[] = [
     title: "Waarom verwerken wij deze gegevens?",
     lines: [
       "Wij gebruiken uw gegevens om uw inschrijving te verwerken, u in te plannen voor de cursus en het examen, en met u te communiceren.",
-      "Uw naam, geboortedatum en geboorteplaats zijn nodig om uw examen aan te melden en uw diploma te laten registreren in het Centraal Diploma Register (CDR).",
+      "Uw naam en geboortedatum zijn nodig om uw examen aan te melden en uw diploma te laten registreren in het Centraal Diploma Register (CDR).",
       "Wij verwerken uw gegevens omdat dit nodig is voor de uitvoering van de overeenkomst met u en om te voldoen aan wettelijke verplichtingen, zoals de fiscale bewaarplicht."
     ]
   },

@@ -137,7 +137,6 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["E-mail", b.email],
         ["Telefoon", b.phone],
         ["Geboortedatum", b.birth_date],
-        ["Geboorteplaats", b.birth_place],
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
@@ -299,4 +298,22 @@ export async function cancelIfUnpaid(bookingId: string) {
   const payment = await provider.getPayment(booking.payment_id);
   if (payment.status === "paid" || payment.status === "pending" || payment.status === "authorized") return;
   await applyOutcome(booking, { status: "canceled", amountCents: payment.amountCents });
+}
+
+/**
+ * Openstaande betalingen van de laatste dagen opnieuw navragen bij de aanbieder.
+ * Vangnet voor betalingen die pas later rond zijn (bijv. iDEAL via myPOS "pending")
+ * terwijl de melding ons niet bereikt. Wordt aangeroepen bij het openen van beheer.
+ */
+export async function syncOpenPayments() {
+  const since = new Date(Date.now() - 3 * 24 * 60 * 60_000).toISOString();
+  const { data } = await getSupabase()
+    .from("bookings")
+    .select("payment_id")
+    .eq("status", "pending")
+    .not("payment_id", "is", null)
+    .gte("created_at", since)
+    .limit(25);
+  const results = await Promise.allSettled((data ?? []).map((b) => syncPayment(b.payment_id as string)));
+  for (const r of results) if (r.status === "rejected") console.error("Openstaande betaling navragen mislukt", r.reason);
 }
