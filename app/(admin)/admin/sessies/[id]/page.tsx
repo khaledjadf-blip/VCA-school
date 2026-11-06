@@ -94,13 +94,14 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
           <p className="official-card p-6 text-muted-foreground">{unfinished ? "Geen betaalde boekingen voor deze datum." : "Nog geen boekingen voor deze datum."}</p>
         ) : (
           <div className="official-card overflow-x-auto">
-            <table className="w-full min-w-[960px] text-left text-sm">
+            <table className="w-full min-w-[1100px] text-left text-sm">
               <thead className="border-b border-border bg-secondary text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-3">Naam</th>
                   <th className="px-4 py-3">E-mail</th>
                   <th className="px-4 py-3">Telefoon</th>
-                  <th className="px-4 py-3">Bedrag</th>
+                  <th className="px-4 py-3">Certificaat</th>
+                  <th className="px-4 py-3">Betaald incl. btw</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Geboekt op</th>
                   <th className="px-4 py-3"></th>
@@ -112,6 +113,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                     <td className="px-4 py-3 font-semibold" data-no-translate>{b.first_name} {b.last_name}</td>
                     <td className="px-4 py-3" data-no-translate><a href={`mailto:${b.email}`} className="underline underline-offset-4">{b.email}</a></td>
                     <td className="whitespace-nowrap px-4 py-3"><a href={`tel:${b.phone}`} dir="ltr">{b.phone}</a></td>
+                    <td className="whitespace-nowrap px-4 py-3">{b.certificate === "paper" ? <strong>Papier + plastic pas</strong> : "PDF + digitale pas"}</td>
                     <td className="whitespace-nowrap px-4 py-3">{formatEuro(b.amount_cents)}</td>
                     <td className="px-4 py-3">
                       <span className={b.status === "paid" ? "font-bold text-green-700" : "text-muted-foreground"}>

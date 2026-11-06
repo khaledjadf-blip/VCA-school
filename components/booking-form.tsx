@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Req, RequiredNote } from "@/components/ui/required";
 import { Textarea } from "@/components/ui/textarea";
+import { certificateOptions, type CertificateChoice } from "@/lib/certificate";
 
 const bookingSchema = z.object({
   firstName: z.string().trim().min(1, "Vul uw voornaam in."),
@@ -39,7 +40,15 @@ function FieldError({ children }: { children?: string }) {
   return children ? <p className="mt-1 text-sm text-destructive">{children}</p> : null;
 }
 
-export function BookingForm({ sessionId }: { sessionId: string }) {
+export function BookingForm({
+  sessionId,
+  certificate,
+  onCertificateChange
+}: {
+  sessionId: string;
+  certificate: CertificateChoice;
+  onCertificateChange: (value: CertificateChoice) => void;
+}) {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const form = useForm<BookingValues>({ resolver: zodResolver(bookingSchema) });
@@ -52,7 +61,7 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, sessionId, lang: language })
+        body: JSON.stringify({ ...values, sessionId, certificate, lang: language })
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
@@ -125,6 +134,20 @@ export function BookingForm({ sessionId }: { sessionId: string }) {
           <label className="text-sm font-semibold">Telefoon<Req /><Input type="tel" {...form.register("phone")} className="mt-1" autoComplete="tel" /></label>
           <FieldError>{errors.phone?.message}</FieldError>
         </div>
+      </div>
+
+      <div>
+        <label className="text-sm font-semibold">
+          Certificaat
+          <select
+            value={certificate}
+            onChange={(event) => onCertificateChange(event.target.value as CertificateChoice)}
+            className="mt-1 flex h-11 w-full rounded-sm border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
+          >
+            <option value="digital">{certificateOptions.digital.label}</option>
+            <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100}`}</option>
+          </select>
+        </label>
       </div>
 
       <label className="text-sm font-semibold">Bedrijf (optioneel)<Input {...form.register("company")} className="mt-1" autoComplete="organization" /></label>

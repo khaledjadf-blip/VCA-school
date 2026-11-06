@@ -21,13 +21,17 @@ export function PaymentResult({ bookingId }: { bookingId: string }) {
       count += 1;
       try {
         const res = await fetch(`/api/bookings/${bookingId}/status`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`Status ${res.status}`);
         const body: Result = await res.json();
         if (cancelled) return;
         setResult(body);
         setChecks(count);
         if (body.status === "pending" && count < MAX_CHECKS) timer = setTimeout(check, 3000);
       } catch {
-        if (!cancelled && count < MAX_CHECKS) timer = setTimeout(check, 3000);
+        if (cancelled) return;
+        // Ook bij fouten tellen, zodat de pagina nooit eindeloos blijft controleren.
+        setChecks(count);
+        if (count < MAX_CHECKS) timer = setTimeout(check, 3000);
       }
     }
     check();
@@ -39,7 +43,9 @@ export function PaymentResult({ bookingId }: { bookingId: string }) {
 
   const status = result?.status;
 
-  if (!result || (status === "pending" && checks < MAX_CHECKS)) {
+  const stillChecking = checks < MAX_CHECKS;
+
+  if ((!result || status === "pending") && stillChecking) {
     return (
       <div role="status" className="official-card p-6">
         <h1 className="text-2xl font-bold">Uw betaling wordt gecontroleerd</h1>
@@ -63,7 +69,7 @@ export function PaymentResult({ bookingId }: { bookingId: string }) {
     );
   }
 
-  if (status === "pending") {
+  if (!result || status === "pending") {
     return (
       <div role="status" className="official-card p-6">
         <h1 className="text-2xl font-bold">Uw betaling is nog niet bevestigd</h1>

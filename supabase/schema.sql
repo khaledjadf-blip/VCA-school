@@ -13,9 +13,7 @@ create extension if not exists pgcrypto;
 -- ---------------------------------------------------------------------------
 create table if not exists public.course_sessions (
   id           uuid primary key default gen_random_uuid(),
-  course_slug  text not null check (course_slug in (
-                 'vca-basis', 'vca-vol', 'vil-vcu',
-                 'heftruck-opleiding', 'hoogwerker-opleiding', 'bhv-opleiding')),
+  course_slug  text not null,
   starts_at    timestamptz not null,
   ends_at      timestamptz,
   location     text not null default 'U-Trechter, Veilinghavenkade 4-8, 3521 AK Utrecht',
@@ -29,6 +27,17 @@ create table if not exists public.course_sessions (
   updated_at   timestamptz not null default now(),
   check (ends_at is null or ends_at > starts_at)
 );
+
+-- Toegestane cursussen (moet gelijk zijn aan lib/data.ts). Opnieuw aanmaken,
+-- zodat nieuwe cursussen er ook bij komen als de tabel al bestond.
+alter table public.course_sessions drop constraint if exists course_sessions_course_slug_check;
+alter table public.course_sessions add constraint course_sessions_course_slug_check check (course_slug in (
+  'vca-basis', 'vca-vol', 'vil-vcu',
+  'heftruck-opleiding', 'orderpicker-opleiding', 'reachtruck-opleiding', 'telehandler-opleiding',
+  'hoogwerker-opleiding', 'bhv-opleiding'));
+
+-- price_cents is de prijs EXCLUSIEF btw; de klant betaalt prijs + 21% btw
+-- (bookings.amount_cents is het betaalde bedrag inclusief btw).
 
 create index if not exists course_sessions_course_starts_idx
   on public.course_sessions (course_slug, starts_at);
@@ -60,6 +69,16 @@ create table if not exists public.bookings (
 
 -- Taal van de website bij het boeken (voor e-mails in de juiste taal).
 alter table public.bookings add column if not exists lang text not null default 'nl';
+
+-- amount_cents is het totaal incl. btw; vat_cents is het btw-deel daarvan.
+-- Boekingen van vóór de btw-wijziging houden 0 (die zijn zonder btw betaald).
+alter table public.bookings add column if not exists vat_percent integer not null default 0;
+alter table public.bookings add column if not exists vat_cents integer not null default 0 check (vat_cents >= 0);
+
+-- Certificaat: digital = PDF + digitale pas (gratis), paper = papieren certificaat + plastic pas.
+-- certificate_cents is de meerprijs excl. btw (zit al in amount_cents).
+alter table public.bookings add column if not exists certificate text not null default 'digital';
+alter table public.bookings add column if not exists certificate_cents integer not null default 0 check (certificate_cents >= 0);
 
 create index if not exists bookings_session_idx on public.bookings (session_id);
 create index if not exists bookings_status_idx on public.bookings (status);

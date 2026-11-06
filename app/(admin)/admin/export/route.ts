@@ -14,6 +14,8 @@ function csvCell(value: unknown) {
   return /[";\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
+const euro = (cents: number) => (cents / 100).toFixed(2).replace(".", ",");
+
 export async function GET(request: Request) {
   if (!(await isAdmin())) return NextResponse.redirect(new URL("/admin", request.url));
 
@@ -33,7 +35,7 @@ export async function GET(request: Request) {
 
   const header = [
     "Cursus", "Cursusdatum", "Locatie", "Voornaam", "Achternaam", "E-mail", "Telefoon",
-    "Geboortedatum", "Geboorteplaats", "Bedrijf", "Bedrag (EUR)", "Status", "Betaald op", "Geboekt op", "Opmerking"
+    "Geboortedatum", "Geboorteplaats", "Bedrijf", "Certificaat", "Excl. btw (EUR)", "Btw (EUR)", "Totaal incl. btw (EUR)", "Status", "Betaald op", "Geboekt op", "Opmerking"
   ];
   const rows = (data ?? []).map((row) => {
     const b = row as Booking & { course_sessions: CourseSession | null };
@@ -49,7 +51,10 @@ export async function GET(request: Request) {
       b.birth_date ?? "",
       b.birth_place ?? "",
       b.company ?? "",
-      (b.amount_cents / 100).toFixed(2).replace(".", ","),
+      b.certificate === "paper" ? "Papier + plastic pas" : "PDF + digitale pas",
+      euro(b.amount_cents - (b.vat_cents ?? 0)),
+      euro(b.vat_cents ?? 0),
+      euro(b.amount_cents),
       bookingStatusLabels[effectiveStatus(b)] ?? b.status,
       b.paid_at ? formatDateTimeNl(b.paid_at) : "",
       formatDateTimeNl(b.created_at),

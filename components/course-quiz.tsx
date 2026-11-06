@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const steps = [
   { key: "situation", question: "Welke situatie past het beste bij u?", options: ["Ik voer werk uit", "Ik geef leiding of ben zzp'er", "Ik plaats uitzendkrachten", "Ik wil heftruck rijden"] },
+  { key: "machine", question: "Met welke machine gaat u werken?", options: ["Heftruck", "Orderpicker", "Reachtruck", "Telehandler", "Hoogwerker", "Geen machine"] },
   { key: "goal", question: "Wat wilt u precies regelen?", options: ["VCA cursus met examen", "Heftruck certificaat", "Advies voor bedrijf of groep", "Opfrissen of herhaling"] },
   { key: "format", question: "Welke leervorm past het best?", options: ["Klassikale lesdag", "Online voorbereiding", "Praktijktraining", "Incompany voor team"] },
   { key: "experience", question: "Hoeveel ervaring heeft u met dit onderwerp?", options: ["Eerste keer", "Al wat ervaring", "Herhaling of verlenging"] }
@@ -36,6 +37,24 @@ const courseInfo = {
     why: "U oefent met veilig rijden, laden, lossen, stabiliteit, omgeving controleren en verantwoord werken met de heftruck.",
     situations: ["U gaat heftruck rijden of doet dit al.", "Uw werkgever wil aantoonbare instructie en toetsing.", "U heeft een herhaling of praktijkcertificaat nodig."]
   },
+  "Orderpicker Opleiding": {
+    slug: "orderpicker-opleiding",
+    intro: "Orderpicker opleiding is voor medewerkers die in het magazijn orders verzamelen met een orderpicker.",
+    why: "U leert de orderpicker veilig bedienen, rijden in smalle gangen en veilig werken op hoogte tussen de stellingen.",
+    situations: ["U verzamelt orders in een magazijn of distributiecentrum.", "Uw werkgever wil aantoonbare instructie en toetsing.", "U heeft een herhaling of praktijkcertificaat nodig."]
+  },
+  "Reachtruck Opleiding": {
+    slug: "reachtruck-opleiding",
+    intro: "Reachtruck opleiding is voor medewerkers die pallets hoog in de stellingen plaatsen en uitnemen.",
+    why: "U leert de mast en vorken veilig bedienen, lasten zeker op hoogte plaatsen en veilig rijden in smalle gangen.",
+    situations: ["U werkt in een magazijn met hoge stellingen.", "Uw werkgever wil aantoonbare instructie en toetsing.", "U heeft een herhaling of praktijkcertificaat nodig."]
+  },
+  "Telehandler Opleiding": {
+    slug: "telehandler-opleiding",
+    intro: "Telehandler opleiding is voor medewerkers die werken met een verreiker in bouw, industrie of agrarische sector.",
+    why: "U leert het lastdiagram lezen, de stabiliteit bewaken en veilig heffen op hoogte met verschillende aanbouwdelen.",
+    situations: ["U werkt met een verreiker op een bouwplaats of bedrijf.", "Uw werkgever wil aantoonbare instructie en toetsing.", "U heeft een herhaling of praktijkcertificaat nodig."]
+  },
   "Hoogwerker Opleiding": {
     slug: "hoogwerker-opleiding",
     intro: "Hoogwerker opleiding is voor veilig werken op hoogte met aandacht voor machinecontrole, stabiliteit en risicoherkenning.",
@@ -49,6 +68,9 @@ const otherRoutes = [
   ["VCA VOL", "Voor leidinggevenden, supervisors, projectleiders en vaak zzp'ers."],
   ["VIL-VCU", "Voor intercedenten en uitzendorganisaties die kandidaten plaatsen."],
   ["Heftruck Opleiding", "Voor mensen die veilig met een heftruck moeten werken."],
+  ["Orderpicker Opleiding", "Voor medewerkers die orders verzamelen met een orderpicker."],
+  ["Reachtruck Opleiding", "Voor medewerkers die met een reachtruck in hoge stellingen werken."],
+  ["Telehandler Opleiding", "Voor medewerkers die met een telehandler (verreiker) werken."],
   ["Hoogwerker Opleiding", "Voor medewerkers die veilig op hoogte werken met een hoogwerker."]
 ] as const;
 
@@ -59,7 +81,15 @@ export function CourseQuiz() {
   const current = steps[index];
 
   const result = useMemo<keyof typeof courseInfo>(() => {
-    if (answers.situation === "Ik wil heftruck rijden" || answers.goal === "Heftruck certificaat" || answers.format === "Praktijktraining") return "Heftruck Opleiding";
+    const byMachine: Record<string, keyof typeof courseInfo> = {
+      Heftruck: "Heftruck Opleiding",
+      Orderpicker: "Orderpicker Opleiding",
+      Reachtruck: "Reachtruck Opleiding",
+      Telehandler: "Telehandler Opleiding",
+      Hoogwerker: "Hoogwerker Opleiding"
+    };
+    if (byMachine[answers.machine]) return byMachine[answers.machine];
+    if (answers.situation === "Ik wil heftruck rijden" || answers.goal === "Heftruck certificaat") return "Heftruck Opleiding";
     if (answers.goal === "Opfrissen of herhaling") return "Hoogwerker Opleiding";
     if (answers.situation === "Ik geef leiding of ben zzp'er") return "VCA VOL";
     if (answers.situation === "Ik plaats uitzendkrachten") return "VIL-VCU";

@@ -80,7 +80,7 @@ export function SessionForm({
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-3">
-        <Field label="Prijs (EUR)" hint="Bijvoorbeeld 219 of 219,50">
+        <Field label="Prijs excl. btw (EUR)" hint="Bijvoorbeeld 250. De klant betaalt dit bedrag + 21% btw.">
           <input type="text" inputMode="decimal" name="price" required defaultValue={values.price} className={fieldClass} />
         </Field>
         <Field label="Aantal plekken">
