@@ -145,10 +145,9 @@ export function BookingForm({
             className="mt-1 flex h-11 w-full rounded-sm border border-input bg-white px-3 py-2 text-sm font-normal dark:bg-background"
           >
             <option value="digital">{certificateOptions.digital.label}</option>
-            <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100} excl. btw`}</option>
+            <option value="paper">{`${certificateOptions.paper.label} + €${certificateOptions.paper.priceCents / 100}`}</option>
           </select>
         </label>
-        <p className="mt-1 text-xs text-muted-foreground">Het digitale certificaat is net zo geldig als het papieren certificaat.</p>
       </div>
 
       <label className="text-sm font-semibold">Bedrijf (optioneel)<Input {...form.register("company")} className="mt-1" autoComplete="organization" /></label>

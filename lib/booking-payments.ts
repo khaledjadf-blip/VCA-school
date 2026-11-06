@@ -52,8 +52,8 @@ function amountRows(b: Booking, ar: boolean) {
   if (!b.vat_cents) return row(ar ? "المبلغ المدفوع" : "Betaald", total, ar);
   const extra = b.certificate_cents ?? 0;
   return [
-    row(ar ? "سعر الدورة بدون ضريبة" : "Cursusprijs excl. btw", euro(b.amount_cents - b.vat_cents - extra), ar),
-    extra ? row(ar ? "الشهادة الورقية بدون ضريبة" : "Papieren certificaat excl. btw", euro(extra), ar) : "",
+    row(ar ? "سعر الدورة" : "Cursusprijs", euro(b.amount_cents - b.vat_cents - extra), ar),
+    extra ? row(ar ? "الشهادة الورقية" : "Papieren certificaat", euro(extra), ar) : "",
     row(ar ? `ضريبة القيمة المضافة ${b.vat_percent}%` : `Btw ${b.vat_percent}%`, euro(b.vat_cents), ar),
     row(ar ? "المجموع المدفوع" : "Totaal betaald", total, ar)
   ].join("");
@@ -143,8 +143,8 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Certificaat", certificateLabel(b, "nl")],
         ...(b.vat_cents
           ? ([
-              ["Cursusprijs excl. btw", formatEuro(b.amount_cents - b.vat_cents - (b.certificate_cents ?? 0))],
-              ...(b.certificate_cents ? ([["Papieren certificaat excl. btw", formatEuro(b.certificate_cents)]] as [string, string][]) : []),
+              ["Cursusprijs", formatEuro(b.amount_cents - b.vat_cents - (b.certificate_cents ?? 0))],
+              ...(b.certificate_cents ? ([["Papieren certificaat", formatEuro(b.certificate_cents)]] as [string, string][]) : []),
               [`Btw ${b.vat_percent}%`, formatEuro(b.vat_cents)],
               ["Totaal betaald", formatEuro(b.amount_cents)]
             ] as [string, string][])
