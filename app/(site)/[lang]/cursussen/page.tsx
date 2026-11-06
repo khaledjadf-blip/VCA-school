@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "@/components/localized-link";
 import { CategoryFlipCard } from "@/components/course-card";
+import { CourseImage } from "@/components/course-image";
+import { CoursePrice } from "@/components/course-price";
 import { Button } from "@/components/ui/button";
 import { categories, courses } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Cursussen",
-  description: "Bekijk VCA Basis, VCA VOL, VIL-VCU, heftruck opleiding en SSVV-examens."
+  description: "Bekijk VCA Basis, VCA VOL, VIL-VCU, heftruck, orderpicker, reachtruck, telehandler, hoogwerker, BHV en SSVV-examens."
 };
 
 export default function CoursesPage() {
@@ -31,7 +33,8 @@ export default function CoursesPage() {
       <section className="section-shell pb-16">
         <div className="grid gap-4">
           {courses.map((course) => (
-            <article key={course.slug} className="official-card grid gap-5 p-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <article key={course.slug} id={course.slug} className="official-card grid scroll-mt-28 gap-5 p-5 md:grid-cols-[220px_1fr] lg:grid-cols-[220px_1fr_auto] lg:items-center">
+              <CourseImage image={course.image} className="aspect-[4/3] w-full" />
               <div>
                 <p className="official-kicker">{course.category}</p>
                 <h2 className="mt-1 text-2xl font-bold">{course.title}</h2>
@@ -44,8 +47,8 @@ export default function CoursesPage() {
                   ))}
                 </div>
               </div>
-              <div className="grid gap-3 lg:w-48">
-                <p className="font-bold text-accent">{course.price}</p>
+              <div className="grid gap-3 md:col-start-2 lg:col-start-auto lg:w-48">
+                <p className="text-lg font-bold text-accent"><CoursePrice priceExVat={course.priceExVat} priceFrom={course.priceFrom} /></p>
                 <Button asChild variant="outline"><Link href={`/cursussen/${course.slug}`}>Details</Link></Button>
               </div>
             </article>

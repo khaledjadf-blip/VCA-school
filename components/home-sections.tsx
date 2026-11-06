@@ -2,6 +2,8 @@ import Link from "@/components/localized-link";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import { CategoryFlipCard } from "@/components/course-card";
+import { CourseImage } from "@/components/course-image";
+import { CoursePrice } from "@/components/course-price";
 import { categories, courses } from "@/lib/data";
 import { visualAssets } from "@/lib/visual-assets";
 
@@ -94,12 +96,13 @@ export function FeaturedCourses() {
           {courses.slice(0, 4).map((course) => (
             <article key={course.slug} className="grid gap-4 border-b border-border p-5 last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
               <div className="flex gap-4">
+                <CourseImage image={course.image} className="hidden aspect-[4/3] w-36 shrink-0 sm:block" />
                 <div>
                   <h3 className="text-xl font-bold text-primary">{course.title}</h3>
                   <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{course.summary}</p>
                   <p className="mt-3 flex flex-wrap gap-2 text-sm font-semibold">
                     <span className="route-chip">{course.duration}</span>
-                    <span className="route-chip route-chip-accent">{course.price}</span>
+                    <span className="route-chip route-chip-accent"><CoursePrice priceExVat={course.priceExVat} priceFrom={course.priceFrom} /></span>
                   </p>
                 </div>
               </div>

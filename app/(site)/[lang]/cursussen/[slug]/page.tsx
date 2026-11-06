@@ -3,10 +3,11 @@ import Link from "@/components/localized-link";
 import { notFound } from "next/navigation";
 import { EnrollmentForm } from "@/components/contact-forms";
 import { UpcomingSessions } from "@/components/upcoming-sessions";
+import { CourseImage } from "@/components/course-image";
+import { CoursePrice } from "@/components/course-price";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/lib/data";
 import { getUpcomingSessions } from "@/lib/sessions";
-import { visualAssets } from "@/lib/visual-assets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,89 +35,45 @@ export default async function CourseDetailPage({ params }: Props) {
 
   return (
     <>
-      <section className="border-b border-border bg-card py-16">
-        <div className="section-shell grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+      <section className="border-b border-border bg-card py-12 lg:py-16">
+        <div className="section-shell grid gap-8 lg:grid-cols-[1fr_minmax(0,520px)] lg:items-center">
           <div>
             <p className="official-kicker">{course.category}</p>
             <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">{course.title}</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">{course.summary}</p>
+            <div className="official-card mt-6 flex flex-wrap items-center justify-between gap-4 p-5 sm:max-w-md">
+              <div>
+                <p className="text-sm text-muted-foreground">Investering</p>
+                <p className="text-3xl font-bold text-accent"><CoursePrice priceExVat={course.priceExVat} priceFrom={course.priceFrom} /></p>
+                <p className="mt-1 text-xs text-muted-foreground">De btw (21%) wordt bij het betalen opgeteld.</p>
+              </div>
+              <Button asChild variant="accent">
+                <Link href="#komende-data">Schrijf in</Link>
+              </Button>
+            </div>
           </div>
-          <div className="official-card p-5">
-            <p className="text-sm text-muted-foreground">Investering</p>
-            <p className="text-3xl font-bold text-accent">{course.price}</p>
-            <Button asChild className="mt-5 w-full" variant="accent">
-              <Link href="#komende-data">Schrijf in</Link>
-            </Button>
-          </div>
+          <CourseImage image={course.image} className="aspect-[4/3] w-full" priority />
         </div>
       </section>
       <section className="section-shell grid gap-8 py-16 lg:grid-cols-[1fr_420px]">
         <div>
           <UpcomingSessions sessions={sessions} />
-          {course.slug === "bhv-opleiding" ? (
-            <div className="grid gap-8">
-              <div className="grid gap-6 overflow-hidden border border-border bg-white lg:grid-cols-[1fr_1fr] lg:items-stretch">
-                <figure className="bg-secondary">
-                  <img
-                    src={visualAssets.bhvPhoto.src}
-                    alt={visualAssets.bhvPhoto.alt}
-                    className="h-full w-full object-cover sm:max-h-[32rem] lg:max-h-none"
-                  />
-                </figure>
-                <div className="p-6 lg:p-8">
-                  <p className="official-kicker">Trainingsomgeving</p>
-                  <h2 className="mt-2 text-3xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
-                  <p className="mt-4 leading-7 text-muted-foreground">
-                    BHV draait om snel en rustig handelen als er iets gebeurt op de werkvloer. De training is praktisch, helder en gericht op eerste hulp, brand, ontruiming en alarmeren.
-                  </p>
-                  <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                    <div className="official-card p-4">
-                      <p className="font-bold">Leervorm</p>
-                      <p className="mt-2 text-sm text-muted-foreground">{course.format}</p>
-                    </div>
-                    <div className="official-card p-4">
-                      <p className="font-bold">Duur</p>
-                      <p className="mt-2 text-sm text-muted-foreground">{course.duration}</p>
-                    </div>
-                    <div className="official-card p-4">
-                      <p className="font-bold">Docent</p>
-                      <p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="official-card p-6">
-                <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
-                <p className="mt-3 leading-7 text-muted-foreground">{course.audience}</p>
-                <h2 className="mt-8 text-2xl font-bold">Wat kunt u verwachten?</h2>
-                <p className="mt-3 leading-7 text-muted-foreground">{course.teacher}</p>
-                <div className="mt-6 grid gap-3">
-                  {course.highlights.map((item) => (
-                    <span key={item} className="font-semibold">{item}</span>
-                  ))}
-                </div>
-              </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="official-card p-4"><p className="font-bold">Leervorm</p><p className="mt-2 text-sm text-muted-foreground">{course.format}</p></div>
+            <div className="official-card p-4 md:mt-6"><p className="font-bold">Duur</p><p className="mt-2 text-sm text-muted-foreground">{course.duration}</p></div>
+            <div className="official-card p-4"><p className="font-bold">Docent</p><p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p></div>
+          </div>
+          <div className="official-card mt-8 p-6">
+            <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
+            <p className="mt-3 leading-7 text-muted-foreground">{course.audience}</p>
+            <h2 className="mt-8 text-2xl font-bold">Wat kunt u verwachten?</h2>
+            <p className="mt-3 leading-7 text-muted-foreground">{course.teacher}</p>
+            <div className="mt-6 grid gap-3">
+              {course.highlights.map((item) => (
+                <span key={item} className="font-semibold">{item}</span>
+              ))}
             </div>
-          ) : (
-            <>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="official-card p-4"><p className="font-bold">Leervorm</p><p className="mt-2 text-sm text-muted-foreground">{course.format}</p></div>
-                <div className="official-card p-4 md:mt-6"><p className="font-bold">Duur</p><p className="mt-2 text-sm text-muted-foreground">{course.duration}</p></div>
-                <div className="official-card p-4"><p className="font-bold">Docent</p><p className="mt-2 text-sm text-muted-foreground">Praktijkexpert</p></div>
-              </div>
-              <div className="official-card mt-8 p-6">
-                <h2 className="text-2xl font-bold">Voor wie is deze opleiding?</h2>
-                <p className="mt-3 leading-7 text-muted-foreground">{course.audience}</p>
-                <h2 className="mt-8 text-2xl font-bold">Wat kunt u verwachten?</h2>
-                <p className="mt-3 leading-7 text-muted-foreground">{course.teacher}</p>
-                <div className="mt-6 grid gap-3">
-                  {course.highlights.map((item) => (
-                    <span key={item} className="font-semibold">{item}</span>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+          </div>
           <div className="official-card mt-8 p-6">
             <div>
               <p className="official-kicker">Na slagen</p>

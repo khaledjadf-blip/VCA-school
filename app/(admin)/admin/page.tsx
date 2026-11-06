@@ -108,7 +108,7 @@ export default async function AdminPage({ searchParams }: Props) {
                 <th className="px-4 py-3">Datum</th>
                 <th className="px-4 py-3">Cursus</th>
                 <th className="px-4 py-3">Locatie</th>
-                <th className="px-4 py-3">Prijs</th>
+                <th className="px-4 py-3">Prijs excl. btw</th>
                 <th className="px-4 py-3">Betaald / plekken</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3"></th>

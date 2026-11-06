@@ -1,3 +1,5 @@
+import { courseImages } from "@/lib/visual-assets";
+
 export const courses = [
   {
     slug: "vca-basis",
@@ -6,7 +8,9 @@ export const courses = [
     summary: "Voor uitvoerende professionals die veilig en aantoonbaar volgens VCA-richtlijnen willen werken.",
     format: "Klassikaal of online",
     duration: "1 dag inclusief examen",
-    price: "vanaf EUR 219",
+    priceExVat: 219,
+    priceFrom: true,
+    image: courseImages["vca-basis"],
     teacher: "Ervaren veiligheidsdocent met praktijkvoorbeelden uit bouw, techniek en industrie.",
     audience: "Uitvoerend medewerkers, monteurs, operators en starters.",
     highlights: ["SSVV-examen", "Nederlandstalig lesmateriaal", "CDR-registratie na slagen"],
@@ -36,7 +40,9 @@ export const courses = [
     summary: "Voor leidinggevenden en zzp'ers die verantwoordelijkheid dragen voor veilige uitvoering op de werkvloer.",
     format: "Klassikaal of online",
     duration: "1 dag inclusief examen",
-    price: "vanaf EUR 249",
+    priceExVat: 249,
+    priceFrom: true,
+    image: courseImages["vca-vol"],
     teacher: "Senior docent veiligheid en leidinggeven op risicovolle werkplekken.",
     audience: "Voormannen, projectleiders, supervisors en zelfstandigen.",
     highlights: ["Leidinggevende focus", "Direct examenresultaat", "10 jaar geldig certificaat"],
@@ -66,7 +72,9 @@ export const courses = [
     summary: "Specifiek voor intercedenten en uitzendorganisaties die personeel verantwoord plaatsen.",
     format: "Klassikaal of online",
     duration: "1 dag inclusief examen",
-    price: "vanaf EUR 259",
+    priceExVat: 259,
+    priceFrom: true,
+    image: courseImages["vil-vcu"],
     teacher: "Docent met kennis van VCU-processen, intake en risicobeheersing.",
     audience: "Intercedenten, planners en accountmanagers in de uitzendbranche.",
     highlights: ["VCU-praktijkcases", "SSVV-gecertificeerd examen", "Heldere voorbereiding"],
@@ -92,11 +100,13 @@ export const courses = [
   {
     slug: "heftruck-opleiding",
     title: "Heftruck Opleiding",
-    category: "Heftruck Opleiding",
-    summary: "Theorie en praktijk voor veilig intern transport, inclusief toetsing en certificaat.",
+    category: "Intern transport",
+    summary: "Theorie en praktijk voor veilig rijden, heffen, laden en lossen met de heftruck, inclusief toetsing en certificaat.",
     format: "Praktijkgericht",
     duration: "1 dag basis of halve dag herhaling",
-    price: "vanaf EUR 185",
+    priceExVat: 250,
+    priceFrom: false,
+    image: courseImages["heftruck-opleiding"],
     teacher: "Praktijkinstructeur intern transport met aandacht voor rijgedrag en werkplekveiligheid.",
     audience: "Beginners, ervaren chauffeurs en medewerkers die herhaling nodig hebben.",
     highlights: ["Praktijkruimte beschikbaar", "Beginners en herhaling", "Certificaat na voldoende resultaat"],
@@ -120,13 +130,111 @@ export const courses = [
     ]
   },
   {
+    slug: "orderpicker-opleiding",
+    title: "Orderpicker Opleiding",
+    category: "Intern transport",
+    summary: "Veilig orders verzamelen met de orderpicker: bediening, rijden in smalle gangen, werken op hoogte en stabiliteit.",
+    format: "Praktijkgericht",
+    duration: "1 dag basis of halve dag herhaling",
+    priceExVat: 170,
+    priceFrom: false,
+    image: courseImages["orderpicker-opleiding"],
+    teacher: "Praktijkinstructeur intern transport met ervaring in magazijn en distributie.",
+    audience: "Orderpickers, magazijnmedewerkers en uitzendkrachten in logistiek en distributie.",
+    highlights: ["Laag- en hoogniveau orderpicker", "Veilig werken in smalle gangen", "Certificaat na voldoende resultaat"],
+    faqs: [
+      {
+        question: "Wat is een orderpicker?",
+        answer: "Een orderpicker is een elektrische magazijntruck waarmee u orders verzamelt uit stellingen. Bij een hoogniveau orderpicker staat u zelf op een platform dat mee omhoog gaat."
+      },
+      {
+        question: "Is een orderpicker opleiding hetzelfde als een heftruck opleiding?",
+        answer: "Nee. De bediening, de stabiliteit en het werken op hoogte zijn anders. Daarom is er een aparte opleiding voor de orderpicker."
+      },
+      {
+        question: "Kan een beginner meedoen?",
+        answer: "Ja. Beginners leren de bediening stap voor stap. Ervaren medewerkers kunnen een herhaling volgen."
+      },
+      {
+        question: "Krijg ik een certificaat?",
+        answer: "Na voldoende resultaat ontvangt de kandidaat een certificaat of bewijs van deelname volgens de gekozen opleiding."
+      }
+    ]
+  },
+  {
+    slug: "reachtruck-opleiding",
+    title: "Reachtruck Opleiding",
+    category: "Intern transport",
+    summary: "Veilig werken met de reachtruck: hoog stapelen in stellingen, mast bedienen, lasten zeker plaatsen en veilig rijden in het magazijn.",
+    format: "Praktijkgericht",
+    duration: "1 dag basis of halve dag herhaling",
+    priceExVat: 250,
+    priceFrom: false,
+    image: courseImages["reachtruck-opleiding"],
+    teacher: "Praktijkinstructeur intern transport met aandacht voor hoog stapelen en stellingveiligheid.",
+    audience: "Magazijnmedewerkers en heftruckchauffeurs die met een reachtruck in hoge stellingen werken.",
+    highlights: ["Hoog stapelen in stellingen", "Mast en vorken veilig bedienen", "Certificaat na voldoende resultaat"],
+    faqs: [
+      {
+        question: "Wat is het verschil tussen een reachtruck en een heftruck?",
+        answer: "Een reachtruck heeft een mast die naar voren schuift en is gemaakt voor hoge stellingen in smalle gangen. Een gewone heftruck wordt vaker gebruikt voor laden, lossen en buitenwerk."
+      },
+      {
+        question: "Heb ik eerst een heftruck certificaat nodig?",
+        answer: "Nee, dat is niet verplicht. Ervaring met een heftruck helpt wel. Beginners krijgen extra aandacht voor bediening en stabiliteit."
+      },
+      {
+        question: "Wat leer ik tijdens de opleiding?",
+        answer: "U leert de reachtruck controleren, veilig rijden, lasten hoog in de stelling plaatsen en weer uitnemen, en risico's in het magazijn herkennen."
+      },
+      {
+        question: "Krijg ik een certificaat?",
+        answer: "Na voldoende resultaat ontvangt de kandidaat een certificaat of bewijs van deelname volgens de gekozen opleiding."
+      }
+    ]
+  },
+  {
+    slug: "telehandler-opleiding",
+    title: "Telehandler Opleiding",
+    category: "Intern transport",
+    summary: "Veilig werken met de telehandler (verreiker): lastdiagram lezen, stabiliteit, heffen op hoogte en werken met verschillende aanbouwdelen.",
+    format: "Praktijkgericht",
+    duration: "1 dag basis of herhaling",
+    priceExVat: 300,
+    priceFrom: false,
+    image: courseImages["telehandler-opleiding"],
+    teacher: "Praktijkinstructeur met ervaring met verreikers in bouw, industrie en agrarische sector.",
+    audience: "Medewerkers in bouw, industrie, agrarische sector en verhuur die een telehandler bedienen.",
+    highlights: ["Lastdiagram en stabiliteit", "Werken met aanbouwdelen", "Certificaat na voldoende resultaat"],
+    faqs: [
+      {
+        question: "Wat is een telehandler?",
+        answer: "Een telehandler, ook verreiker genoemd, is een machine met een uitschuifbare giek. Daarmee tilt u lasten hoog en ver, bijvoorbeeld op een bouwplaats of boerderij."
+      },
+      {
+        question: "Waarom is een aparte opleiding nodig?",
+        answer: "Hoe verder de giek uitschuift, hoe minder de machine kan tillen. U leert het lastdiagram lezen, zodat de telehandler niet kantelt."
+      },
+      {
+        question: "Kan een beginner meedoen?",
+        answer: "Ja. Beginners volgen theorie en praktijk. Ervaren bestuurders kunnen een herhaling volgen."
+      },
+      {
+        question: "Krijg ik een certificaat?",
+        answer: "Na voldoende resultaat ontvangt de kandidaat een certificaat of bewijs van deelname volgens de gekozen opleiding."
+      }
+    ]
+  },
+  {
     slug: "hoogwerker-opleiding",
     title: "Hoogwerker Opleiding",
     category: "Hoogwerker Opleiding",
     summary: "Veilig werken met een hoogwerker, inclusief machinekennis, risicoherkenning en praktijkinstructie.",
     format: "Praktijkgericht",
     duration: "1 dag basis of herhaling",
-    price: "vanaf EUR 195",
+    priceExVat: 300,
+    priceFrom: true,
+    image: courseImages["hoogwerker-opleiding"],
     teacher: "Instructeur met aandacht voor veilig werken op hoogte en machinecontrole.",
     audience: "Medewerkers die een hoogwerker gebruiken of hun kennis willen opfrissen.",
     highlights: ["Praktijk en toetsing", "Veilig werken op hoogte", "Herhaling mogelijk"],
@@ -156,7 +264,9 @@ export const courses = [
     summary: "Praktische bedrijfshulpverlening voor eerste hulp, brand, ontruiming en alarmeren op de werkvloer.",
     format: "Praktijkgericht",
     duration: "1 dag basis of herhaling",
-    price: "vanaf EUR 175",
+    priceExVat: 250,
+    priceFrom: true,
+    image: courseImages["bhv-opleiding"],
     teacher: "BHV-instructeur met aandacht voor handelen in noodsituaties en duidelijke procedures.",
     audience: "Medewerkers die BHV-taken uitvoeren of een herhaling nodig hebben binnen hun bedrijf.",
     highlights: ["Eerste hulp", "Brand en ontruiming", "BHV-rol op de werkvloer"],
@@ -190,10 +300,10 @@ export const categories = [
     icon: "book"
   },
   {
-    title: "Heftruck Opleiding",
-    description: "Theorie en praktijk voor veilig werken met intern transport.",
-    detail: "Voor beginners, ervaren bestuurders en herhalingscertificering.",
-    href: "/cursussen/heftruck-opleiding",
+    title: "Intern transport",
+    description: "Heftruck, orderpicker, reachtruck en telehandler: theorie en praktijk per machine.",
+    detail: "Kies de opleiding die past bij de machine waarmee u werkt.",
+    href: "/cursussen#heftruck-opleiding",
     icon: "forklift"
   },
   {

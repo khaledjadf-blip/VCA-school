@@ -7,6 +7,7 @@ import { refreshCoursePages } from "@/lib/revalidate";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
+import { VAT_PERCENT } from "@/lib/vat";
 
 export type BookingWithSession = Booking & { course_sessions: CourseSession };
 
@@ -60,7 +61,7 @@ function customerEmailHtml(b: BookingWithSession) {
     ${row("Datum", escapeHtml(dateText(s.starts_at, "nl-NL")))}
     ${row("Tijd", escapeHtml(timeText(s)))}
     ${row("Locatie", location)}
-    ${row("Betaald", escapeHtml(formatEuro(b.amount_cents)))}
+    ${row("Betaald", `${escapeHtml(formatEuro(b.amount_cents))} (incl. ${VAT_PERCENT}% btw)`)}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
   <p>Annuleren is kosteloos tot 7 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
@@ -77,7 +78,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("التاريخ", escapeHtml(dateText(s.starts_at, "ar-u-nu-latn")), true)}
       ${row("الوقت", `<span dir="ltr">${escapeHtml(timeText(s))}</span>`, true)}
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
-      ${row("المبلغ المدفوع", `<span dir="ltr">${escapeHtml(formatEuro(b.amount_cents))}</span>`, true)}
+      ${row("المبلغ المدفوع", `<span dir="ltr">${escapeHtml(formatEuro(b.amount_cents))}</span> (شامل الضريبة ${VAT_PERCENT}%)`, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
     <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ. <a href="https://vcaveiligvakkundig.nl/ar/voorwaarden">الشروط</a></p>
@@ -113,7 +114,7 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
-        ["Bedrag", formatEuro(b.amount_cents)],
+        ["Bedrag incl. btw", formatEuro(b.amount_cents)],
         ["Betaal-ID", b.payment_id],
         ["Plekken bezet", `${s.seats_taken} / ${s.seats_total}`]
       ])
