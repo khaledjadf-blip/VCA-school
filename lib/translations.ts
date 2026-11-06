@@ -697,5 +697,12 @@ Object.assign(arabicTranslations, {
   "Voor medewerkers die orders verzamelen met een orderpicker.": "للموظفين الذين يجمعون الطلبات باستخدام Orderpicker.",
   "Voor medewerkers die met een reachtruck in hoge stellingen werken.": "للموظفين الذين يعملون بالـ Reachtruck على رفوف عالية.",
   "Voor medewerkers die met een telehandler (verreiker) werken.": "للموظفين الذين يعملون بالـ Telehandler (الرافعة التلسكوبية).",
-  "Betaald incl. btw": "المدفوع شامل الضريبة"
+  "Betaald incl. btw": "المدفوع شامل الضريبة",
+  "Certificaat": "الشهادة",
+  "Als PDF opsturen en digitale VCA-pas": "إرسال الشهادة PDF وبطاقة VCA رقمية",
+  "Papieren certificaat en plastic pas + €20 excl. btw": "شهادة ورقية وبطاقة بلاستيكية + 20€ بدون ضريبة",
+  "Het digitale certificaat is net zo geldig als het papieren certificaat.": "الشهادة الرقمية صالحة تماما مثل الشهادة الورقية.",
+  "Papieren certificaat excl. btw": "الشهادة الورقية بدون ضريبة",
+  "Papier + plastic pas": "ورقية + بطاقة بلاستيكية",
+  "PDF + digitale pas": "PDF + بطاقة رقمية"
 });

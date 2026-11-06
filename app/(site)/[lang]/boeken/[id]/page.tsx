@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/localized-link";
 import { notFound } from "next/navigation";
-import { BookingForm } from "@/components/booking-form";
+import { BookingArea } from "@/components/booking-area";
 import { SessionSummary } from "@/components/upcoming-sessions";
 import { Button } from "@/components/ui/button";
 import { courses } from "@/lib/data";
@@ -39,17 +39,19 @@ export default async function BookingPage({ params }: Props) {
       </section>
       <section className="section-shell grid gap-8 py-12 lg:grid-cols-[1fr_380px] lg:items-start">
         {bookable ? (
-          <BookingForm sessionId={session.id} />
+          <BookingArea session={session} courseTitle={course.title} />
         ) : (
-          <div className="official-card p-6">
-            <h2 className="text-2xl font-bold">Deze datum is vol</h2>
-            <p className="mt-3 leading-7 text-muted-foreground">Kies een andere datum of neem contact met ons op.</p>
-            <Button asChild variant="accent" className="mt-5">
-              <Link href={`/cursussen/${course.slug}`}>Bekijk andere data</Link>
-            </Button>
-          </div>
+          <>
+            <div className="official-card p-6">
+              <h2 className="text-2xl font-bold">Deze datum is vol</h2>
+              <p className="mt-3 leading-7 text-muted-foreground">Kies een andere datum of neem contact met ons op.</p>
+              <Button asChild variant="accent" className="mt-5">
+                <Link href={`/cursussen/${course.slug}`}>Bekijk andere data</Link>
+              </Button>
+            </div>
+            <SessionSummary session={session} courseTitle={course.title} />
+          </>
         )}
-        <SessionSummary session={session} courseTitle={course.title} />
       </section>
     </>
   );

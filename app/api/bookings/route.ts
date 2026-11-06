@@ -4,6 +4,7 @@ import { courseTitle } from "@/lib/admin-labels";
 import { localizePath } from "@/lib/localized-path";
 import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
 import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
+import { certificateOptions } from "@/lib/certificate";
 import { VAT_PERCENT, vatOf, withVat } from "@/lib/vat";
 
 const bookingSchema = z.object({
@@ -19,6 +20,7 @@ const bookingSchema = z.object({
   // Onzichtbaar veld: echte bezoekers laten dit leeg, spam-bots niet.
   website: z.string().max(0).optional(),
   acceptTerms: z.literal(true),
+  certificate: z.enum(["digital", "paper"]).default("digital"),
   lang: z.enum(["nl", "ar"]).default("nl")
 });
 
@@ -80,15 +82,17 @@ export async function POST(request: Request) {
       .eq("id", booking.session_id)
       .single();
     if (!session) throw new Error("Cursusdatum niet gevonden");
-    // De cursusprijs is excl. btw; de klant betaalt incl. btw.
-    const amountCents = withVat(session.price_cents);
+    // Cursusprijs en certificaat zijn excl. btw; de klant betaalt incl. btw.
+    const certificate = certificateOptions[input.certificate];
+    const priceExVat = session.price_cents + certificate.priceCents;
+    const amountCents = withVat(priceExVat);
     const date = new Date(session.starts_at).toLocaleDateString("nl-NL", { timeZone: "Europe/Amsterdam" });
     const base = siteUrl(request);
     const thanks = `${base}${localizePath("/boeken/bedankt", input.lang)}?b=${booking.id}`;
     const payment = await provider.createPayment({
       bookingId: booking.id,
       amountCents,
-      description: `${courseTitle(session.course_slug)} ${date} – ${booking.first_name} ${booking.last_name}`,
+      description: `${courseTitle(session.course_slug)} ${date}${certificate.priceCents ? " + papieren certificaat" : ""} – ${booking.first_name} ${booking.last_name}`,
       ...(provider.name === "mypos"
         ? {
             redirectUrl: `${base}/api/payments/mypos/return?b=${booking.id}&r=ok&lang=${input.lang}`,
@@ -111,12 +115,17 @@ export async function POST(request: Request) {
 
     // Taal is handig voor e-mails, maar nooit reden om een boeking te laten mislukken
     // (bijv. als de kolom nog niet bestaat omdat schema.sql nog niet opnieuw is uitgevoerd).
-    // Btw apart bewaren voor e-mails en export; ook hier geen reden om te laten mislukken.
+    // Btw en certificaatkeuze apart bewaren voor e-mails, beheer en export; ook hier geen reden om te laten mislukken.
     const { error: vatError } = await supabase
       .from("bookings")
-      .update({ vat_percent: VAT_PERCENT, vat_cents: vatOf(session.price_cents) })
+      .update({
+        vat_percent: VAT_PERCENT,
+        vat_cents: vatOf(priceExVat),
+        certificate: input.certificate,
+        certificate_cents: certificate.priceCents
+      })
       .eq("id", booking.id);
-    if (vatError) console.warn("Btw opslaan mislukt (voer supabase/schema.sql opnieuw uit)", vatError.message);
+    if (vatError) console.warn("Btw/certificaat opslaan mislukt (voer supabase/schema.sql opnieuw uit)", vatError.message);
 
     if (input.lang !== "nl") {
       const { error: langError } = await supabase.from("bookings").update({ lang: input.lang }).eq("id", booking.id);

@@ -75,6 +75,11 @@ alter table public.bookings add column if not exists lang text not null default 
 alter table public.bookings add column if not exists vat_percent integer not null default 0;
 alter table public.bookings add column if not exists vat_cents integer not null default 0 check (vat_cents >= 0);
 
+-- Certificaat: digital = PDF + digitale pas (gratis), paper = papieren certificaat + plastic pas.
+-- certificate_cents is de meerprijs excl. btw (zit al in amount_cents).
+alter table public.bookings add column if not exists certificate text not null default 'digital';
+alter table public.bookings add column if not exists certificate_cents integer not null default 0 check (certificate_cents >= 0);
+
 create index if not exists bookings_session_idx on public.bookings (session_id);
 create index if not exists bookings_status_idx on public.bookings (status);
 

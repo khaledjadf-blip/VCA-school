@@ -7,6 +7,7 @@ import { refreshCoursePages } from "@/lib/revalidate";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
+import { certificateOptions } from "@/lib/certificate";
 import { company } from "@/lib/company";
 
 export type BookingWithSession = Booking & { course_sessions: CourseSession };
@@ -38,13 +39,21 @@ const divider = `<hr style="border:none;border-top:1px solid #d8e2ec;margin:24px
 const row = (label: string, value: string, rtl = false) =>
   `<tr><td style="padding:${rtl ? "4px 0 4px 12px" : "4px 12px 4px 0"};font-weight:bold;vertical-align:top">${label}</td><td style="padding:4px 0">${value}</td></tr>`;
 
+const certificateLabels = {
+  digital: { nl: certificateOptions.digital.label, ar: "إرسال الشهادة PDF وبطاقة VCA رقمية" },
+  paper: { nl: `${certificateOptions.paper.label}`, ar: "شهادة ورقية وبطاقة بلاستيكية" }
+} as const;
+const certificateLabel = (b: Booking, lang: "nl" | "ar") => certificateLabels[b.certificate ?? "digital"]?.[lang] ?? certificateLabels.digital[lang];
+
 /** Bedrag-regels: prijs excl. btw, btw en totaal; oude boekingen zonder btw alleen het totaal. */
 function amountRows(b: Booking, ar: boolean) {
   const euro = (cents: number) => (ar ? `<span dir="ltr">${escapeHtml(formatEuro(cents))}</span>` : escapeHtml(formatEuro(cents)));
   const total = `<strong>${euro(b.amount_cents)}</strong>`;
   if (!b.vat_cents) return row(ar ? "المبلغ المدفوع" : "Betaald", total, ar);
+  const extra = b.certificate_cents ?? 0;
   return [
-    row(ar ? "السعر بدون ضريبة" : "Prijs excl. btw", euro(b.amount_cents - b.vat_cents), ar),
+    row(ar ? "سعر الدورة بدون ضريبة" : "Cursusprijs excl. btw", euro(b.amount_cents - b.vat_cents - extra), ar),
+    extra ? row(ar ? "الشهادة الورقية بدون ضريبة" : "Papieren certificaat excl. btw", euro(extra), ar) : "",
     row(ar ? `ضريبة القيمة المضافة ${b.vat_percent}%` : `Btw ${b.vat_percent}%`, euro(b.vat_cents), ar),
     row(ar ? "المجموع المدفوع" : "Totaal betaald", total, ar)
   ].join("");
@@ -75,6 +84,7 @@ function customerEmailHtml(b: BookingWithSession) {
     ${row("Datum", escapeHtml(dateText(s.starts_at, "nl-NL")))}
     ${row("Tijd", escapeHtml(timeText(s)))}
     ${row("Locatie", location)}
+    ${row("Certificaat", escapeHtml(certificateLabel(b, "nl")))}
     ${amountRows(b, false)}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
@@ -93,6 +103,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("التاريخ", escapeHtml(dateText(s.starts_at, "ar-u-nu-latn")), true)}
       ${row("الوقت", `<span dir="ltr">${escapeHtml(timeText(s))}</span>`, true)}
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
+      ${row("الشهادة", escapeHtml(certificateLabel(b, "ar")), true)}
       ${amountRows(b, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
@@ -129,9 +140,11 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
+        ["Certificaat", certificateLabel(b, "nl")],
         ...(b.vat_cents
           ? ([
-              ["Prijs excl. btw", formatEuro(b.amount_cents - b.vat_cents)],
+              ["Cursusprijs excl. btw", formatEuro(b.amount_cents - b.vat_cents - (b.certificate_cents ?? 0))],
+              ...(b.certificate_cents ? ([["Papieren certificaat excl. btw", formatEuro(b.certificate_cents)]] as [string, string][]) : []),
               [`Btw ${b.vat_percent}%`, formatEuro(b.vat_cents)],
               ["Totaal betaald", formatEuro(b.amount_cents)]
             ] as [string, string][])

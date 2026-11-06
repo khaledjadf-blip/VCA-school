@@ -109,7 +109,7 @@ export function UpcomingSessions({
   );
 }
 
-export function SessionSummary({ session, courseTitle }: { session: PublicSession; courseTitle: string }) {
+export function SessionSummary({ session, courseTitle, extraCents = 0 }: { session: PublicSession; courseTitle: string; extraCents?: number }) {
   const { isArabic } = useLanguage();
   const time = session.endsAt
     ? `${formatTime(session.startsAt)} – ${formatTime(session.endsAt)}`
@@ -137,13 +137,19 @@ export function SessionSummary({ session, courseTitle }: { session: PublicSessio
           <dt className="text-muted-foreground">Prijs excl. btw</dt>
           <dd dir="ltr">{formatPrice(session.priceCents)}</dd>
         </div>
+        {extraCents ? (
+          <div className="flex items-center justify-between">
+            <dt className="text-muted-foreground">Papieren certificaat excl. btw</dt>
+            <dd dir="ltr">{formatPrice(extraCents)}</dd>
+          </div>
+        ) : null}
         <div className="flex items-center justify-between">
           <dt className="text-muted-foreground">Btw <span dir="ltr">{VAT_PERCENT}%</span></dt>
-          <dd dir="ltr">{formatPrice(vatOf(session.priceCents))}</dd>
+          <dd dir="ltr">{formatPrice(vatOf(session.priceCents + extraCents))}</dd>
         </div>
         <div className="mt-1 flex items-center justify-between border-t border-border pt-2">
           <dt className="font-semibold">Totaal incl. btw</dt>
-          <dd className="text-2xl font-bold text-accent" dir="ltr">{formatPrice(withVat(session.priceCents))}</dd>
+          <dd className="text-2xl font-bold text-accent" dir="ltr">{formatPrice(withVat(session.priceCents + extraCents))}</dd>
         </div>
       </dl>
       {full ? null : <p className="text-sm font-semibold text-primary">{seatsLabel(session.seatsLeft, isArabic)}</p>}

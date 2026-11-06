@@ -40,6 +40,9 @@ export type Booking = {
   /** Btw-deel van amount_cents (0 bij boekingen van vóór de btw-wijziging). */
   vat_percent: number;
   vat_cents: number;
+  /** Gekozen certificaat en de meerprijs excl. btw (zit al in amount_cents). */
+  certificate: "digital" | "paper";
+  certificate_cents: number;
   seat_counted: boolean;
   paid_at: string | null;
   created_at: string;
