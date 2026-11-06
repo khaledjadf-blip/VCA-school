@@ -4,7 +4,7 @@ import { courseTitle } from "@/lib/admin-labels";
 import { localizePath } from "@/lib/localized-path";
 import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
 import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
-import { withVat } from "@/lib/vat";
+import { VAT_PERCENT, vatOf, withVat } from "@/lib/vat";
 
 const bookingSchema = z.object({
   sessionId: z.string().uuid(),
@@ -111,6 +111,13 @@ export async function POST(request: Request) {
 
     // Taal is handig voor e-mails, maar nooit reden om een boeking te laten mislukken
     // (bijv. als de kolom nog niet bestaat omdat schema.sql nog niet opnieuw is uitgevoerd).
+    // Btw apart bewaren voor e-mails en export; ook hier geen reden om te laten mislukken.
+    const { error: vatError } = await supabase
+      .from("bookings")
+      .update({ vat_percent: VAT_PERCENT, vat_cents: vatOf(session.price_cents) })
+      .eq("id", booking.id);
+    if (vatError) console.warn("Btw opslaan mislukt (voer supabase/schema.sql opnieuw uit)", vatError.message);
+
     if (input.lang !== "nl") {
       const { error: langError } = await supabase.from("bookings").update({ lang: input.lang }).eq("id", booking.id);
       if (langError) console.warn("Taal opslaan mislukt (voer supabase/schema.sql opnieuw uit)", langError.message);

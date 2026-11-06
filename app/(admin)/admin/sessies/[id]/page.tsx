@@ -100,7 +100,7 @@ export default async function SessionDetailPage({ params, searchParams }: Props)
                   <th className="px-4 py-3">Naam</th>
                   <th className="px-4 py-3">E-mail</th>
                   <th className="px-4 py-3">Telefoon</th>
-                  <th className="px-4 py-3">Bedrag</th>
+                  <th className="px-4 py-3">Betaald incl. btw</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Geboekt op</th>
                   <th className="px-4 py-3"></th>

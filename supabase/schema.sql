@@ -70,6 +70,11 @@ create table if not exists public.bookings (
 -- Taal van de website bij het boeken (voor e-mails in de juiste taal).
 alter table public.bookings add column if not exists lang text not null default 'nl';
 
+-- amount_cents is het totaal incl. btw; vat_cents is het btw-deel daarvan.
+-- Boekingen van vóór de btw-wijziging houden 0 (die zijn zonder btw betaald).
+alter table public.bookings add column if not exists vat_percent integer not null default 0;
+alter table public.bookings add column if not exists vat_cents integer not null default 0 check (vat_cents >= 0);
+
 create index if not exists bookings_session_idx on public.bookings (session_id);
 create index if not exists bookings_status_idx on public.bookings (status);
 

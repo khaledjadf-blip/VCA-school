@@ -7,7 +7,7 @@ import { refreshCoursePages } from "@/lib/revalidate";
 import { rowsToHtml, sendEmail } from "@/lib/send-email";
 import { getSupabase, type Booking, type CourseSession } from "@/lib/supabase";
 import { TIME_ZONE, formatEuro } from "@/lib/time";
-import { VAT_PERCENT } from "@/lib/vat";
+import { company } from "@/lib/company";
 
 export type BookingWithSession = Booking & { course_sessions: CourseSession };
 
@@ -38,6 +38,20 @@ const divider = `<hr style="border:none;border-top:1px solid #d8e2ec;margin:24px
 const row = (label: string, value: string, rtl = false) =>
   `<tr><td style="padding:${rtl ? "4px 0 4px 12px" : "4px 12px 4px 0"};font-weight:bold;vertical-align:top">${label}</td><td style="padding:4px 0">${value}</td></tr>`;
 
+/** Bedrag-regels: prijs excl. btw, btw en totaal; oude boekingen zonder btw alleen het totaal. */
+function amountRows(b: Booking, ar: boolean) {
+  const euro = (cents: number) => (ar ? `<span dir="ltr">${escapeHtml(formatEuro(cents))}</span>` : escapeHtml(formatEuro(cents)));
+  const total = `<strong>${euro(b.amount_cents)}</strong>`;
+  if (!b.vat_cents) return row(ar ? "المبلغ المدفوع" : "Betaald", total, ar);
+  return [
+    row(ar ? "السعر بدون ضريبة" : "Prijs excl. btw", euro(b.amount_cents - b.vat_cents), ar),
+    row(ar ? `ضريبة القيمة المضافة ${b.vat_percent}%` : `Btw ${b.vat_percent}%`, euro(b.vat_cents), ar),
+    row(ar ? "المجموع المدفوع" : "Totaal betaald", total, ar)
+  ].join("");
+}
+
+const companyLine = `<p style="color:#5b6b7b;font-size:12px">${escapeHtml(company.name)} · KvK ${company.kvk} · Btw ${company.btw}</p>`;
+
 /**
  * Taal van klant-e-mails: geboekt via de Nederlandse site → alleen Nederlands;
  * via de Arabische site → eerst Arabisch, daaronder Nederlands (handig voor werkgever of instanties).
@@ -61,12 +75,13 @@ function customerEmailHtml(b: BookingWithSession) {
     ${row("Datum", escapeHtml(dateText(s.starts_at, "nl-NL")))}
     ${row("Tijd", escapeHtml(timeText(s)))}
     ${row("Locatie", location)}
-    ${row("Betaald", `${escapeHtml(formatEuro(b.amount_cents))} (incl. ${VAT_PERCENT}% btw)`)}
+    ${amountRows(b, false)}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
   <p>Annuleren is kosteloos tot 7 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
   <p>Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
-  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>`;
+  <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
+  ${companyLine}`;
 
   const ar = `
   <div dir="rtl" style="text-align:right">
@@ -78,7 +93,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${row("التاريخ", escapeHtml(dateText(s.starts_at, "ar-u-nu-latn")), true)}
       ${row("الوقت", `<span dir="ltr">${escapeHtml(timeText(s))}</span>`, true)}
       ${row("المكان", `<span dir="ltr">${location}</span>`, true)}
-      ${row("المبلغ المدفوع", `<span dir="ltr">${escapeHtml(formatEuro(b.amount_cents))}</span> (شامل الضريبة ${VAT_PERCENT}%)`, true)}
+      ${amountRows(b, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
     <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ. <a href="https://vcaveiligvakkundig.nl/ar/voorwaarden">الشروط</a></p>
@@ -114,7 +129,13 @@ async function sendConfirmationEmails(b: BookingWithSession) {
         ["Bedrijf", b.company],
         ["Opmerking", b.notes],
         ["Taal klant", languageLabel(b)],
-        ["Bedrag incl. btw", formatEuro(b.amount_cents)],
+        ...(b.vat_cents
+          ? ([
+              ["Prijs excl. btw", formatEuro(b.amount_cents - b.vat_cents)],
+              [`Btw ${b.vat_percent}%`, formatEuro(b.vat_cents)],
+              ["Totaal betaald", formatEuro(b.amount_cents)]
+            ] as [string, string][])
+          : ([["Bedrag", formatEuro(b.amount_cents)]] as [string, string][])),
         ["Betaal-ID", b.payment_id],
         ["Plekken bezet", `${s.seats_taken} / ${s.seats_total}`]
       ])
@@ -145,7 +166,7 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
   <p>Beste ${name},</p>
   <p>Uw boeking voor <strong>${course}</strong> op ${dateNl} (${time}) is geannuleerd.</p>
   ${refunded
-    ? `<p>Wij hebben ${amount} terugbetaald. Het bedrag staat binnen enkele werkdagen weer op uw rekening.</p>`
+    ? `<p>Wij hebben ${amount}${b.vat_cents ? " (incl. btw)" : ""} terugbetaald. Het bedrag staat binnen enkele werkdagen weer op uw rekening.</p>`
     : `<p>Volgens onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a> is bij annuleren binnen 7 dagen voor de cursusdatum geen terugbetaling mogelijk.</p>`}
   <p>Wilt u een nieuwe datum boeken? Kijk op <a href="https://vcaveiligvakkundig.nl/inschrijven">vcaveiligvakkundig.nl/inschrijven</a>. Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
   <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>`;
@@ -156,7 +177,7 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
     <p>مرحبا ${name}،</p>
     <p>تم إلغاء حجزك لدورة <strong>${course}</strong> بتاريخ ${dateAr} (<span dir="ltr">${time}</span>).</p>
     ${refunded
-      ? `<p>أرجعنا لك مبلغ <span dir="ltr">${amount}</span>. سيصل إلى حسابك خلال أيام عمل قليلة.</p>`
+      ? `<p>أرجعنا لك مبلغ <span dir="ltr">${amount}</span>${b.vat_cents ? " (شامل الضريبة)" : ""}. سيصل إلى حسابك خلال أيام عمل قليلة.</p>`
       : `<p>حسب الشروط، الإلغاء خلال الأيام السبعة الأخيرة قبل الدورة لا يشمل إرجاع المبلغ.</p>`}
     <p>لحجز موعد جديد: <a href="https://vcaveiligvakkundig.nl/ar/inschrijven">vcaveiligvakkundig.nl/ar/inschrijven</a>. لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
     <p>مع التحية،<br><span dir="ltr">VCA Veilig &amp; Vakkundig B.V.</span></p>

@@ -37,6 +37,9 @@ export type Booking = {
   payment_provider: string | null;
   payment_id: string | null;
   lang: "nl" | "ar";
+  /** Btw-deel van amount_cents (0 bij boekingen van vóór de btw-wijziging). */
+  vat_percent: number;
+  vat_cents: number;
   seat_counted: boolean;
   paid_at: string | null;
   created_at: string;
