@@ -706,5 +706,10 @@ Object.assign(arabicTranslations, {
   "Totaal excl. btw": "المجموع بدون ضريبة",
   "Totaal": "المجموع",
   "Onze cursussen": "دوراتنا",
-  "Meer info en boeken": "معلومات أكثر والحجز"
+  "Meer info en boeken": "معلومات أكثر والحجز",
+  "Na slagen wordt uw diploma geregistreerd, zodat een werkgever het direct kan controleren.": "بعد النجاح تُسجَّل شهادتك، حتى يستطيع صاحب العمل التحقق منها فورا.",
+  "Uitleg met voorbeelden uit bouw, techniek, industrie en logistiek.": "شرح مع أمثلة من البناء والتقنية والصناعة واللوجستيات.",
+  "Kies een open datum of vraag een training voor uw team op locatie aan.": "اختر موعدا متاحا أو اطلب تدريبا لفريقك في موقع عملكم.",
+  "Hulp bij aanmelding, planning en voorbereiding in uw eigen taal.": "مساعدة في التسجيل والتخطيط والتحضير بلغتك.",
+  "Docent geeft les aan een groep cursisten in een leslokaal": "مدرّب يعطي درسا لمجموعة من المتدربين في قاعة الدروس"
 });

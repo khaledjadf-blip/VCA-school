@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import Link from "@/components/localized-link";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
@@ -136,34 +137,46 @@ export function ConversionBand() {
 }
 
 export function WhySection() {
-  const items = ["Erkende examens en correcte CDR-registratie", "Docenten met praktijkervaring", "Klasplanning en incompany opties", "Begeleiding in Nederlands en Arabisch mogelijk"];
+  const items = [
+    ["Erkende examens en correcte CDR-registratie", "Na slagen wordt uw diploma geregistreerd, zodat een werkgever het direct kan controleren."],
+    ["Docenten met praktijkervaring", "Uitleg met voorbeelden uit bouw, techniek, industrie en logistiek."],
+    ["Klasplanning en incompany opties", "Kies een open datum of vraag een training voor uw team op locatie aan."],
+    ["Begeleiding in Nederlands en Arabisch mogelijk", "Hulp bij aanmelding, planning en voorbereiding in uw eigen taal."]
+  ];
   return (
     <section className="section-shell py-16">
-      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-        <div className="safety-panel border border-border bg-white p-6">
-          <p className="official-kicker">Trainingsomgeving</p>
-          <h2 className="mt-2 text-2xl font-bold text-primary">Geen kortingsschool, maar een duidelijke certificeringsroute.</h2>
-          <p className="mt-4 leading-7 text-muted-foreground">Kandidaten krijgen uitleg, voorbereiding en examenbegeleiding zonder commerciële ruis. De nadruk ligt op slagen, veiligheid, planning en correcte registratie.</p>
-          <p className="mt-4 border-l-4 border-accent bg-secondary p-3 text-sm font-semibold text-primary">Arabische ondersteuning kan helpen bij uitleg over aanmelding, planning en voorbereiding.</p>
+      <div className="grid overflow-hidden border border-border bg-white lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+        <figure className="relative min-h-[18rem] bg-secondary">
           <img
-            src={visualAssets.hoistCertificate.src}
-            alt={visualAssets.hoistCertificate.alt}
-            className="mt-5 w-full bg-white object-contain object-center p-3 lg:max-w-[24rem] lg:p-4"
+            src={visualAssets.classroom.src}
+            alt={visualAssets.classroom.alt}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
-          <Link href="/over-ons" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">
+          <figcaption className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(10,32,58,0.88),rgba(10,32,58,0))] p-5 pt-16 text-white">
+            <p className="text-lg font-bold">Geen kortingsschool, maar een duidelijke certificeringsroute.</p>
+          </figcaption>
+        </figure>
+        <div className="p-6 lg:p-10">
+          <p className="official-kicker">Waarom wij</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-primary">Een opleider die rust, duidelijkheid en resultaat brengt.</h2>
+          <ul className="mt-6 grid gap-5">
+            {items.map(([title, text]) => (
+              <li key={title} className="flex gap-3">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center bg-accent/10 text-accent">
+                  <Check className="h-4 w-4" aria-hidden />
+                </span>
+                <div>
+                  <p className="font-bold text-primary">{title}</p>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Link href="/over-ons" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-primary underline-offset-4 hover:underline">
             Lees het verhaal achter de school
           </Link>
-        </div>
-        <div>
-          <p className="official-kicker">Waarom wij</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight">Een opleider die rust, duidelijkheid en resultaat brengt.</h2>
-          <div className="proof-lanes mt-6 grid gap-0 border-y border-border bg-white">
-            {items.map((item) => (
-              <div key={item} className="border-b border-border p-4 last:border-b-0">
-                <p className="font-semibold">{item}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
