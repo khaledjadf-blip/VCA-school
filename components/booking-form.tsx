@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "@/components/localized-link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLanguage } from "@/components/language-provider";
@@ -51,11 +51,28 @@ export function BookingForm({
 }) {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Blijft "bezig" tot de betaalpagina geopend is: een tweede klik maakt anders een tweede boeking.
+  const [redirecting, setRedirecting] = useState(false);
+  const busy = useRef(false);
   const form = useForm<BookingValues>({ resolver: zodResolver(bookingSchema) });
+
+  // Terug via de browserknop (pagina uit de cache): knop weer bruikbaar maken.
+  useEffect(() => {
+    const reset = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        busy.current = false;
+        setRedirecting(false);
+      }
+    };
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
   const errors = form.formState.errors;
   const { language } = useLanguage();
 
   async function submit(values: BookingValues) {
+    if (busy.current) return;
+    busy.current = true;
     setError(null);
     try {
       const res = await fetch("/api/bookings", {
@@ -65,6 +82,7 @@ export function BookingForm({
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
+        busy.current = false;
         setError(body.error ?? "server");
         return;
       }
@@ -81,15 +99,18 @@ export function BookingForm({
           payForm.appendChild(input);
         }
         document.body.appendChild(payForm);
+        setRedirecting(true);
         payForm.submit();
         return;
       }
       if (body.checkoutUrl) {
+        setRedirecting(true);
         window.location.href = body.checkoutUrl;
         return;
       }
       setDone(true);
     } catch {
+      busy.current = false;
       setError("server");
     }
   }
@@ -157,7 +178,7 @@ export function BookingForm({
           <span>
             Ik ga akkoord met de{" "}
             <Link href="/voorwaarden" target="_blank" className="font-semibold text-primary underline underline-offset-4">voorwaarden</Link>
-            . Kosteloos annuleren kan tot 7 dagen voor de cursusdatum.<Req />
+            . Kosteloos annuleren kan tot 14 dagen voor de cursusdatum.<Req />
           </span>
         </label>
         <FieldError>{errors.acceptTerms?.message}</FieldError>
@@ -177,8 +198,8 @@ export function BookingForm({
         </p>
       ) : null}
 
-      <Button type="submit" variant="accent" size="lg" disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting ? "Bezig..." : "Verder naar betalen"}
+      <Button type="submit" variant="accent" size="lg" disabled={form.formState.isSubmitting || redirecting}>
+        {form.formState.isSubmitting || redirecting ? "Bezig..." : "Verder naar betalen"}
       </Button>
       <p className="text-center text-xs text-muted-foreground">U betaalt veilig online met iDEAL of creditcard.</p>
     </form>

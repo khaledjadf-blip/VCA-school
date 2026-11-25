@@ -24,8 +24,8 @@ const sections: { title: string; lines: string[] }[] = [
   {
     title: "Annuleren door u",
     lines: [
-      "Tot 7 dagen vóór de cursusdatum kunt u kosteloos annuleren. U krijgt dan het volledige bedrag terug.",
-      "Annuleert u binnen 7 dagen vóór de cursusdatum, of komt u niet opdagen, dan is terugbetaling niet mogelijk.",
+      "Tot 14 dagen vóór de cursusdatum kunt u kosteloos annuleren. U krijgt dan het volledige bedrag terug.",
+      "Annuleert u binnen 14 dagen vóór de cursusdatum, of komt u niet opdagen, dan is terugbetaling niet mogelijk.",
       "Annuleren doet u per e-mail aan info@vcaveiligvakkundig.nl. Vermeld uw naam en de cursusdatum."
     ]
   },

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { courseTitle } from "@/lib/admin-labels";
+import { PENDING_HOLD_MS, courseTitle } from "@/lib/admin-labels";
+import { cancelIfUnpaid } from "@/lib/booking-payments";
 import { localizePath } from "@/lib/localized-path";
 import { getPaymentProvider, siteUrl, webhookUrl } from "@/lib/payments";
 import { getSupabase, isSupabaseConfigured, type Booking } from "@/lib/supabase";
@@ -53,6 +54,20 @@ export async function POST(request: Request) {
   if (years < 16 || years > 100) return NextResponse.json({ ok: false, error: "invalid" }, { status: 400 });
 
   const supabase = getSupabase();
+
+  // Zelfde persoon boekt opnieuw dezelfde datum (bijv. dubbel geklikt of opnieuw geprobeerd):
+  // de vorige, nog niet betaalde poging vervalt, zodat er geen dubbele boeking blijft staan.
+  const { data: earlier } = await supabase
+    .from("bookings")
+    .select("id")
+    .eq("session_id", input.sessionId)
+    .eq("email", input.email.toLowerCase())
+    .eq("status", "pending")
+    .gte("created_at", new Date(Date.now() - PENDING_HOLD_MS).toISOString());
+  for (const old of earlier ?? []) {
+    await cancelIfUnpaid(old.id).catch((cancelError) => console.error("Eerdere poging vervallen mislukt", cancelError));
+  }
+
   const { data, error } = await supabase.rpc("create_booking", {
     p_session_id: input.sessionId,
     p_first_name: input.firstName,
