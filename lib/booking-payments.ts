@@ -89,7 +89,7 @@ function customerEmailHtml(b: BookingWithSession) {
     ${amountRows(b, false)}
   </table>
   <p>Neem op de cursusdag een geldig identiteitsbewijs mee (paspoort, ID-kaart of rijbewijs). Kom graag 15 minuten voor aanvang.</p>
-  <p>Annuleren is kosteloos tot 7 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
+  <p>Annuleren is kosteloos tot 14 dagen voor de cursusdatum: stuur dan een e-mail naar info@vcaveiligvakkundig.nl. Daarna is terugbetaling niet mogelijk. Zie onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a>.</p>
   <p>Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
   <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>
   ${companyLine}`;
@@ -108,7 +108,7 @@ function customerEmailHtml(b: BookingWithSession) {
       ${amountRows(b, true)}
     </table>
     <p>أحضر معك يوم الدورة إثبات هوية ساري المفعول (جواز سفر أو بطاقة هوية أو رخصة قيادة). يرجى الحضور قبل 15 دقيقة من البداية.</p>
-    <p>الإلغاء مجاني حتى 7 أيام قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ. <a href="https://vcaveiligvakkundig.nl/ar/voorwaarden">الشروط</a></p>
+    <p>الإلغاء مجاني حتى 14 يوماً قبل موعد الدورة: أرسل إيميل إلى <span dir="ltr">info@vcaveiligvakkundig.nl</span>. بعد ذلك لا يمكن إرجاع المبلغ. <a href="https://vcaveiligvakkundig.nl/ar/voorwaarden">الشروط</a></p>
     <p>لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
     <p>مع التحية،<br><span dir="ltr">VCA Veilig &amp; Vakkundig B.V.</span></p>
     <p style="color:#5b6b7b;font-size:13px">النسخة الهولندية في الأسفل، يمكنك إظهارها لصاحب العمل.</p>
@@ -184,7 +184,7 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
   <p>Uw boeking voor <strong>${course}</strong> op ${dateNl} (${time}) is geannuleerd.</p>
   ${refunded
     ? `<p>Wij hebben ${amount}${b.vat_cents ? " (incl. btw)" : ""} terugbetaald. Het bedrag staat binnen enkele werkdagen weer op uw rekening.</p>`
-    : `<p>Volgens onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a> is bij annuleren binnen 7 dagen voor de cursusdatum geen terugbetaling mogelijk.</p>`}
+    : `<p>Volgens onze <a href="https://vcaveiligvakkundig.nl/voorwaarden">voorwaarden</a> is bij annuleren binnen 14 dagen voor de cursusdatum geen terugbetaling mogelijk.</p>`}
   <p>Wilt u een nieuwe datum boeken? Kijk op <a href="https://vcaveiligvakkundig.nl/inschrijven">vcaveiligvakkundig.nl/inschrijven</a>. Vragen? Antwoord op deze e-mail of bel/WhatsApp <a href="tel:+31616717342">+31 6 16717342</a>.</p>
   <p>Met vriendelijke groet,<br>VCA Veilig &amp; Vakkundig B.V.</p>`;
 
@@ -195,7 +195,7 @@ export async function sendCancellationEmails(b: BookingWithSession, refunded: bo
     <p>تم إلغاء حجزك لدورة <strong>${course}</strong> بتاريخ ${dateAr} (<span dir="ltr">${time}</span>).</p>
     ${refunded
       ? `<p>أرجعنا لك مبلغ <span dir="ltr">${amount}</span>${b.vat_cents ? " (شامل الضريبة)" : ""}. سيصل إلى حسابك خلال أيام عمل قليلة.</p>`
-      : `<p>حسب الشروط، الإلغاء خلال الأيام السبعة الأخيرة قبل الدورة لا يشمل إرجاع المبلغ.</p>`}
+      : `<p>حسب الشروط، الإلغاء خلال الأيام الأربعة عشر الأخيرة قبل الدورة لا يشمل إرجاع المبلغ.</p>`}
     <p>لحجز موعد جديد: <a href="https://vcaveiligvakkundig.nl/ar/inschrijven">vcaveiligvakkundig.nl/ar/inschrijven</a>. لأي سؤال: رد على هذا الإيميل أو اتصل / واتساب <span dir="ltr">+31 6 16717342</span>.</p>
     <p>مع التحية،<br><span dir="ltr">VCA Veilig &amp; Vakkundig B.V.</span></p>
   </div>`;
